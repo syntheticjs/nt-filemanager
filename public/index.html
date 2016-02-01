@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Bower</title>
+	  <script src="./vendor/angular/angular.js"></script>
+	  <script src="./vendor/jquery/dist/jquery.js"></script>
+	  <script src="./vendor/jquery.tie/jquery.tie.js"></script>
+	  <script src="./vendor/jquery.fitimage/jquery.fitimage.js"></script>
+	  <script src="./vendor/synthetic/dist/synthetic.js"></script>
+	  <script src="nt-filemanager.js"></script>
+	  <style>
+		body {
+			background-color:#fff;
+		}
+	  </style>
+	  <script>
+	  Synthetic.getComponent('nt-filemanager')
+	  .createPreset('tester', function($setup) {
+	  	$setup({
+	  		connector: 'testServer.json',
+	  		receiver: function() {
+	  			debugger;
+	  		}
+	  	});
+	  });
+	  </script>
+</head>
+<body>
+	<nt-filemanager preset="tester"></nt-filemanager>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "name": "nt-filemanager",
+  "version": "1.0.0",
+  "authors": [
+    "Vladimir Morulus <vladimirmorulus@gmail.com>"
+  ],
+  "description": "File manager UI",
+  "main": "dist/nt-filemanager.js",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "~2.2.0",
+    "jquery.fitimage": "*",
+    "jquery.tie": "*",
+    "synthetic": "~0.1.1"
+  },
+  "homepage": "https://github.com/syntheticjs/nt-filemanager",
+  "keywords": [
+    "synthetic"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/vendor",
+    "src",
+    "client-test.js",
+    "test",
+    "tests",
+    "public",
+    ".bowerrc"
+  ]
+}

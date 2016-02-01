@@ -1,0 +1,323 @@
+nt-filemanager {
+	position: relative;
+	background-color: rgba(37, 37, 37, 0.01);
+    display: block;
+}
+
+nt-filemanager ul.filesArea {
+	overflow: hidden;
+	display:table;
+	list-style: none;
+	padding: 0px;
+	margin:0 0 5px 0;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	background: none;
+	clear:both;
+}
+
+nt-filemanager ul.filesArea li {
+	padding: 24px 24px;
+	height: 162px;
+	float: left;
+	margin: 0 1px 1px 1px;
+}
+
+nt-filemanager ul.filesArea li.file {
+	background-color: rgba(234, 229, 219, 0);
+	transition:background 0.45s ease;
+	&:hover {
+		background-color:rgba(224, 216, 201, 0.19)
+	}
+}
+
+
+nt-filemanager ul.filesArea li.folder {
+	background-color: rgba(255, 255, 255, 0.03);
+}
+
+nt-filemanager ul.filesArea li > div.thumb {
+	width:110px;
+	height:110px;
+	text-align:center;
+	margin:0 auto;
+	cursor:pointer;
+}
+
+nt-filemanager ul.filesArea li.image > div.thumb {
+	background-color: #8A8A8A;
+}
+
+nt-filemanager ul.filesArea li.image > div.thumb > img {
+	display:none;
+}
+
+
+nt-filemanager ul.filesArea li .acceptit {
+	transform-origin:50% 50%;
+	transition:transform 0.5s ease, opacity 0.3s ease;
+	
+	opacity:0;
+
+	margin: 0 auto;
+    border-radius: 16px;
+    border: 1px rgba(234, 204, 170, 0.69) solid;
+    cursor: pointer;
+    display: block;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.3);
+    width: 32px;
+    height: 32px;
+    cursor:pointer;
+	
+	>symbol {
+		cursor:pointer;
+		>div {
+    	    width: 80%;
+		    height: 80%;
+		    cursor: pointer;
+		    margin-left: 10%;
+		    margin-top: 10%;
+		    >svg {
+		    	width: 100%;
+			    height: 100%;
+			    fill: #FF0D0D;
+			    cursor:pointer;
+		    }
+	    }
+	}
+}
+
+nt-filemanager ul.filesArea li {
+	position:relative;
+	&.selected {
+		background-color:#D0CB00;
+
+		&:hover {
+			background-color:#B5B105;
+		}
+
+		img {
+			opacity:0.75;
+			filter:alpha(opacity=75);
+		}
+
+		div.subscribe {
+			color:white;
+			font-weight: 100;
+		}
+
+		&.image {
+			> div.thumb {
+				/*box-shadow:         1px 4px 17px 4px rgba(0, 0, 0, 0.39);*/
+				background-color:#000000;
+			}
+		}
+	}
+
+	&:hover {
+		.acceptit {
+			opacity:1;
+			transform: translateX(-50%) scale(1);
+		}
+	}
+}
+
+nt-filemanager ul.filesArea li div.subscribe {
+	font-size: 11px;
+	color: #131212;
+	font-weight: normal;
+	margin: 10px auto 0 auto;
+	height:20px;
+	line-height: 14px;
+	height: 14px;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	width: 120px;
+	text-align:center;
+	font-weight: 100;
+	font-family: Arial;
+}
+
+
+nt-filemanager div.location {
+	display:table;
+	overflow: hidden;
+	height:34px;
+	width:100%;
+	position: relative;
+}
+
+nt-filemanager div.location > table {
+	padding:0px;
+	width:100%;
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+
+nt-filemanager div.location > table:after {
+}
+
+nt-filemanager div.location > table td.backurl {
+	display:none;
+	width:34px;
+	height:100%;
+	vertical-align: middle;
+}
+
+nt-filemanager div.location > table td.backurl a.goback-icon {
+	background:url(images/goback-icon.png) center center no-repeat transparent;
+	width:100%;
+	height:23px;
+	display:inline-block;
+	cursor:pointer;
+}
+
+nt-filemanager div.location td.input {
+	display:table;
+	font-size:14px;
+	color:#505057;
+	height:100%;
+	width:100%;
+	
+}
+
+nt-filemanager div.location td.input > div {
+	padding:6px 0;
+	border:1px rgba(255, 13, 13, 0.16) solid;
+}
+
+nt-filemanager div.location td.input > div > div {
+	border-radius: 3px;
+}
+
+nt-filemanager div.location td.input > div > div > div {
+	padding:0 12px;
+}
+
+nt-filemanager div.controls {
+	padding: 1px 0;
+	margin-bottom: 3px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	float:left;
+	
+}
+
+nt-filemanager div.controls ul {
+	list-style:none;
+	margin:0px;
+	padding:0px;
+}
+
+nt-filemanager div.controls ul:after {
+	content: "";
+	display:block;
+	width:100%;
+	clear:both;
+}
+
+nt-filemanager div.controls ul li {
+	float:left;
+	background-color:rgba(37, 37, 37, 0.01);
+	margin:0 3px 0 0;
+}
+
+nt-filemanager div.controls ul li.selected {
+	background-color:#FF0D0D;
+}
+
+nt-filemanager-modal {
+	background-color:rgba(5,5,5,1);
+	border-radius: 12px;
+	padding:12px;
+	-webkit-box-shadow: 0px 10px 24px -5px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow:    0px 10px 24px -5px rgba(50, 50, 50, 0.75);
+	box-shadow:         0px 10px 24px -5px rgba(50, 50, 50, 0.75);
+	width:600px;
+}
+
+nt-filemanager-overlay {
+	background-color:rgba(0,0,0,0.6);
+}
+
+nt-filemanager-modal > div {
+	padding:10px !important;
+}
+
+nt-filemanager-modal > div img.preview {
+	width:580px;
+}
+
+nt-filemanager-modal > div > div {
+	position:relative;
+}
+
+nt-filemanager-modal span.close {
+	position:absolute;
+	top:-30px;
+	right:-30px;
+}
+
+/* Metro icons */
+a.elbora-vcl-themes-metro-icon {
+	background-position:center center;
+	background-repeat: no-repeat;
+	background-size:60%;
+}
+
+a.elbora-vcl-themes-metro-icon > img.glow { display:none; }
+a.elbora-vcl-themes-metro-icon > img.default { display:block; }
+
+.elbora-vcl-themes-metro-icon32x32 {
+	text-decoration:none;
+	width:32px;
+	height:32px;
+	display:block;
+}
+
+.elbora-vcl-themes-metro-icon32x32-add {
+	background-image:url(images/metro-icon-add-dark.png);
+}
+
+.elbora-vcl-themes-metro-icon32x32-addfolder {
+	background-image:url(images/metro-icon-newfolder-dark.png);
+}
+
+.elbora-vcl-themes-metro-icon32x32-list {
+	background-image:url(images/metro-icon-list-dark.png);
+}
+
+.elbora-vcl-themes-metro-icon32x32-delete {
+	background-image:url(images/metro-icon-delete-dark.png);
+}
+
+.elbora-vcl-themes-metro-icon32x32-use {
+	background-image:url(images/metro-icon-use-dark.png);
+}
+
+.elbora-vcl-themes-bold-icon32x32-close {
+	background-image:url(images/bold-icon-close-dark.png);
+	transition:transform 0.35s ease;
+	transform:scale(0.7);
+}
+.elbora-vcl-themes-bold-icon32x32-close:hover {
+	transform:scale(1);
+}
+
+.elbora-vcl-themes-metro-icon-filetype {
+	width:110px;
+	height:110px;
+	display:inline-block;
+	background-position:center center;
+	background-repeat: no-repeat;
+}
+
+.elbora-vcl-themes-metro-icon-filetype-folder {
+	background-image:url(images/metro-icon-folder-dark.png);
+}
