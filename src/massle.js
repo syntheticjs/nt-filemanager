@@ -1338,405 +1338,387 @@ function log() {
 		this.binds();
 	};
 
-
-	var FN = function(wrapper, options) {
-
-		this.wrapper = wrapper;
-		var options = options || {};
-		// Initial
-			// main data
-			this.data = {
-				files: [],
-				folders: []
-			}
-			// options
-			this.options = $.extend({
-				isRoot: true,
-				connector: '',
-				location: '/',
-				receiver: false
-			}, options || {});
-			// wrappers
-			this.wrappers = {
-				area: null
-			};
-			// Phenotype
-			this.phenotype = {
-				controls: {
-					use: {
-						'icon': 'use',
-						'trigger': 'use',
-						'hidden': true,
-						"title": "Использовать",
-						'click': function() {
-							if ("function"==typeof this.options.receiver) this.options.receiver(this.seance.selectedItems); 
-						}
-					},
-					addfile: {
-						'icon': 'add',
-						'trigger': 'add',
-						'title': 'Создать',
-						'init': function(el) {
-							this.bindUploadFile(el);
-						}
-					},
-					addfolder: {
-						'icon': 'addfolder',
-						'trigger': 'addfolder',
-						'title': 'Создать директорию',
-						'click': function() {
-							this.createFolder();
-							return false;
-						}
-					},
-					select: {
-						'icon': 'list',
-						'trigger': 'modeSelect',
-						'click': function() {
-							this.toogleSelectMode();
-							return false;
-						},
-						'title': 'Выбрать'
-					},
-					del: {
-						'icon': 'delete',
-						'hidden': true,
-						'trigger': 'delete',
-						'title': 'Удалить выбранное',
-						'click': function() {
-							this.deleteDialog();
-							return false;
-						}
-					}
-				}
-			};
-			// 
-			this.seance = {
-				mode: 'preview'
-			}
-		// Init
-		this.init = function() {
-			this.seance.location = this.options.location;
-			this.build();
-			this.refresh();
-		}
-		// request
-		this.request = function(data, success) {
-			var widget = this;
-			if (!this.options.connector) return;
-			var data = data || {};
-			var success = success || false;
-			$.ajax({
-				url: this.options.connector,
-				data: $.extend({
-					location: this.seance.location
-				}, data),
-				type: "POST",
-				dataType: 'json',
-				success: function(res) {
-					
-					if (res) { 
-						if (!res.success) {
-							if (res.errorMsg) widget.alert(res.errorMsg);
-						} else
-						("function"==typeof success) && (success.call(widget, res)); }
-					else { this.throwError('INVALID_SERVER_RESPONSE'); }
-				},
-				error: function(r) {
-					console.error('Server response error: ', r.responseText);
-				}
-			});
-		}
-		// Local alert
-		this.alert = function(msg) {
-			alert(msg);
-		}
-		// Refresh
-		this.refresh = function() {
+    var FNPROTO = {
+        init : function() {
+            this.seance.location = this.options.location;
+            this.build();
+            this.refresh();
+        },
+        request : function(data, success) {
+            var widget = this;
+            if (!this.options.connector) return;
+            var data = data || {};
+            var success = success || false;
+            $.ajax({
+                url: this.options.connector,
+                data: $.extend({
+                    location: this.seance.location
+                }, data),
+                type: "POST",
+                dataType: 'json',
+                success: function(res) {
+                    
+                    if (res) { 
+                        if (!res.success) {
+                            if (res.errorMsg) widget.alert(res.errorMsg);
+                        } else
+                        ("function"==typeof success) && (success.call(widget, res)); }
+                    else { this.throwError('INVALID_SERVER_RESPONSE'); }
+                },
+                error: function(r) {
+                    console.error('Server response error: ', r.responseText);
+                }
+            });
+        },
+        alert : function(msg) {
+            alert(msg);
+        },
+        refresh : function() {
             console.log('refresh');
-			var widget = this;
-			$.ajax({
-				url: this.options.connector,
-				data: {
-					location: this.seance.location
-				},
-				type: "POST",
-				dataType: 'json',
-				success: function(res) {
-					if (res) { widget.data = res; widget.updateView(); }
-					else { this.throwError('INVALID_SERVER_RESPONSE'); }
-				},
-				error: function(r) {
-					console.error('Server response error: ', r.responseText);
-				}
-			});
-			// Set location
-			this.redrawLocation();
-			
-		}
-		// Build
-		this.build = function() {
-			var widget = this;
-			// Create main area
-			this.buildLocation();
-			this.buildControls();	
-			
-			this.buildArea();		
+            var widget = this;
+            $.ajax({
+                url: this.options.connector,
+                data: {
+                    location: this.seance.location
+                },
+                type: "POST",
+                dataType: 'json',
+                success: function(res) {
+                    if (res) { widget.data = res; widget.updateView(); }
+                    else { this.throwError('INVALID_SERVER_RESPONSE'); }
+                },
+                error: function(r) {
+                    console.error('Server response error: ', r.responseText);
+                }
+            });
+            // Set location
+            this.redrawLocation();
+            
+        },
+        build : function() {
+            var widget = this;
+            // Create main area
+            this.buildLocation();
+            this.buildControls();   
+            
+            this.buildArea();
+        },
+        buildControls : function() {
+            var widget = this;
+            // Create controls
+            var addCaption = 'Добавить изображение с '+(navigator.platform.toUpperCase().indexOf('MAC') >= 0 ? 'моего Mac`а' : 'компьютера');
+            
+            this.wrappers.controls = $(this.wrapper)
+            .put($("<div />", {
+                "class": "controls"
+            }));
+            
+            // Build buttons
+            $(this.wrappers.controls)
+                .put($("<ul />"))
+                .tie(function() {
+                    var ul = this;
+                    var crButton = function(ctrl) {
+                        $(ul)
+                            .put($('<li />', {
+                                "class": ctrl.hidden ? "hidden" : "",
+                                "data-trigger": ctrl.trigger
+                            }))
+                                .put($('<a />', {
+                                    'class': "elbora-vcl-themes-metro-icon elbora-vcl-themes-metro-icon32x32 elbora-vcl-themes-metro-icon32x32-"+ctrl.icon,
+                                    'title': ctrl.title || ''
+                                }))
+                                .tie(function() {
+                                    if ("function"==typeof ctrl.click) $(this).click(function() {
+                                        ctrl.click.call(widget, this);
+                                        return false;
+                                    });
+                                    else 
+                                    $(this).click(function() {
+                                        
+                                        return false;
+                                    });
 
-			
-		}
-		// Build controls
-		this.buildControls = function() {
-			var widget = this;
-			// Create controls
-			
-			this.wrappers.controls = $(this.wrapper)
-			.put($("<div />", {
-				"class": "controls"
-			}));
-			
-			// Build buttons
-			$(this.wrappers.controls)
-				.put($("<ul />"))
-				.tie(function() {
-					var ul = this;
-					var crButton = function(ctrl) {
-						$(ul)
-							.put($('<li />', {
-								"class": ctrl.hidden ? "hidden" : "",
-								"data-trigger": ctrl.trigger
-							}))
-								.put($('<a />', {
-									'class': "elbora-vcl-themes-metro-icon elbora-vcl-themes-metro-icon32x32 elbora-vcl-themes-metro-icon32x32-"+ctrl.icon,
-									'title': ctrl.title || ''
-								}))
-								.tie(function() {
-									if ("function"==typeof ctrl.click) $(this).click(function() {
-										ctrl.click.call(widget, this);
-										return false;
-									});
-									else 
-									$(this).click(function() {
-										
-										return false;
-									});
+                                    if ("function"==typeof ctrl.init) ctrl.init.call(widget, this);
+                                });
+                    };
 
-									if ("function"==typeof ctrl.init) ctrl.init.call(widget, this);
-								});
-					};
+                    $.each(widget.phenotype.controls, function() {
+                        crButton(this);
+                    });
 
-					$.each(widget.phenotype.controls, function() {
-						crButton(this);
-					});
+                });
 
-				});
-		}
-		// Build location
-		this.buildLocation = function() {
-			var widget = this;
-			this.wrappers.area = $(this.wrapper)
-			.put($("<div />", {
-				"class": "location"
-			}));
+            this.wrappers.addArea = $(this.wrapper)
+            .put($("<div />", {
+                "class": "add-area"
+            }))
+            .put($("<div />", {
+                "class": "add-area-section add-area-section-box"
+            }))
+            .tie(function() {
+                $(this).put($('<figure />', {
+                    "class": ""
+                }))
+                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-add-folder-icon"></use></svg></div><figcaption><span class="capitalized">Новая папка</span></figcaption>')
+                
+                
+            })
+            .click(function() {
+                widget.createFolder();
+                return false;
+            })
+            .and($("<div />", {
+                "class": "add-area-section"
+            }))
+            .tie(function() {
+                $(this).put($('<figure />', {
+                    "class": ""
+                }))
+                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-camera-icon"></use></svg></div><figcaption><span class="capitalized">'+addCaption+'</span></figcaption>');
+                 widget.bindUploadFile(this);
+            })
+            .and($("<div />", {
+                "class": "add-area-section add-area-section-box"
+            }))
+            .tie(function() {
+                $(this).put($('<figure />', {
+                    "class": "are-box-standalone"
+                }))
+                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-navicon-icon"></use></svg></div>')
+                
 
-			$(this.wrappers.area)
-			.put($("<table />"))
-			.ramp($("<tbody />"),$("<tr />"))
-				.put($('<td />', {
-					"class": "backurl"
-				}))
-				.tie(function() {
-					widget.wrappers.backurl = this;
-					$(this)
-					.put($("<a />", {
-						"class": "goback-icon"
-					}))
-					.click(function() {
-						widget.goTop();
-						return false;
-					});
-				})
-				.and($("<td />", {
-					"class": "input"
-				}))
-					.put($("<div />"))
-					.put($("<div />"))
-					.put($("<div />"))
-					.tie(function() {
-						widget.wrappers.location = this;
-					})
-					.html(this.seance.location);
-		}
-		// Build area
-		this.buildArea = function() {
-			var widget = this;
-			// Build area self
-			this.wrappers.area = $(this.wrapper)
-			.put($("<ul />", {
-				"class": "filesArea"
-			}));
-			
-		}
-		// update view
-		this.updateView = function() {
-			var widget = this;
-			// Create folders
-			$(this.wrappers.area)
-			.empty()
-			.tie(function() {
-				
-				// Draw folders
-				$.each(widget.data.folders, function() {
-					$(widget.wrappers.area)
-					.put($('<li />', {
-						"class": "folder",
-						"rel": this.name
-					}))
-					.click(function() {
-						widget.click($(this));
-						return false;
-					})
-						.put($("<div />", {
-							"class": "thumb",
-						}))
-						.tie(function() {
-							$(this).put($("<a />", {
-								"class": "elbora-vcl-themes-metro-icon elbora-vcl-themes-metro-icon32x32"
-							}))
-								.put($("<div />", {
-									"class": "elbora-vcl-themes-metro-icon-filetype elbora-vcl-themes-metro-icon-filetype-folder"
-								}));
-						})
-						.and($("<div />", {
-							"class": "subscribe"
-						}))
-						.html(this.title);							
-				});
-				// Draw files
-				$.each(widget.data.files, function() {
-					var file = this;
-					
-					$(widget.wrappers.area)
-					.put($('<li />', {
-						"class": "file image",
-						"rel": this.name,
+                var element = this;
+
+                widget.$fetch('+seance.mode=="select"', function(isSelect) {
+                    
+                    element[isSelect?'addClass':'removeClass']("active");
+                });
+            })
+            .click(function() {
+                widget.deleteDialog();
+                return false;
+            });
+            .and($("<div />", {
+                "class": "add-area-section add-area-section-box"
+            }))
+            .tie(function() {
+                $(this).put($('<figure />', {
+                    "class": "are-box-standalone"
+                }))
+                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-navicon-icon"></use></svg></div>')
+                
+
+                var element = this;
+
+                widget.$fetch('+seance.mode=="select"', function(isSelect) {
+                    
+                    element[isSelect?'addClass':'removeClass']("active");
+                });
+            })
+            .click(function() {
+                widget.toogleSelectMode();
+                return false;
+            });
+        },
+        buildLocation : function() {
+            var widget = this;
+            this.wrappers.area = $(this.wrapper)
+            .put($("<div />", {
+                "class": "location"
+            }));
+
+            $(this.wrappers.area)
+            .put($("<table />"))
+            .ramp($("<tbody />"),$("<tr />"))
+                .put($('<td />', {
+                    "class": "backurl"
+                }))
+                .tie(function() {
+                    widget.wrappers.backurl = this;
+                    $(this)
+                    .put($("<a />", {
+                        "class": "goback-icon"
+                    }))
+                    .click(function() {
+                        widget.goTop();
+                        return false;
+                    });
+                })
+                .and($("<td />", {
+                    "class": "input"
+                }))
+                    .put($("<div />"))
+                    .put($("<div />"))
+                    .put($("<div />"))
+                    .tie(function() {
+                        widget.wrappers.location = this;
+                    })
+                    .html(this.seance.location);
+        },
+        buildArea : function() {
+            var widget = this;
+            // Build area self
+            this.wrappers.area = $(this.wrapper)
+            .put($("<ul />", {
+                "class": "filesArea"
+            }));
+            
+        },
+        updateView : function() {
+            var widget = this;
+            // Create folders
+            $(this.wrappers.area)
+            .empty()
+            .tie(function() {
+                
+                // Draw folders
+                $.each(widget.data.folders, function() {
+                    $(widget.wrappers.area)
+                    .put($('<li />', {
+                        "class": "folder",
+                        "rel": this.name
+                    }))
+                    .click(function() {
+                        widget.click($(this));
+                        return false;
+                    })
+                        .put($("<div />", {
+                            "class": "thumb",
+                        }))
+                        .tie(function() {
+                            $(this).put($("<a />", {
+                                "class": "elbora-vcl-themes-metro-icon elbora-vcl-themes-metro-icon32x32"
+                            }))
+                                .put($("<div />", {
+                                    "class": "elbora-vcl-themes-metro-icon-filetype elbora-vcl-themes-metro-icon-filetype-folder"
+                                }));
+                        })
+                        .and($("<div />", {
+                            "class": "subscribe"
+                        }))
+                        .html(this.title);                          
+                });
+                // Draw files
+                $.each(widget.data.files, function() {
+                    var file = this;
+                    
+                    $(widget.wrappers.area)
+                    .put($('<li />', {
+                        "class": "file image",
+                        "rel": this.name,
                         "origin": this.origin
-					}))
-					.click(function() {
-						widget.click($(this));
-						return false;
-					})
-						.put($("<div />", {
-							"class": "thumb"
-						}))
-						.click(function() {
-							widget.previewClick($(this).parent());
-							return false;
-						})
-						.tie(function() {
-							$(this).put($("<img />", {
-								"alt": file.name,
-								"src": file.thumb
-							}));
-						})
-						.and($("<div />", {
-							"class": "subscribe"
-						}))
-						.html(this.title)
-						.and($('<div />',  {
-							"class": "acceptit"
-						}))
-						.tie(function() {
-							$(this)
-							.put($('<symbol />', {
-								"class": "icons__plate",
-								"title": "Use it"
-							}))
-							.html('<div class="icon icon--ei-share-apple icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-share-apple-icon"></use></svg></div>')
-							.click(function() {
-								debugger;
-								if ("function"==typeof widget.options.receiver && widget.seance.mode!=='select') {
-									widget.sendback(file.name); 
-								}
-							});
-						});
-									
-				});
-				widget.postRender();
-			});
-			
-		}
-		this.sendback = function(rel) {
-			if (rel)
-			this.options.receiver({
+                    }))
+                    .click(function() {
+                        widget.click($(this));
+                        return false;
+                    })
+                        .put($("<div />", {
+                            "class": "thumb"
+                        }))
+                        .click(function() {
+                            widget.previewClick($(this).parent());
+                            return false;
+                        })
+                        .tie(function() {
+                            $(this).put($("<img />", {
+                                "alt": file.name,
+                                "src": file.thumb
+                            }));
+                        })
+                        .and($("<div />", {
+                            "class": "subscribe"
+                        }))
+                        .html(this.title)
+                        .condition("function"==typeof widget.options.receiver, function() {
+                            $(this).and($('<div />',  {
+                                "class": "acceptit"
+                            }))
+                            .tie(function() {
+                                $(this)
+                                .put($('<symbol />', {
+                                    "class": "icons__plate",
+                                    "title": "Use it"
+                                }))
+                                .html('<div class="icon icon--ei-share-apple icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-share-apple-icon"></use></svg></div>')
+                                .click(function() {
+                                    
+                                    if ("function"==typeof widget.options.receiver && widget.seance.mode!=='select') {
+                                        widget.sendback(file.name); 
+                                    }
+                                });
+                            });
+                        }); 
+                });
+                widget.postRender();
+            });
+            
+        },
+        sendback : function(rel) {
+            if (rel)
+            this.options.receiver({
                 files: [this.getCurrentLocation()+rel],
                 folders: []
-			}); 
-			else {
-				this.options.receiver(this.seance.selectedItems);
-			}
+            }); 
+            else {
+                this.options.receiver(this.seance.selectedItems);
+            }
             this.close();
             return false;
-		}
-		this.redrawLocation = function() {
-			$(this.wrappers.location).html(this.seance.location);
-			if (this.seance.location!='/') $(this.wrappers.backurl).show();
-			else $(this.wrappers.backUrl).hide();
-		}
-		this.postRender = function() {
-			var widget = this;
-			$(this.wrappers.area).find('div.thumb>img').each(function() {
-				widget.calcThumbSize(this);
-			});
-		}
-		/* Auto fit image to wrapper */
-		this.calcThumbSize = function(img) {
-			var img = img;
-			
-			$(img).fitimage({
-				width:110,
-				height:110
-			});
-			
-		};
+        },
+        redrawLocation : function() {
+            $(this.wrappers.location).html(this.seance.location);
+            if (this.seance.location!='/') $(this.wrappers.backurl).show();
+            else $(this.wrappers.backUrl).hide();
+        },
+        postRender : function() {
+            var widget = this;
+            $(this.wrappers.area).find('div.thumb>img').each(function() {
+                widget.calcThumbSize(this);
+            });
+        },
+        calcThumbSize : function(img) {
+            var img = img;
+            
+            $(img).fitimage({
+                width:110,
+                height:110
+            });
+            
+        },
+        previewClick : function(el) {
+            var widget = this;
+            switch (this.seance.mode) {
+                case 'select':
+                    this.select(el);
+                break;
+                case 'preview':
+                    if ($(el).hasClass('folder')) {
+                        // open folder
+                        widget.appendLocation($(el).attr("rel"));                       
+                    } else {
+                        this.preview(el);
+                    };
+                break;
+            }
+            
+        },
+        click : function(el) {
+            var widget = this;
+            switch(this.seance.mode) {
+                case 'select':
+                    this.select(el);
+                break;
+                case 'preview':
+                    if ($(el).hasClass('folder')) {
 
-		this.click = function(el) {
-			var widget = this;
-			switch(this.seance.mode) {
-				case 'select':
-					this.select(el);
-				break;
-				/*case 'preview':
-					if ($(el).hasClass('folder')) {
-
-						// open folder
-						widget.appendLocation($(el).attr("rel"));						
-					} else {
-						this.preview(el);
-					};
-				break;*/
-			}
-		};
-
-		this.previewClick = function(el) {
-			var widget = this;
-			switch (this.seance.mode) {
-				case 'select':
-					this.select(el);
-				break;
-				case 'preview':
-					if ($(el).hasClass('folder')) {
-						// open folder
-						widget.appendLocation($(el).attr("rel"));						
-					} else {
-						this.preview(el);
-					};
-				break;
-			}
-			
-		};
-
-        this.preview = function(el) {
+                        // open folder
+                        widget.appendLocation($(el).attr("rel"));                       
+                    }
+                break;
+            }
+        },
+        preview : function(el) {
             var plugin = this;
             var el = el;
             $("body").component("overlay", {
@@ -1778,172 +1760,237 @@ function log() {
                 });
                    
             }).show();
-        }
+        },
+        appendLocation : function(loc) {
+            var loc = loc.split('\\').join('/');
 
-		this.appendLocation = function(loc) {
-			var loc = loc.split('\\').join('/');
+            if (/^[^\/]+/.test(loc)) {
+                if (loc.indexOf(0)=='/') loc = loc.substr(1);
+                if (loc.length==1 && loc.substring(-1)=='/') loc = loc.substr(0,-1);
+                
+                if (this.seance.location.substring(-1)!=='/') this.seance.location += '/';
+                this.seance.location += loc;
+                
+                this.refresh();
+            }
+        },
+        disableSelectionMode : function() {
+            this.seance.mode = 'preview';
+            $(this.wrappers.area).find('li.selected').removeClass('selected');
+            $(this.wrappers.controls).find('li[data-trigger=modeSelect]').removeClass('selected');
+            this.seance.selectedItems = {
+                'folders': [],
+                'files': []
+            };
+            this.recheckSituation();
+        },
+        enableSelectionMode : function() {
 
-			if (/^[^\/]+/.test(loc)) {
-				if (loc.indexOf(0)=='/') loc = loc.substr(1);
-				if (loc.length==1 && loc.substring(-1)=='/') loc = loc.substr(0,-1);
-				
-				if (this.seance.location.substring(-1)!=='/') this.seance.location += '/';
-				this.seance.location += loc;
-				
-				this.refresh();
-			}
-		}
+            this.seance.mode = 'select';
+            $(this.wrappers.controls).find('li[data-trigger=modeSelect]').addClass('selected');
+            this.recheckSituation();
 
-		/* SELECT MODE */
+        },
+        toogleSelectMode : function() {
+            if (this.seance.mode == 'select') {
+                this.disableSelectionMode();
+            } else {
+                this.enableSelectionMode();
+            }
+        },
+        select : function(el) {
+            $(el).toggleClass('selected');
+            this.recheckSituation();
+        },
+        deleteDialog : function() {
+            if (confirm("Удалить выбранные файлы?")) {
+                this.deleteSelected();
+                this.disableSelectionMode();
+            }
+        },
+        deleteSelected : function() {
+            var widget = this;
+            if ("function"==typeof this.options.onDelete) {
+                this.options.onDelete.call(this, this.seance.selectedItems);
+            }
+            this.request({
+                mode: 'delete',
+                location: this.seance.location,
+                files: this.seance.selectedItems.files,
+                folders: this.seance.selectedItems.folders
+            }, function() {
+                widget.refresh();
+            });
+        },
+        createFolder : function() {
+            var widget = this;
+            var dirname;
+            if (dirname = prompt("Укажите имя для новой директории")) {
+                if ("function"==typeof this.options.onDelete) {
+                    this.options.onMakeDir.call(this, dirname);
+                }
+                if (typeof this.options.connector!="undefined" && this.options.connector) {
+                    this.request({
+                        mode: 'addfolder',
+                        location: this.seance.location,
+                        foldername: dirname
+                    }, function() {
+                        widget.refresh();
+                    });
+                }
+            }
+        },
+        bindUploadFile : function(el) {
+            var widget = this;
+            new uploadFileOnClick($(el), function() {
 
-		this.disableSelectionMode = function() {
-			this.seance.mode = 'preview';
-			$(this.wrappers.area).find('li.selected').removeClass('selected');
-			$(this.wrappers.controls).find('li[data-trigger=modeSelect]').removeClass('selected');
-			this.seance.selectedItems = {
-				'folders': [],
-				'files': []
-			};
-			this.recheckSituation();
-		};
-		
-		this.enableSelectionMode = function() {
+                return widget.seance.location;
+            }, {
+                connector: this.options.connector,
+                onSuccess: function(response) {
+                    widget.refresh();
+                }
+            });
+        },
+        recheckSituation : function() {
+            var widget = this;
+            /* Смотрим на выеделенные элементы */
+            this.seance.selectedItems = {
+                'folders': [],
+                'files': []
+            };
+            var cloc = this.getCurrentLocation();
 
-			this.seance.mode = 'select';
-			$(this.wrappers.controls).find('li[data-trigger=modeSelect]').addClass('selected');
-			this.recheckSituation();
+            $(this.wrappers.area).find('li.selected').each(function() {
+                if ($(this).hasClass("folder"))
+                widget.seance.selectedItems.folders.push(cloc+'/'+$(this).attr("rel"));
+                else
+                widget.seance.selectedItems.files.push(cloc+'/'+$(this).attr("rel"));
+            });
+            
+            /* Определяем показывать ли кнопку delete */
+            if (this.seance.selectedItems.folders.length>0 || this.seance.selectedItems.files.length>0) {
+                $(this.wrappers.controls).find('li[data-trigger=use]').removeClass("hidden");
+                $(this.wrappers.controls).find('li[data-trigger=delete]').removeClass("hidden");
+            } else {
+                $(this.wrappers.controls).find('li[data-trigger=use]').addClass("hidden");
+                $(this.wrappers.controls).find('li[data-trigger=delete]').addClass("hidden");
+            }
+            this.$digest();
+        },
+        goTop : function() {
+            if (this.seance.location=='/') return false;
+            var aloc = this.seance.location.split('/');
 
-		};
-
-		this.toogleSelectMode  = function() {
-			if (this.seance.mode == 'select') {
-				this.disableSelectionMode();
-			} else {
-				this.enableSelectionMode();
-			}
-		}
-
-		this.select = function(el) {
-			$(el).toggleClass('selected');
-			this.recheckSituation();
-		};
-
-		/* Диалог перед удалением */
-		this.deleteDialog = function() {
-			if (confirm("Удалить выбранные файлы?")) {
-				this.deleteSelected();
-				this.disableSelectionMode();
-			}
-		}
-		/* Удаление */
-		this.deleteSelected = function() {
-			var widget = this;
-			if ("function"==typeof this.options.onDelete) {
-				this.options.onDelete.call(this, this.seance.selectedItems);
-			}
-			this.request({
-				mode: 'delete',
-				location: this.seance.location,
-				files: this.seance.selectedItems.files,
-				folders: this.seance.selectedItems.folders
-			}, function() {
-				widget.refresh();
-			});
-		}
-
-		/* Создание директории */
-		this.createFolder = function() {
-			var widget = this;
-			var dirname;
-			if (dirname = prompt("Укажите имя для новой директории")) {
-				if ("function"==typeof this.options.onDelete) {
-					this.options.onMakeDir.call(this, dirname);
-				}
-				if (typeof this.options.connector!="undefined" && this.options.connector) {
-					this.request({
-						mode: 'addfolder',
-						location: this.seance.location,
-						foldername: dirname
-					}, function() {
-						widget.refresh();
-					});
-				}
-			}
-		}
-
-		/* Накладываем на кнопку возможность выбора файла */
-		this.bindUploadFile = function(el) {
-			var widget = this;
-			new uploadFileOnClick($(el), function() {
-
-				return widget.seance.location;
-			}, {
-				connector: this.options.connector,
-				onSuccess: function(response) {
-					widget.refresh();
-				}
-			});
-		}
-
-		/* Переход на уровень выше */
-		this.goTop = function() {
-			if (this.seance.location=='/') return false;
-			var aloc = this.seance.location.split('/');
-
-			while (aloc[aloc.length-1]=='' && aloc.length>0) {
-				aloc.pop();
-				console.log('aloc', aloc);
-			}
-			aloc.pop();
-			var loc = aloc.length==0 ? '/' : aloc.join('/');
-			if (loc=='') loc = '/';
-			this.seance.location = loc;
-			this.refresh();
-		}
-
-		/* Пересматривает ситуацию активных элементов */
-		this.recheckSituation = function() {
-			var widget = this;
-			/* Смотрим на выеделенные элементы */
-			this.seance.selectedItems = {
-				'folders': [],
-				'files': []
-			};
-			var cloc = this.getCurrentLocation();
-
-			$(this.wrappers.area).find('li.selected').each(function() {
-				if ($(this).hasClass("folder"))
-				widget.seance.selectedItems.folders.push(cloc+'/'+$(this).attr("rel"));
-				else
-				widget.seance.selectedItems.files.push(cloc+'/'+$(this).attr("rel"));
-			});
-            console.log(widget.seance.selectedItems);
-			/* Определяем показывать ли кнопку delete */
-			if (this.seance.selectedItems.folders.length>0 || this.seance.selectedItems.files.length>0) {
-				$(this.wrappers.controls).find('li[data-trigger=use]').removeClass("hidden");
-				$(this.wrappers.controls).find('li[data-trigger=delete]').removeClass("hidden");
-			} else {
-				$(this.wrappers.controls).find('li[data-trigger=use]').addClass("hidden");
-				$(this.wrappers.controls).find('li[data-trigger=delete]').addClass("hidden");
-			}
-		}	
-		/* Возврвщает текущую локацию файл без первого слеша */
-		this.getCurrentLocation = function() {
-			var loc = this.seance.location;
-			if (loc.substr(0,1)==='/') loc = loc.substr(1);
-			if (loc.substr(-1)==='/') loc = loc.substr(0,-1);
+            while (aloc[aloc.length-1]=='' && aloc.length>0) {
+                aloc.pop();
+                console.log('aloc', aloc);
+            }
+            aloc.pop();
+            var loc = aloc.length==0 ? '/' : aloc.join('/');
+            if (loc=='') loc = '/';
+            this.seance.location = loc;
+            this.refresh();
+        },
+        getCurrentLocation : function() {
+            var loc = this.seance.location;
+            if (loc.substr(0,1)==='/') loc = loc.substr(1);
+            if (loc.substr(-1)==='/') loc = loc.substr(0,-1);
             if (loc.length===1&&loc[0]==='/') loc = '';
-			return loc;
+            return loc;
+        }
+    }
+
+	var FN = function(parent, wrapper, options) {
+
+		this.wrapper = wrapper;
+		var options = options || {};
+
+		// main data
+		this.data = {
+			files: [],
+			folders: []
+		}
+		// options
+		this.options = $.extend({
+			isRoot: true,
+			connector: '',
+			location: '/',
+			receiver: false
+		}, options || {});
+		// wrappers
+		this.wrappers = {
+			area: null
+		};
+		// Phenotype
+		this.phenotype = {
+			controls: {
+				use: {
+					'icon': 'use',
+					'trigger': 'use',
+					'hidden': true,
+					"title": "Использовать",
+					'click': function() {
+						if ("function"==typeof this.options.receiver) this.options.receiver(this.seance.selectedItems); 
+					}
+				},
+				addfile: {
+					'icon': 'add',
+					'trigger': 'add',
+					'title': 'Создать',
+					'init': function(el) {
+						this.bindUploadFile(el);
+					}
+				},
+				addfolder: {
+					'icon': 'addfolder',
+					'trigger': 'addfolder',
+					'title': 'Создать директорию',
+					'click': function() {
+						this.createFolder();
+						return false;
+					}
+				},
+				select: {
+					'icon': 'list',
+					'trigger': 'modeSelect',
+					'click': function() {
+						this.toogleSelectMode();
+						return false;
+					},
+					'title': 'Выбрать'
+				},
+				del: {
+					'icon': 'delete',
+					'hidden': true,
+					'trigger': 'delete',
+					'title': 'Удалить выбранное',
+					'click': function() {
+						this.deleteDialog();
+						return false;
+					}
+				}
+			}
+		};
+
+		// 
+		this.seance = {
+			mode: 'preview'
 		}
 
 		this.init();
 	}
 
-	$.fn.ntFileManager = $.fn.ntFileManager = function(data) {
+    FN.prototype = FNPROTO;
+    FN.prototype.constructor = FN;
+
+	$.fn.ntFileManager = $.fn.ntFileManager = function(data, component) {
 		
-		var data = data;
+
+		
 		return $(this).each(function() {
-			new FN(this, data);
+            
+            component.$newScope(FN, [this, data]);
 		});
 	};
 
