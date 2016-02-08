@@ -1496,13 +1496,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        },
 	                        beforeSubmit: function(formData, jqForm, options) 
 	                        {   
+	                            
 	                            var reconfig = self.widget.parseUserRequest(uploadCfg);
 
-	                            options.extraData = {
-	                                content: reconfig.content
-	                            };
-	                            console.log(options.extraData);
-	                            that.config.beforeSubmit.call(that, formData, jqForm, options);
+	                            options.extraData = reconfig.data;
+	                            
+	                            //that.config.beforeSubmit.call(that, formData, jqForm, options);
 	                        
 	                            $(that.wrappers.element).attr("disabled", true).css({
 	                                'opacity': 0.5
@@ -1565,7 +1564,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.component.$fetch(['$config.url','$config.type'], function(url, type) {
 
 	                // Mix default request with user request
-	                debugger;
+	                
 	                var parsedUserRequest = widget.parseUserRequest(data);
 	                var request = $.extend({
 	                    url: url,
@@ -1577,7 +1576,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                // Add functions
 	                // Success callback
 	                request.success = function(res) {
-	                    debugger;
 	                    if (res) { 
 	                        if (res.type==='contents' && res.content) {
 	                            ;("function"==typeof success) && (success.call(widget, res.content)); 
@@ -1604,7 +1602,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.component.$fetch(['$config.requests.refresh'], function(refreshCfg) {
 	                widget.request(refreshCfg, function(res) {
 
-	                    if (res) { widget.content = res; widget.updateView(); }
+	                    if (res) { widget.data = res; widget.updateView(); }
 	                    else { widget.throwError('INVALID_SERVER_RESPONSE'); }
 	                }, function(r) {
 	                    console.error('Server response error: ', r.responseText);
@@ -2046,9 +2044,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 	        createFolder : function() {
 	            var widget = this;
+
 	            if (this.seance.dirname = prompt("Укажите имя для новой директории")) {
+
 	                this.component.$fetch(['$config.requests.addFolder'], function(addFolderCfg) {
-	                    this.request(addFolderCfg, function() {
+	                    
+	                    widget.request(addFolderCfg, function() {
 	                        widget.refresh();
 	                    });
 	                });
