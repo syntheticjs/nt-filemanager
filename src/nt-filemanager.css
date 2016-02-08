@@ -2,145 +2,160 @@ nt-filemanager {
 	position: relative;
 	background-color: rgba(37, 37, 37, 0.01);
     display: block;
-}
 
-nt-filemanager ul.filesArea {
-	overflow: hidden;
-	display:table;
-	list-style: none;
-	padding: 0px;
-	margin:0 0 5px 0;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
-	background: none;
-	clear:both;
-}
+    ul.filesArea {
+		overflow: hidden;
+		display:table;
+		list-style: none;
+		padding: 0px;
+		margin:0 0 5px 0;
+		-webkit-border-radius: 6px;
+		-moz-border-radius: 6px;
+		border-radius: 6px;
+		background: none;
+		clear:both;
 
-nt-filemanager ul.filesArea li {
-	padding: 24px 24px;
-	height: 130px;
-	float: left;
-	margin: 0 1px 1px 1px;
-}
+		li {
+			padding: 24px 24px;
+			height: 130px;
+			float: left;
+			margin: 0 1px 1px 1px;
+			position: relative;
+			
+			&.folder {
+				background-color: rgba(255, 255, 255, 0.03);
+			}
 
-nt-filemanager ul.filesArea li.file {
-	background-color: rgba(224, 216, 201, 0.19);
-	transition:background 0.45s ease;
-	&:hover {
-		background-color:rgba(224, 216, 201, 0.29)
-	}
-}
+			&.file {
+				background-color: rgba(224, 216, 201, 0.19);
+				transition:background 0.25s ease;
+				&:hover {
+					background-color:rgba(224, 216, 201, 0.29)
+				}
+			}
 
-
-nt-filemanager ul.filesArea li.folder {
-	background-color: rgba(255, 255, 255, 0.03);
-}
-
-nt-filemanager ul.filesArea li > div.thumb {
-	width:110px;
-	height:110px;
-	text-align:center;
-	margin:0 auto;
-	cursor:pointer;
-}
-
-nt-filemanager ul.filesArea li.image > div.thumb {
-	background-color: #8A8A8A;
-}
-
-nt-filemanager ul.filesArea li.image > div.thumb > img {
-	display:none;
-}
-
-
-nt-filemanager ul.filesArea li .acceptit {
-	transform-origin:50% 50%;
-	transition:transform 0.5s ease, opacity 0.3s ease;
-	
-	opacity:0;
-
-	margin: 0 auto;
-    border-radius: 16px;
-    border: 1px rgba(234, 204, 170, 0.69) solid;
-    cursor: pointer;
-    display: block;
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%) scale(0.3);
-    width: 32px;
-    height: 32px;
-    cursor:pointer;
-	
-	>symbol {
-		cursor:pointer;
-		>div {
-    	    width: 80%;
-		    height: 80%;
-		    cursor: pointer;
-		    margin-left: 10%;
-		    margin-top: 10%;
-		    >svg {
-		    	width: 100%;
-			    height: 100%;
-			    fill: #FF0D0D;
-			    cursor:pointer;
-		    }
-	    }
-	}
-}
-
-nt-filemanager ul.filesArea li {
-	position:relative;
-	&.selected {
-		background-color:#FF0D0D;
-
-		&:hover {
-			background-color:#BD1D1D;
-		}
-
-		img {
-			opacity:0.75;
-			filter:alpha(opacity=75);
-		}
-
-		div.subscribe {
-			color:white;
-			font-weight: 100;
-		}
-
-		&.image {
 			> div.thumb {
-				/*box-shadow:         1px 4px 17px 4px rgba(0, 0, 0, 0.39);*/
-				background-color:#000000;
+				width:110px;
+				height:110px;
+				text-align:center;
+				margin:0 auto;
+				cursor:pointer;
+				position: relative;
+
+				>.nt-filemanager-overlay {
+					position: absolute;
+					top:0;
+					left:0;
+					width:100%;
+					height:100%;
+					display:none;
+					>div {
+						background-color:rgb(217, 216, 204);
+						transform-origin:50% 50%;
+						transition:transform 0.25s ease, opacity 0.3s ease;
+						opacity:0;
+						margin: 0 auto;
+					    border-radius: 16px;
+					    border: 1px rgba(234, 204, 170, 0.69) solid;
+					    cursor: pointer;
+					    display: block;
+					    position: absolute;
+					    top: 50%;
+					    left: 50%;
+					    transform: translateX(-50%) translateY(-50%) scale(0.85);
+					    width: 32px;
+					    height: 32px;
+					    cursor:pointer;
+						
+						>symbol {
+							cursor:pointer;
+							>div {
+					    	    width: 80%;
+							    height: 80%;
+							    cursor: pointer;
+							    margin-left: 10%;
+							    margin-top: 10%;
+							    >svg {
+							    	width: 100%;
+								    height: 100%;
+								    fill: #8FA0A5;
+								    cursor:pointer;
+							    }
+						    }
+						}
+					}
+				}
+			}
+
+			&.image > div.thumb {
+				background-color: #8A8A8A;
+
+				
+
+				> img {
+					display:none;
+				}
+			}
+
+			div.subscribe {
+				font-size: 11px;
+				color: #131212;
+				font-weight: normal;
+				margin: 10px auto 0 auto;
+				height:20px;
+				line-height: 14px;
+				height: 14px;
+				-o-text-overflow: ellipsis;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				width: 120px;
+				text-align:center;
+				font-weight: 100;
+				font-family: Arial;
+			}
+
+			&.selected {
+				background-color:rgba(88, 84, 28, 0.22);
+
+				&:hover {
+					background-color:rgba(90, 86, 30, 0.35);
+				}
+
+				img {
+					opacity:0.75;
+					filter:alpha(opacity=75);
+				}
+
+				div.subscribe {
+					color:white;
+					font-weight: 100;
+				}
+
+				&.image {
+					> div.thumb {
+						/*box-shadow:         1px 4px 17px 4px rgba(0, 0, 0, 0.39);*/
+						background-color:#000000;
+					}
+				}
+
+				>div.thumb {
+					>.nt-filemanager-overlay {
+						display:block;
+						>div {
+							opacity:1;
+						}
+					}
+				}
+			}
+
+			&:hover {
+				.acceptit {
+					opacity:1;
+					transform: translateX(-50%) scale(1);
+				}
 			}
 		}
 	}
-
-	&:hover {
-		.acceptit {
-			opacity:1;
-			transform: translateX(-50%) scale(1);
-		}
-	}
-}
-
-nt-filemanager ul.filesArea li div.subscribe {
-	font-size: 11px;
-	color: #131212;
-	font-weight: normal;
-	margin: 10px auto 0 auto;
-	height:20px;
-	line-height: 14px;
-	height: 14px;
-	-o-text-overflow: ellipsis;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	width: 120px;
-	text-align:center;
-	font-weight: 100;
-	font-family: Arial;
 }
 
 
@@ -188,7 +203,7 @@ nt-filemanager div.location td.input {
 
 nt-filemanager div.location td.input > div {
 	padding:6px 0;
-	border:1px rgba(255, 13, 13, 0.16) solid;
+	border:1px rgb(204, 202, 202) solid;
 }
 
 nt-filemanager div.location td.input > div > div {
@@ -206,12 +221,12 @@ nt-filemanager div.add-area {
 		display:block;
 		border:none;
 		background-color:rgb(245, 245, 245);
-		margin:0 0 10px 0;
+		margin:0 0 4px 0;
 		padding:10px 0;
 		clear: both;
 		font-family: Arial;
 		text-align: center;
-		cursor:pointer;
+		
 
 		flex:0 1 100%;
 		margin-right: 2px;
@@ -230,15 +245,15 @@ nt-filemanager div.add-area {
 				>svg {
 					width:100%;
 					height:100%;
-					fill:#DCD5D5;
-					transition:fill 0.45s ease;
+					fill:#403737;
+					transition:fill 0.25s ease;
 				}
 			}
 
 			>figcaption {
 				font-size:11px;
-				color:#D0C9BD;
-				transition:color 0.45s ease;
+				color:#403737;
+				transition:color 0.25s ease;
 				display: inline-block;
 			    height: 50px;
 			    vertical-align: middle;
@@ -276,12 +291,12 @@ nt-filemanager div.add-area {
 		}
 
 		&:hover {
-			background-color:#F9F2E6;
+			background-color:#EFECEC;
 
 			> figure {
 				>div {
 					>svg {
-						fill:#FF0D0D;
+						fill:#8FA0A5;
 					}
 				}
 				>figcaption {
@@ -290,8 +305,12 @@ nt-filemanager div.add-area {
 			}
 		}
 
+		&.pointable {
+			cursor:pointer;
+		}
+
 		&.active {
-			background-color:#FF0D0D;
+			background-color:#8FA0A5;
 
 			> figure {
 				>div {
@@ -341,7 +360,7 @@ nt-filemanager div.controls ul li {
 }
 
 nt-filemanager div.controls ul li.selected {
-	background-color:#FF0D0D;
+	background-color:#8FA0A5;
 }
 
 nt-filemanager-modal {
@@ -415,7 +434,7 @@ a.elbora-vcl-themes-metro-icon > img.default { display:block; }
 
 .elbora-vcl-themes-bold-icon32x32-close {
 	background-image:url(images/bold-icon-close-dark.png);
-	transition:transform 0.35s ease;
+	transition:transform 0.25s ease;
 	transform:scale(0.7);
 }
 .elbora-vcl-themes-bold-icon32x32-close:hover {

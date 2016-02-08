@@ -1176,9 +1176,17 @@ function log() {
 ;(function($) {
 	
 
-	var uploadFileOnClick = function(element, loctarget, config) {
+	var uploadFileOnClick = function(element, config) {
 		this.enablearea = false;
-		this.loctarget = loctarget;
+        this.widget = config.widget;
+        this.component = config.widget.component;
+        this.configuratedRequest = null;
+
+        var self = this;
+
+        
+
+
 		this.build = function() {
 			var that = this;
 			
@@ -1198,48 +1206,45 @@ function log() {
 			this.wrappers = {
 				element: element
 			};
-			
-			// ñîçäàåì ñêðûòíóþ ôîðìó
-			this.wrappers.hform = $('<form />');
-			$(this.wrappers.hform).attr({
-				'method': 'post',
-				'action': this.config.connector,
-				'enctype': 'multipart/form-data'
-			});
-			$(this.wrappers.hform).css({
-				'position': 'absolute'
-			})
-			
-			/*, {
-				'method': 'post',
-				'action': window.$elbora.settings['AJAX_CONNECTOR'],
-				'enctype': 'multipart/form-data'
-			}).appendTo($('body'))
-			.;*/
-			
-			// 
-			/*var hidden = $('<input />', {
-				'type': 'hidden',
-				'name': 'modifer',
-				'value': api.parent.settings.photoUploadModifer
-			}).appendTo(this.wrappers.hform);*/
-			
-			//
-			this.wrappers.fileinput = $('<input />', {
-				'type': 'file',
-				'name': 'files'
-			}).appendTo(this.wrappers.hform).change(function() {
-				$(that.wrappers.hform).submit();
-				return false;
-			}).css({
-				'position': 'absolute',
-				'z-index': 9999999,
-				'display': 'block',
-				'opacity': 0
-			});
-			
-			//
-			this.fileinputseld = $(this.wrappers.fileinput)[0];
+
+            this.component.$fetch(['$config.url','$config.type','$config.requests.upload'], function(url, type, uploadCfg) {
+                // Mix default request with user request
+                
+                var parsedUserRequest = self.widget.parseUserRequest(uploadCfg);
+                that.configuratedRequest = $.extend({
+                    url: url,
+                    type: type,
+                    dataType: 'json',
+                    data: {}
+                }, parsedUserRequest);
+
+                that.wrappers.hform = $('<form />');
+                $(that.wrappers.hform).attr({
+                    'method': that.configuratedRequest.type,
+                    'action': that.configuratedRequest.url,
+                    'enctype': 'multipart/form-data'
+                });
+
+                $(that.wrappers.hform).css({
+                    'position': 'absolute'
+                });
+                
+                that.wrappers.fileinput = $('<input />', {
+                    'type': 'file',
+                    'name': 'files'
+                }).appendTo(that.wrappers.hform).change(function() {
+                    $(that.wrappers.hform).submit();
+                    return false;
+                }).css({
+                    'position': 'absolute',
+                    'z-index': 9999999,
+                    'display': 'block',
+                    'opacity': 0
+                });
+                
+                //
+                that.fileinputseld = $(that.wrappers.fileinput)[0];
+            });
 		};
 		
 		this.binds = function() {
@@ -1289,49 +1294,57 @@ function log() {
 				};
 					
 			});
+
+			var widget = this;
+
+            this.component.$run(function($config) {
+                $config(['url','type','requests.upload'], function(url, type, uploadCfg) {
+                    // Mix default request with user request
+                    
+                    var parsedUserRequest = self.widget.parseUserRequest(uploadCfg);
+                    var request = $.extend({
+                        url: url,
+                        type: type,
+                        dataType: 'json',
+                        data: {},
+                        success: function(response) 
+                        {
+                            
+                            $(that.wrappers.element).attr("disabled", false).css({
+                                'opacity': 1
+                            });
+                            
+                            that.config.onSuccess(response);
+                        },
+                        error: function(response) 
+                        {
+                            console.error(response.responseText);
+                            
+                            that.config.onError(response);
+                            
+                            $(that.wrappers.element).attr("disabled", false).css({
+                                'opacity': 1
+                            });
+                        },
+                        beforeSubmit: function(formData, jqForm, options) 
+                        {   
+                            
+                            var reconfig = self.widget.parseUserRequest(uploadCfg);
+
+                            options.extraData = reconfig.data;
+                            
+                            //that.config.beforeSubmit.call(that, formData, jqForm, options);
+                        
+                            $(that.wrappers.element).attr("disabled", true).css({
+                                'opacity': 0.5
+                            });
+                        }
+                    }, parsedUserRequest);
+
+                    $(that.wrappers.hform).ajaxForm(request);
+                });
+            });
 			
-			$(this.wrappers.hform).ajaxForm(
-			{
-					type: 'post',
-					url: this.config.connector,
-					data: {
-						mode: 'addfile',
-						location: '/'
-					},
-					dataType: 'json',
-					success: function(response) 
-					{
-						
-						$(that.wrappers.element).attr("disabled", false).css({
-							'opacity': 1
-						});
-						
-						that.config.onSuccess(response);
-					},
-					error: function(response) 
-					{
-						console.error(response.responseText);
-						
-						that.config.onError(response);
-						
-						$(that.wrappers.element).attr("disabled", false).css({
-							'opacity': 1
-						});
-					},
-					beforeSubmit: function(formData, jqForm, options) 
-					{	
-						options.extraData = {
-							mode: 'addfile',
-							location: loctarget()
-						};
-						console.log(options.extraData);
-						that.config.beforeSubmit.call(that, formData, jqForm, options);
-					
-						$(that.wrappers.element).attr("disabled", true).css({
-							'opacity': 0.5
-						});
-					}
-			});
 		};
 		
 		this.build();
@@ -1344,53 +1357,90 @@ function log() {
             this.build();
             this.refresh();
         },
-        request : function(data, success) {
+        /*
+        Parse each propertie in object for scope variable
+        */
+        parseUserRequest : function(object) {
+            var copy = {}, collectionNames = [], collectionExprs = [];
+            for (var prop in object) {
+                if (object.hasOwnProperty(prop)) {
+                    if (typeof object[prop] ===  "string") {
+                        collectionNames.push(prop);
+                        collectionExprs.push(object[prop]);
+                    } else if (typeof object[prop] === "object") {
+                        copy[prop] = this.parseUserRequest(object[prop]);
+                    } else {
+                        copy[prop] = object[prop];
+                    }
+                }
+            }
+
+            if (collectionExprs.length>0) {
+                this.$fetch(collectionExprs, function() {
+                    
+                    var results = Array.prototype.slice.apply(arguments);
+                    for (var i = 0;i<results.length;++i) {
+                        copy[collectionNames[i]] = results[i];
+                    }
+                });
+            }
+
+            return copy;
+        },
+        request : function(data, success, error) {
             var widget = this;
             if (!this.options.connector) return;
             var data = data || {};
             var success = success || false;
-            $.ajax({
-                url: this.options.connector,
-                data: $.extend({
-                    location: this.seance.location
-                }, data),
-                type: "POST",
-                dataType: 'json',
-                success: function(res) {
-                    
+
+            this.component.$fetch(['$config.url','$config.type'], function(url, type) {
+
+                // Mix default request with user request
+                
+                var parsedUserRequest = widget.parseUserRequest(data);
+                var request = $.extend({
+                    url: url,
+                    type: type,
+                    dataType: 'json',
+                    data: {}
+                }, parsedUserRequest);
+
+                // Add functions
+                // Success callback
+                request.success = function(res) {
                     if (res) { 
-                        if (!res.success) {
+                        if (res.type==='contents' && res.content) {
+                            ;("function"==typeof success) && (success.call(widget, res.content)); 
+                        } else {
                             if (res.errorMsg) widget.alert(res.errorMsg);
-                        } else
-                        ("function"==typeof success) && (success.call(widget, res)); }
-                    else { this.throwError('INVALID_SERVER_RESPONSE'); }
-                },
-                error: function(r) {
+                        }
+                    }
+                    else { widget.throwError('INVALID_SERVER_RESPONSE'); }
+                };
+                // Error callback
+                request.error = function(r) {
                     console.error('Server response error: ', r.responseText);
-                }
+                };
+
+                $.ajax(request);
             });
+            
         },
         alert : function(msg) {
             alert(msg);
         },
         refresh : function() {
-            console.log('refresh');
             var widget = this;
-            $.ajax({
-                url: this.options.connector,
-                data: {
-                    location: this.seance.location
-                },
-                type: "POST",
-                dataType: 'json',
-                success: function(res) {
+            this.component.$fetch(['$config.requests.refresh'], function(refreshCfg) {
+                widget.request(refreshCfg, function(res) {
+
                     if (res) { widget.data = res; widget.updateView(); }
-                    else { this.throwError('INVALID_SERVER_RESPONSE'); }
-                },
-                error: function(r) {
+                    else { widget.throwError('INVALID_SERVER_RESPONSE'); }
+                }, function(r) {
                     console.error('Server response error: ', r.responseText);
-                }
+                });
             });
+            
             // Set location
             this.redrawLocation();
             
@@ -1413,48 +1463,13 @@ function log() {
                 "class": "controls"
             }));
             
-            // Build buttons
-            $(this.wrappers.controls)
-                .put($("<ul />"))
-                .tie(function() {
-                    var ul = this;
-                    var crButton = function(ctrl) {
-                        $(ul)
-                            .put($('<li />', {
-                                "class": ctrl.hidden ? "hidden" : "",
-                                "data-trigger": ctrl.trigger
-                            }))
-                                .put($('<a />', {
-                                    'class': "elbora-vcl-themes-metro-icon elbora-vcl-themes-metro-icon32x32 elbora-vcl-themes-metro-icon32x32-"+ctrl.icon,
-                                    'title': ctrl.title || ''
-                                }))
-                                .tie(function() {
-                                    if ("function"==typeof ctrl.click) $(this).click(function() {
-                                        ctrl.click.call(widget, this);
-                                        return false;
-                                    });
-                                    else 
-                                    $(this).click(function() {
-                                        
-                                        return false;
-                                    });
-
-                                    if ("function"==typeof ctrl.init) ctrl.init.call(widget, this);
-                                });
-                    };
-
-                    $.each(widget.phenotype.controls, function() {
-                        crButton(this);
-                    });
-
-                });
-
+            // Topbar
             this.wrappers.addArea = $(this.wrapper)
             .put($("<div />", {
-                "class": "add-area"
+                "class": "add-area "
             }))
             .put($("<div />", {
-                "class": "add-area-section add-area-section-box"
+                "class": "add-area-section add-area-section-box pointable"
             }))
             .tie(function() {
                 $(this).put($('<figure />', {
@@ -1468,8 +1483,9 @@ function log() {
                 widget.createFolder();
                 return false;
             })
+            // Add files section
             .and($("<div />", {
-                "class": "add-area-section"
+                "class": "add-area-section pointable"
             }))
             .tie(function() {
                 $(this).put($('<figure />', {
@@ -1477,30 +1493,61 @@ function log() {
                 }))
                 .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-camera-icon"></use></svg></div><figcaption><span class="capitalized">'+addCaption+'</span></figcaption>');
                  widget.bindUploadFile(this);
+
+                 var element = this;
+                 widget.$fetch('+this.seance.mode!="preview"||seance.selectedItems.files.length||seance.selectedItems.folders.length', 
+                    function(isSelected) {
+                    $(element)[!isSelected ? 'show' : 'hide']();
+                 });
+            })
+            // Info table
+            .and($("<div />", {
+                "class": "add-area-section"
+            }))
+            .tie(function() {
+                var span = $(this).put($('<figure />', {
+                    "class": ""
+                }))
+                .put($('<figcaption />'))
+                .put($('<span />'));
+
+                 var element = this;
+                 widget.$fetch(['+this.seance.mode', '+seance.selectedItems.files.length','+seance.selectedItems.folders.length'], function(mode, filesCount, foldersCount) {
+                    
+                    $(element)[mode=='select'||filesCount||foldersCount ? 'show' : 'hide']();
+                    $(span).html(
+                        foldersCount||filesCount ?
+                        'Selected '+(foldersCount ? foldersCount+' folders' : '')+(filesCount ? (foldersCount ? ' and ' : '')+filesCount+' files' : '')
+                        : 'Select items'
+                    );
+                 });
+
+
             })
             .and($("<div />", {
-                "class": "add-area-section add-area-section-box"
+                "class": "add-area-section add-area-section-box pointable"
             }))
             .tie(function() {
                 $(this).put($('<figure />', {
                     "class": "are-box-standalone"
                 }))
-                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-navicon-icon"></use></svg></div>')
+                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-delete-icon"></use></svg></div>')
                 
 
                 var element = this;
-
-                widget.$fetch('+seance.mode=="select"', function(isSelect) {
+                
+                widget.$fetch('+seance.selectedItems.files.length||seance.selectedItems.folders.length', function(isSelected) {
                     
-                    element[isSelect?'addClass':'removeClass']("active");
+                    $(element)[isSelected ? 'show' : 'hide']();
                 });
+
+                $(this).click(function() {
+                    widget.deleteDialog();
+                    return false;
+                })
             })
-            .click(function() {
-                widget.deleteDialog();
-                return false;
-            });
             .and($("<div />", {
-                "class": "add-area-section add-area-section-box"
+                "class": "add-area-section add-area-section-box pointable"
             }))
             .tie(function() {
                 $(this).put($('<figure />', {
@@ -1624,23 +1671,17 @@ function log() {
                             $(this).put($("<img />", {
                                 "alt": file.name,
                                 "src": file.thumb
-                            }));
-                        })
-                        .and($("<div />", {
-                            "class": "subscribe"
-                        }))
-                        .html(this.title)
-                        .condition("function"==typeof widget.options.receiver, function() {
-                            $(this).and($('<div />',  {
-                                "class": "acceptit"
+                            }))
+                            .and($('<div />',  {
+                                "class": "nt-filemanager-overlay"
                             }))
                             .tie(function() {
                                 $(this)
+                                .put($('<div />'))
                                 .put($('<symbol />', {
-                                    "class": "icons__plate",
                                     "title": "Use it"
                                 }))
-                                .html('<div class="icon icon--ei-share-apple icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-share-apple-icon"></use></svg></div>')
+                                .html('<div class="icon icon--ei-share-apple icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-checked"></use></svg></div>')
                                 .click(function() {
                                     
                                     if ("function"==typeof widget.options.receiver && widget.seance.mode!=='select') {
@@ -1648,7 +1689,12 @@ function log() {
                                     }
                                 });
                             });
-                        }); 
+                        })
+                        .and($("<div />", {
+                            "class": "subscribe"
+                        }))
+                        .html(this.title)
+                        
                 });
                 widget.postRender();
             });
@@ -1718,6 +1764,9 @@ function log() {
                 break;
             }
         },
+        /*
+        Preview file
+        */
         preview : function(el) {
             var plugin = this;
             var el = el;
@@ -1777,7 +1826,7 @@ function log() {
         disableSelectionMode : function() {
             this.seance.mode = 'preview';
             $(this.wrappers.area).find('li.selected').removeClass('selected');
-            $(this.wrappers.controls).find('li[data-trigger=modeSelect]').removeClass('selected');
+            
             this.seance.selectedItems = {
                 'folders': [],
                 'files': []
@@ -1787,7 +1836,7 @@ function log() {
         enableSelectionMode : function() {
 
             this.seance.mode = 'select';
-            $(this.wrappers.controls).find('li[data-trigger=modeSelect]').addClass('selected');
+            
             this.recheckSituation();
 
         },
@@ -1797,56 +1846,51 @@ function log() {
             } else {
                 this.enableSelectionMode();
             }
+            this.$digest();
         },
         select : function(el) {
             $(el).toggleClass('selected');
             this.recheckSituation();
         },
         deleteDialog : function() {
-            if (confirm("Удалить выбранные файлы?")) {
+            var message;
+            if (this.seance.selectedItems.folders.length&&this.seance.selectedItems.files.length) {
+                message = 'Are you sure to remove selected files and folders with all files inside?';
+            } else if (this.seance.selectedItems.folders.length) {
+                message = 'Are you sure to remove selected folders with all files inside?'
+            } else if (this.seance.selectedItems.files.length) {
+                message = 'Are you sure to remove selected files?'
+            };
+            if (confirm(message)) {
                 this.deleteSelected();
                 this.disableSelectionMode();
             }
         },
         deleteSelected : function() {
             var widget = this;
-            if ("function"==typeof this.options.onDelete) {
-                this.options.onDelete.call(this, this.seance.selectedItems);
-            }
-            this.request({
-                mode: 'delete',
-                location: this.seance.location,
-                files: this.seance.selectedItems.files,
-                folders: this.seance.selectedItems.folders
-            }, function() {
-                widget.refresh();
+            this.component.$fetch(['$config.requests.remove'], function(removeCfg) {
+                widget.request(removeCfg, function() {
+                    widget.refresh();
+                });
             });
         },
         createFolder : function() {
             var widget = this;
-            var dirname;
-            if (dirname = prompt("Укажите имя для новой директории")) {
-                if ("function"==typeof this.options.onDelete) {
-                    this.options.onMakeDir.call(this, dirname);
-                }
-                if (typeof this.options.connector!="undefined" && this.options.connector) {
-                    this.request({
-                        mode: 'addfolder',
-                        location: this.seance.location,
-                        foldername: dirname
-                    }, function() {
+
+            if (this.seance.dirname = prompt("Укажите имя для новой директории")) {
+
+                this.component.$fetch(['$config.requests.addFolder'], function(addFolderCfg) {
+                    
+                    widget.request(addFolderCfg, function() {
                         widget.refresh();
                     });
-                }
+                });
             }
         },
         bindUploadFile : function(el) {
             var widget = this;
-            new uploadFileOnClick($(el), function() {
-
-                return widget.seance.location;
-            }, {
-                connector: this.options.connector,
+            new uploadFileOnClick($(el), {
+                widget: this,
                 onSuccess: function(response) {
                     widget.refresh();
                 }
@@ -1868,14 +1912,7 @@ function log() {
                 widget.seance.selectedItems.files.push(cloc+'/'+$(this).attr("rel"));
             });
             
-            /* Определяем показывать ли кнопку delete */
-            if (this.seance.selectedItems.folders.length>0 || this.seance.selectedItems.files.length>0) {
-                $(this.wrappers.controls).find('li[data-trigger=use]').removeClass("hidden");
-                $(this.wrappers.controls).find('li[data-trigger=delete]').removeClass("hidden");
-            } else {
-                $(this.wrappers.controls).find('li[data-trigger=use]').addClass("hidden");
-                $(this.wrappers.controls).find('li[data-trigger=delete]').addClass("hidden");
-            }
+            
             this.$digest();
         },
         goTop : function() {
@@ -1904,6 +1941,7 @@ function log() {
 	var FN = function(parent, wrapper, options) {
 
 		this.wrapper = wrapper;
+        this.component = parent;
 		var options = options || {};
 
 		// main data
@@ -1975,7 +2013,9 @@ function log() {
 
 		// 
 		this.seance = {
-			mode: 'preview'
+			mode: 'preview',
+            dirname: false,
+            location: false
 		}
 
 		this.init();

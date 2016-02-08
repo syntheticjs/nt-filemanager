@@ -61,10 +61,104 @@ return /******/ (function(modules) { // webpackBootstrap
 		name: "nt-filemanager",
 		engine: "angular"
 	}, function($component, $init, $setup, $proto) {
-		$init(function($element, $self) {
-			$($element).ntFileManager({
-				connector: "/testServer.json"
+
+		/*
+		INCLUDE EVIL ICON LOADER. IT's MIT. HERE IT IS:
+
+		Copyright (c) 2014 Alexander Madyankin <alexander@madyankin.name>, Roman Shamin
+
+		MIT License
+
+		Permission is hereby granted, free of charge, to any person obtaining
+		a copy of this software and associated documentation files (the
+		"Software"), to deal in the Software without restriction, including
+		without limitation the rights to use, copy, modify, merge, publish,
+		distribute, sublicense, and/or sell copies of the Software, and to
+		permit persons to whom the Software is furnished to do so, subject to
+		the following conditions:
+
+		The above copyright notice and this permission notice shall be
+		included in all copies or substantial portions of the Software.
+
+		THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+		EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+		MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+		NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+		LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+		OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+		WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+		*/
+		angular.element(document.body).ready(function() {
+			var ssvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");http://www.w3.org/2000/svg
+			ssvg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+			ssvg.setAttribute('id', 'ei-sprite');
+
+			document.body.appendChild(ssvg);
+			ssvg.style.display = 'none';
+			ssvg.innerHTML+='<symbol id="ei-share-apple-icon" viewBox="0 0 50 50"><path d="M30.3 13.7L25 8.4l-5.3 5.3-1.4-1.4L25 5.6l6.7 6.7z"></path><path d="M24 7h2v21h-2z"></path><path d="M35 40H15c-1.7 0-3-1.3-3-3V19c0-1.7 1.3-3 3-3h7v2h-7c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1h20c.6 0 1-.4 1-1V19c0-.6-.4-1-1-1h-7v-2h7c1.7 0 3 1.3 3 3v18c0 1.7-1.3 3-3 3z"></path></symbol><symbol id="ei-camera-icon" viewBox="0 0 50 50"><path d="M39 38H11c-1.7 0-3-1.3-3-3V17c0-1.7 1.3-3 3-3h6c.2 0 .5-.2.6-.3l1.1-2.2c.4-.8 1.4-1.4 2.3-1.4h8c.9 0 1.9.6 2.3 1.4l1.1 2.2c.1.2.4.3.6.3h6c1.7 0 3 1.3 3 3v18c0 1.7-1.3 3-3 3zM11 16c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1h28c.6 0 1-.4 1-1V17c0-.6-.4-1-1-1h-6c-.9 0-1.9-.6-2.3-1.4l-1.1-2.2c-.1-.2-.4-.4-.6-.4h-8c-.2 0-.5.2-.6.3l-1.1 2.2c-.4.9-1.4 1.5-2.3 1.5h-6z"></path><path d="M25 34c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9zm0-16c-3.9 0-7 3.1-7 7s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7z"></path><circle cx="35" cy="18" r="1"></circle><path d="M12 12h4v1h-4z"></path><path d="M25 21v-1c-2.8 0-5 2.2-5 5h1c0-2.2 1.8-4 4-4z"></path></symbol><symbol id="sm-checked" viewBox="-150 -152 800 800"><polygon points="142.8,323.85 35.7,216.75 0,252.45 142.8,395.25 448.8,89.25 413.1,53.55"/></symbol><symbol id="sm-delete-icon" viewBox="-150 -152 800 800"><path d="M76.5,408c0,28.05,22.95,51,51,51h204c28.05,0,51-22.95,51-51V102h-306V408z M408,25.5h-89.25L293.25,0h-127.5l-25.5,25.5 H51v51h357V25.5z"/></symbol><symbol id="sm-add-folder-icon" viewBox="-150 -152 800 800"><path d="M444.955,31.782H333.208c-17.576,0-37.758,8.931-47.165,31.782c0,0-4.132,29.145-31.782,31.782 H31.782C14.239,95.347,0,109.077,0,126.621v286.551c0,17.544,14.239,31.783,31.782,31.783h413.172 c17.544,0,31.782-14.239,31.782-31.783V63.565C476.737,46.021,462.499,31.782,444.955,31.782z M444.955,126.621v286.551H31.782 V127.13H254.26l3.051-0.159c29.812-2.829,48.246-23.71,56.732-45.163c8.263-20.722,22.661-18.243,22.661-18.243h108.251V126.621 z"/><path d="M317.825,254.26H254.26v-63.565c0-8.772-7.151-15.891-15.891-15.891 c-8.772,0-15.891,7.119-15.891,15.891v63.565h-63.565c-8.772,0-15.891,7.151-15.891,15.891s7.119,15.891,15.891,15.891h63.565 v63.565c0,8.74,7.119,15.891,15.891,15.891c8.74,0,15.891-7.151,15.891-15.891v-63.565h63.565 c8.74,0,15.891-7.151,15.891-15.891S326.565,254.26,317.825,254.26z"/></symbol><symbol id="ei-navicon-icon" viewBox="0 0 50 50"><path d="M10 12h30v4H10z"></path><path d="M10 22h30v4H10z"></path><path d="M10 32h30v4H10z"></path></symbol>';
+		});
+
+		$setup({
+			type: 'post', // post only for now
+			url: 'testServer.json', // url of server script
+			requests: {
+				upload: {
+					data:  {
+						type: "'upload'",
+						content: {
+							location: 'seance.location'
+						}
+					}
+				},
+				refresh: {
+					data: {
+						type: "'contents'",
+						content: {
+	                        location: 'seance.location'
+	                    }
+					}
+				},
+				remove: {
+					data: {
+						type: "'delete'",
+						content: {
+							location: 'seance.location',
+		                    files: 'seance.selectedItems.files',
+		                    folders: 'seance.selectedItems.folders'
+						}
+					}
+				},
+				reattach: {
+					data: {
+						type: "'reattach'",
+						content: '%content'
+					}
+				},
+				// Request to create a new folder
+				addFolder: {
+					data: {
+						type: "'addFolder'",
+						content: {
+							location: 'seance.location',
+	                    	name: 'seance.dirname'
+						}
+					}
+				}
+
+			},
+			receiver: false
+		});
+
+		$init(function($element, $self, $config) {
+			$config(['connector', 'receiver'], function(connector, receiver, location) {
+				
+				$($element).ntFileManager({
+					connector: connector,
+					receiver: receiver,
+					location: location
+				}, $self);
 			});
+			
 		});	
 	}); 
 
@@ -1250,9 +1344,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	;(function($) {
 		
 
-		var uploadFileOnClick = function(element, loctarget, config) {
+		var uploadFileOnClick = function(element, config) {
 			this.enablearea = false;
-			this.loctarget = loctarget;
+	        this.widget = config.widget;
+	        this.component = config.widget.component;
+	        this.configuratedRequest = null;
+
+	        var self = this;
+
+	        
+
+
 			this.build = function() {
 				var that = this;
 				
@@ -1272,48 +1374,45 @@ return /******/ (function(modules) { // webpackBootstrap
 				this.wrappers = {
 					element: element
 				};
-				
-				// ñîçäàåì ñêðûòíóþ ôîðìó
-				this.wrappers.hform = $('<form />');
-				$(this.wrappers.hform).attr({
-					'method': 'post',
-					'action': this.config.connector,
-					'enctype': 'multipart/form-data'
-				});
-				$(this.wrappers.hform).css({
-					'position': 'absolute'
-				})
-				
-				/*, {
-					'method': 'post',
-					'action': window.$elbora.settings['AJAX_CONNECTOR'],
-					'enctype': 'multipart/form-data'
-				}).appendTo($('body'))
-				.;*/
-				
-				// 
-				/*var hidden = $('<input />', {
-					'type': 'hidden',
-					'name': 'modifer',
-					'value': api.parent.settings.photoUploadModifer
-				}).appendTo(this.wrappers.hform);*/
-				
-				//
-				this.wrappers.fileinput = $('<input />', {
-					'type': 'file',
-					'name': 'files'
-				}).appendTo(this.wrappers.hform).change(function() {
-					$(that.wrappers.hform).submit();
-					return false;
-				}).css({
-					'position': 'absolute',
-					'z-index': 9999999,
-					'display': 'block',
-					'opacity': 0
-				});
-				
-				//
-				this.fileinputseld = $(this.wrappers.fileinput)[0];
+
+	            this.component.$fetch(['$config.url','$config.type','$config.requests.upload'], function(url, type, uploadCfg) {
+	                // Mix default request with user request
+	                
+	                var parsedUserRequest = self.widget.parseUserRequest(uploadCfg);
+	                that.configuratedRequest = $.extend({
+	                    url: url,
+	                    type: type,
+	                    dataType: 'json',
+	                    data: {}
+	                }, parsedUserRequest);
+
+	                that.wrappers.hform = $('<form />');
+	                $(that.wrappers.hform).attr({
+	                    'method': that.configuratedRequest.type,
+	                    'action': that.configuratedRequest.url,
+	                    'enctype': 'multipart/form-data'
+	                });
+
+	                $(that.wrappers.hform).css({
+	                    'position': 'absolute'
+	                });
+	                
+	                that.wrappers.fileinput = $('<input />', {
+	                    'type': 'file',
+	                    'name': 'files'
+	                }).appendTo(that.wrappers.hform).change(function() {
+	                    $(that.wrappers.hform).submit();
+	                    return false;
+	                }).css({
+	                    'position': 'absolute',
+	                    'z-index': 9999999,
+	                    'display': 'block',
+	                    'opacity': 0
+	                });
+	                
+	                //
+	                that.fileinputseld = $(that.wrappers.fileinput)[0];
+	            });
 			};
 			
 			this.binds = function() {
@@ -1363,403 +1462,482 @@ return /******/ (function(modules) { // webpackBootstrap
 					};
 						
 				});
+
+				var widget = this;
+
+	            this.component.$run(function($config) {
+	                $config(['url','type','requests.upload'], function(url, type, uploadCfg) {
+	                    // Mix default request with user request
+	                    
+	                    var parsedUserRequest = self.widget.parseUserRequest(uploadCfg);
+	                    var request = $.extend({
+	                        url: url,
+	                        type: type,
+	                        dataType: 'json',
+	                        data: {},
+	                        success: function(response) 
+	                        {
+	                            
+	                            $(that.wrappers.element).attr("disabled", false).css({
+	                                'opacity': 1
+	                            });
+	                            
+	                            that.config.onSuccess(response);
+	                        },
+	                        error: function(response) 
+	                        {
+	                            console.error(response.responseText);
+	                            
+	                            that.config.onError(response);
+	                            
+	                            $(that.wrappers.element).attr("disabled", false).css({
+	                                'opacity': 1
+	                            });
+	                        },
+	                        beforeSubmit: function(formData, jqForm, options) 
+	                        {   
+	                            var reconfig = self.widget.parseUserRequest(uploadCfg);
+
+	                            options.extraData = {
+	                                content: reconfig.content
+	                            };
+	                            console.log(options.extraData);
+	                            that.config.beforeSubmit.call(that, formData, jqForm, options);
+	                        
+	                            $(that.wrappers.element).attr("disabled", true).css({
+	                                'opacity': 0.5
+	                            });
+	                        }
+	                    }, parsedUserRequest);
+
+	                    $(that.wrappers.hform).ajaxForm(request);
+	                });
+	            });
 				
-				$(this.wrappers.hform).ajaxForm(
-				{
-						type: 'post',
-						url: this.config.connector,
-						data: {
-							mode: 'addfile',
-							location: '/'
-						},
-						dataType: 'json',
-						success: function(response) 
-						{
-							
-							$(that.wrappers.element).attr("disabled", false).css({
-								'opacity': 1
-							});
-							
-							that.config.onSuccess(response);
-						},
-						error: function(response) 
-						{
-							console.error(response.responseText);
-							
-							that.config.onError(response);
-							
-							$(that.wrappers.element).attr("disabled", false).css({
-								'opacity': 1
-							});
-						},
-						beforeSubmit: function(formData, jqForm, options) 
-						{	
-							options.extraData = {
-								mode: 'addfile',
-								location: loctarget()
-							};
-							console.log(options.extraData);
-							that.config.beforeSubmit.call(that, formData, jqForm, options);
-						
-							$(that.wrappers.element).attr("disabled", true).css({
-								'opacity': 0.5
-							});
-						}
-				});
 			};
 			
 			this.build();
 			this.binds();
 		};
 
+	    var FNPROTO = {
+	        init : function() {
+	            this.seance.location = this.options.location;
+	            this.build();
+	            this.refresh();
+	        },
+	        /*
+	        Parse each propertie in object for scope variable
+	        */
+	        parseUserRequest : function(object) {
+	            var copy = {}, collectionNames = [], collectionExprs = [];
+	            for (var prop in object) {
+	                if (object.hasOwnProperty(prop)) {
+	                    if (typeof object[prop] ===  "string") {
+	                        collectionNames.push(prop);
+	                        collectionExprs.push(object[prop]);
+	                    } else if (typeof object[prop] === "object") {
+	                        copy[prop] = this.parseUserRequest(object[prop]);
+	                    } else {
+	                        copy[prop] = object[prop];
+	                    }
+	                }
+	            }
 
-		var FN = function(wrapper, options) {
+	            if (collectionExprs.length>0) {
+	                this.$fetch(collectionExprs, function() {
+	                    
+	                    var results = Array.prototype.slice.apply(arguments);
+	                    for (var i = 0;i<results.length;++i) {
+	                        copy[collectionNames[i]] = results[i];
+	                    }
+	                });
+	            }
 
-			this.wrapper = wrapper;
-			var options = options || {};
-			// Initial
-				// main data
-				this.data = {
-					files: [],
-					folders: []
-				}
-				// options
-				this.options = $.extend({
-					isRoot: true,
-					connector: '',
-					location: '/',
-					onUse: false
-				}, options || {});
-				// wrappers
-				this.wrappers = {
-					area: null
-				};
-				// Phenotype
-				this.phenotype = {
-					controls: {
-						use: {
-							'icon': 'use',
-							'trigger': 'use',
-							'hidden': true,
-							"title": "Использовать",
-							'click': function() {
-								if ("function"==typeof this.options.onUse) this.options.onUse(this.seance.selectedItems); 
-							}
-						},
-						addfile: {
-							'icon': 'add',
-							'trigger': 'add',
-							'title': 'Создать',
-							'init': function(el) {
-								this.bindUploadFile(el);
-							}
-						},
-						addfolder: {
-							'icon': 'addfolder',
-							'trigger': 'addfolder',
-							'title': 'Создать директорию',
-							'click': function() {
-								this.createFolder();
-								return false;
-							}
-						},
-						select: {
-							'icon': 'list',
-							'trigger': 'modeSelect',
-							'click': function() {
-								this.toogleSelectMode();
-								return false;
-							},
-							'title': 'Выбрать'
-						},
-						del: {
-							'icon': 'delete',
-							'hidden': true,
-							'trigger': 'delete',
-							'title': 'Удалить выбранное',
-							'click': function() {
-								this.deleteDialog();
-								return false;
-							}
-						}
-					}
-				};
-				// 
-				this.seance = {
-					mode: 'preview'
-				}
-			// Init
-			this.init = function() {
-				this.seance.location = this.options.location;
-				this.build();
-				this.refresh();
-			}
-			// request
-			this.request = function(data, success) {
-				var widget = this;
-				if (!this.options.connector) return;
-				var data = data || {};
-				var success = success || false;
-				$.ajax({
-					url: this.options.connector,
-					data: $.extend({
-						location: this.seance.location
-					}, data),
-					type: "POST",
-					dataType: 'json',
-					success: function(res) {
-						
-						if (res) { 
-							if (!res.success) {
-								if (res.errorMsg) widget.alert(res.errorMsg);
-							} else
-							("function"==typeof success) && (success.call(widget, res)); }
-						else { this.throwError('INVALID_SERVER_RESPONSE'); }
-					},
-					error: function(r) {
-						console.error('Server response error: ', r.responseText);
-					}
-				});
-			}
-			// Local alert
-			this.alert = function(msg) {
-				alert(msg);
-			}
-			// Refresh
-			this.refresh = function() {
-	            console.log('refresh');
-				var widget = this;
-				$.ajax({
-					url: this.options.connector,
-					data: {
-						location: this.seance.location
-					},
-					type: "POST",
-					dataType: 'json',
-					success: function(res) {
-						if (res) { widget.data = res; widget.updateView(); }
-						else { this.throwError('INVALID_SERVER_RESPONSE'); }
-					},
-					error: function(r) {
-						console.error('Server response error: ', r.responseText);
-					}
-				});
-				// Set location
-				this.redrawLocation();
-				
-			}
-			// Build
-			this.build = function() {
-				var widget = this;
-				// Create main area
-				this.buildLocation();
-				this.buildControls();	
-				
-				this.buildArea();		
+	            return copy;
+	        },
+	        request : function(data, success, error) {
+	            var widget = this;
+	            if (!this.options.connector) return;
+	            var data = data || {};
+	            var success = success || false;
 
-				
-			}
-			// Build controls
-			this.buildControls = function() {
-				var widget = this;
-				// Create controls
-				
-				this.wrappers.controls = $(this.wrapper)
-				.put($("<div />", {
-					"class": "controls"
-				}));
-				
-				// Build buttons
-				$(this.wrappers.controls)
-					.put($("<ul />"))
-					.tie(function() {
-						var ul = this;
-						var crButton = function(ctrl) {
-							$(ul)
-								.put($('<li />', {
-									"class": ctrl.hidden ? "hidden" : "",
-									"data-trigger": ctrl.trigger
-								}))
-									.put($('<a />', {
-										'class': "elbora-vcl-themes-metro-icon elbora-vcl-themes-metro-icon32x32 elbora-vcl-themes-metro-icon32x32-"+ctrl.icon,
-										'title': ctrl.title || ''
-									}))
-									.tie(function() {
-										if ("function"==typeof ctrl.click) $(this).click(function() {
-											ctrl.click.call(widget, this);
-											return false;
-										});
-										else 
-										$(this).click(function() {
-											
-											return false;
-										});
+	            this.component.$fetch(['$config.url','$config.type'], function(url, type) {
 
-										if ("function"==typeof ctrl.init) ctrl.init.call(widget, this);
-									});
-						};
+	                // Mix default request with user request
+	                debugger;
+	                var parsedUserRequest = widget.parseUserRequest(data);
+	                var request = $.extend({
+	                    url: url,
+	                    type: type,
+	                    dataType: 'json',
+	                    data: {}
+	                }, parsedUserRequest);
 
-						$.each(widget.phenotype.controls, function() {
-							crButton(this);
-						});
+	                // Add functions
+	                // Success callback
+	                request.success = function(res) {
+	                    debugger;
+	                    if (res) { 
+	                        if (res.type==='contents' && res.content) {
+	                            ;("function"==typeof success) && (success.call(widget, res.content)); 
+	                        } else {
+	                            if (res.errorMsg) widget.alert(res.errorMsg);
+	                        }
+	                    }
+	                    else { widget.throwError('INVALID_SERVER_RESPONSE'); }
+	                };
+	                // Error callback
+	                request.error = function(r) {
+	                    console.error('Server response error: ', r.responseText);
+	                };
 
-					});
-			}
-			// Build location
-			this.buildLocation = function() {
-				var widget = this;
-				this.wrappers.area = $(this.wrapper)
-				.put($("<div />", {
-					"class": "location"
-				}));
+	                $.ajax(request);
+	            });
+	            
+	        },
+	        alert : function(msg) {
+	            alert(msg);
+	        },
+	        refresh : function() {
+	            var widget = this;
+	            this.component.$fetch(['$config.requests.refresh'], function(refreshCfg) {
+	                widget.request(refreshCfg, function(res) {
 
-				$(this.wrappers.area)
-				.put($("<table />"))
-				.ramp($("<tbody />"),$("<tr />"))
-					.put($('<td />', {
-						"class": "backurl"
-					}))
-					.tie(function() {
-						widget.wrappers.backurl = this;
-						$(this)
-						.put($("<a />", {
-							"class": "goback-icon"
-						}))
-						.click(function() {
-							widget.goTop();
-							return false;
-						});
-					})
-					.and($("<td />", {
-						"class": "input"
-					}))
-						.put($("<div />"))
-						.put($("<div />"))
-						.put($("<div />"))
-						.tie(function() {
-							widget.wrappers.location = this;
-						})
-						.html(this.seance.location);
-			}
-			// Build area
-			this.buildArea = function() {
-				var widget = this;
-				// Build area self
-				this.wrappers.area = $(this.wrapper)
-				.put($("<ul />", {
-					"class": "filesArea"
-				}));
-				
-			}
-			// update view
-			this.updateView = function() {
-				var widget = this;
-				// Create folders
-				$(this.wrappers.area)
-				.empty()
-				.tie(function() {
-					
-					// Draw folders
-					$.each(widget.data.folders, function() {
-						$(widget.wrappers.area)
-						.put($('<li />', {
-							"class": "folder",
-							"rel": this.name
-						}))
-						.click(function() {
-							widget.click($(this));
-							return false;
-						})
-							.put($("<div />", {
-								"class": "thumb",
-							}))
-							.tie(function() {
-								$(this).put($("<a />", {
-									"class": "elbora-vcl-themes-metro-icon elbora-vcl-themes-metro-icon32x32"
-								}))
-									.put($("<div />", {
-										"class": "elbora-vcl-themes-metro-icon-filetype elbora-vcl-themes-metro-icon-filetype-folder"
-									}));
-							})
-							.and($("<div />", {
-								"class": "subscribe"
-							}))
-							.html(this.title);							
-					});
-					// Draw files
-					$.each(widget.data.files, function() {
-						var file = this;
-						
-						$(widget.wrappers.area)
-						.put($('<li />', {
-							"class": "file image",
-							"rel": this.name,
+	                    if (res) { widget.content = res; widget.updateView(); }
+	                    else { widget.throwError('INVALID_SERVER_RESPONSE'); }
+	                }, function(r) {
+	                    console.error('Server response error: ', r.responseText);
+	                });
+	            });
+	            
+	            // Set location
+	            this.redrawLocation();
+	            
+	        },
+	        build : function() {
+	            var widget = this;
+	            // Create main area
+	            this.buildLocation();
+	            this.buildControls();   
+	            
+	            this.buildArea();
+	        },
+	        buildControls : function() {
+	            var widget = this;
+	            // Create controls
+	            var addCaption = 'Добавить изображение с '+(navigator.platform.toUpperCase().indexOf('MAC') >= 0 ? 'моего Mac`а' : 'компьютера');
+	            
+	            this.wrappers.controls = $(this.wrapper)
+	            .put($("<div />", {
+	                "class": "controls"
+	            }));
+	            
+	            // Topbar
+	            this.wrappers.addArea = $(this.wrapper)
+	            .put($("<div />", {
+	                "class": "add-area "
+	            }))
+	            .put($("<div />", {
+	                "class": "add-area-section add-area-section-box pointable"
+	            }))
+	            .tie(function() {
+	                $(this).put($('<figure />', {
+	                    "class": ""
+	                }))
+	                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-add-folder-icon"></use></svg></div><figcaption><span class="capitalized">Новая папка</span></figcaption>')
+	                
+	                
+	            })
+	            .click(function() {
+	                widget.createFolder();
+	                return false;
+	            })
+	            // Add files section
+	            .and($("<div />", {
+	                "class": "add-area-section pointable"
+	            }))
+	            .tie(function() {
+	                $(this).put($('<figure />', {
+	                    "class": ""
+	                }))
+	                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-camera-icon"></use></svg></div><figcaption><span class="capitalized">'+addCaption+'</span></figcaption>');
+	                 widget.bindUploadFile(this);
+
+	                 var element = this;
+	                 widget.$fetch('+this.seance.mode!="preview"||seance.selectedItems.files.length||seance.selectedItems.folders.length', 
+	                    function(isSelected) {
+	                    $(element)[!isSelected ? 'show' : 'hide']();
+	                 });
+	            })
+	            // Info table
+	            .and($("<div />", {
+	                "class": "add-area-section"
+	            }))
+	            .tie(function() {
+	                var span = $(this).put($('<figure />', {
+	                    "class": ""
+	                }))
+	                .put($('<figcaption />'))
+	                .put($('<span />'));
+
+	                 var element = this;
+	                 widget.$fetch(['+this.seance.mode', '+seance.selectedItems.files.length','+seance.selectedItems.folders.length'], function(mode, filesCount, foldersCount) {
+	                    
+	                    $(element)[mode=='select'||filesCount||foldersCount ? 'show' : 'hide']();
+	                    $(span).html(
+	                        foldersCount||filesCount ?
+	                        'Selected '+(foldersCount ? foldersCount+' folders' : '')+(filesCount ? (foldersCount ? ' and ' : '')+filesCount+' files' : '')
+	                        : 'Select items'
+	                    );
+	                 });
+
+
+	            })
+	            .and($("<div />", {
+	                "class": "add-area-section add-area-section-box pointable"
+	            }))
+	            .tie(function() {
+	                $(this).put($('<figure />', {
+	                    "class": "are-box-standalone"
+	                }))
+	                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-delete-icon"></use></svg></div>')
+	                
+
+	                var element = this;
+	                
+	                widget.$fetch('+seance.selectedItems.files.length||seance.selectedItems.folders.length', function(isSelected) {
+	                    
+	                    $(element)[isSelected ? 'show' : 'hide']();
+	                });
+
+	                $(this).click(function() {
+	                    widget.deleteDialog();
+	                    return false;
+	                })
+	            })
+	            .and($("<div />", {
+	                "class": "add-area-section add-area-section-box pointable"
+	            }))
+	            .tie(function() {
+	                $(this).put($('<figure />', {
+	                    "class": "are-box-standalone"
+	                }))
+	                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-navicon-icon"></use></svg></div>')
+	                
+
+	                var element = this;
+
+	                widget.$fetch('+seance.mode=="select"', function(isSelect) {
+	                    
+	                    element[isSelect?'addClass':'removeClass']("active");
+	                });
+	            })
+	            .click(function() {
+	                widget.toogleSelectMode();
+	                return false;
+	            });
+	        },
+	        buildLocation : function() {
+	            var widget = this;
+	            this.wrappers.area = $(this.wrapper)
+	            .put($("<div />", {
+	                "class": "location"
+	            }));
+
+	            $(this.wrappers.area)
+	            .put($("<table />"))
+	            .ramp($("<tbody />"),$("<tr />"))
+	                .put($('<td />', {
+	                    "class": "backurl"
+	                }))
+	                .tie(function() {
+	                    widget.wrappers.backurl = this;
+	                    $(this)
+	                    .put($("<a />", {
+	                        "class": "goback-icon"
+	                    }))
+	                    .click(function() {
+	                        widget.goTop();
+	                        return false;
+	                    });
+	                })
+	                .and($("<td />", {
+	                    "class": "input"
+	                }))
+	                    .put($("<div />"))
+	                    .put($("<div />"))
+	                    .put($("<div />"))
+	                    .tie(function() {
+	                        widget.wrappers.location = this;
+	                    })
+	                    .html(this.seance.location);
+	        },
+	        buildArea : function() {
+	            var widget = this;
+	            // Build area self
+	            this.wrappers.area = $(this.wrapper)
+	            .put($("<ul />", {
+	                "class": "filesArea"
+	            }));
+	            
+	        },
+	        updateView : function() {
+	            var widget = this;
+	            // Create folders
+	            $(this.wrappers.area)
+	            .empty()
+	            .tie(function() {
+	                
+	                // Draw folders
+	                $.each(widget.data.folders, function() {
+	                    $(widget.wrappers.area)
+	                    .put($('<li />', {
+	                        "class": "folder",
+	                        "rel": this.name
+	                    }))
+	                    .click(function() {
+	                        widget.click($(this));
+	                        return false;
+	                    })
+	                        .put($("<div />", {
+	                            "class": "thumb",
+	                        }))
+	                        .tie(function() {
+	                            $(this).put($("<a />", {
+	                                "class": "elbora-vcl-themes-metro-icon elbora-vcl-themes-metro-icon32x32"
+	                            }))
+	                                .put($("<div />", {
+	                                    "class": "elbora-vcl-themes-metro-icon-filetype elbora-vcl-themes-metro-icon-filetype-folder"
+	                                }));
+	                        })
+	                        .and($("<div />", {
+	                            "class": "subscribe"
+	                        }))
+	                        .html(this.title);                          
+	                });
+	                // Draw files
+	                $.each(widget.data.files, function() {
+	                    var file = this;
+	                    
+	                    $(widget.wrappers.area)
+	                    .put($('<li />', {
+	                        "class": "file image",
+	                        "rel": this.name,
 	                        "origin": this.origin
-						}))
-						.click(function() {
-							widget.click($(this));
-							return false;
-						})
-							.put($("<div />", {
-								"class": "thumb"
-							}))
-							
-							.tie(function() {
-								$(this).put($("<img />", {
-									"alt": file.name,
-									"src": file.thumb
-								}));
-							})
-							.and($("<div />", {
-								"class": "subscribe"
-							}))
-							.html(this.title);				
-					});
-					widget.postRender();
-				});
-				
-			}
-			this.redrawLocation = function() {
-				$(this.wrappers.location).html(this.seance.location);
-				if (this.seance.location!='/') $(this.wrappers.backurl).show();
-				else $(this.wrappers.backUrl).hide();
-			}
-			this.postRender = function() {
-				var widget = this;
-				$(this.wrappers.area).find('div.thumb>img').each(function() {
-					widget.calcThumbSize(this);
-				});
-			}
-			/* Auto fit image to wrapper */
-			this.calcThumbSize = function(img) {
-				var img = img;
-				
-				$(img).fitimage({
-					width:90,
-					height:90
-				});
-				
-			};
+	                    }))
+	                    .click(function() {
+	                        widget.click($(this));
+	                        return false;
+	                    })
+	                        .put($("<div />", {
+	                            "class": "thumb"
+	                        }))
+	                        .click(function() {
+	                            widget.previewClick($(this).parent());
+	                            return false;
+	                        })
+	                        .tie(function() {
+	                            $(this).put($("<img />", {
+	                                "alt": file.name,
+	                                "src": file.thumb
+	                            }))
+	                            .and($('<div />',  {
+	                                "class": "nt-filemanager-overlay"
+	                            }))
+	                            .tie(function() {
+	                                $(this)
+	                                .put($('<div />'))
+	                                .put($('<symbol />', {
+	                                    "title": "Use it"
+	                                }))
+	                                .html('<div class="icon icon--ei-share-apple icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-checked"></use></svg></div>')
+	                                .click(function() {
+	                                    
+	                                    if ("function"==typeof widget.options.receiver && widget.seance.mode!=='select') {
+	                                        widget.sendback(file.name); 
+	                                    }
+	                                });
+	                            });
+	                        })
+	                        .and($("<div />", {
+	                            "class": "subscribe"
+	                        }))
+	                        .html(this.title)
+	                        
+	                });
+	                widget.postRender();
+	            });
+	            
+	        },
+	        sendback : function(rel) {
+	            if (rel)
+	            this.options.receiver({
+	                files: [this.getCurrentLocation()+rel],
+	                folders: []
+	            }); 
+	            else {
+	                this.options.receiver(this.seance.selectedItems);
+	            }
+	            this.close();
+	            return false;
+	        },
+	        redrawLocation : function() {
+	            $(this.wrappers.location).html(this.seance.location);
+	            if (this.seance.location!='/') $(this.wrappers.backurl).show();
+	            else $(this.wrappers.backUrl).hide();
+	        },
+	        postRender : function() {
+	            var widget = this;
+	            $(this.wrappers.area).find('div.thumb>img').each(function() {
+	                widget.calcThumbSize(this);
+	            });
+	        },
+	        calcThumbSize : function(img) {
+	            var img = img;
+	            
+	            $(img).fitimage({
+	                width:110,
+	                height:110
+	            });
+	            
+	        },
+	        previewClick : function(el) {
+	            var widget = this;
+	            switch (this.seance.mode) {
+	                case 'select':
+	                    this.select(el);
+	                break;
+	                case 'preview':
+	                    if ($(el).hasClass('folder')) {
+	                        // open folder
+	                        widget.appendLocation($(el).attr("rel"));                       
+	                    } else {
+	                        this.preview(el);
+	                    };
+	                break;
+	            }
+	            
+	        },
+	        click : function(el) {
+	            var widget = this;
+	            switch(this.seance.mode) {
+	                case 'select':
+	                    this.select(el);
+	                break;
+	                case 'preview':
+	                    if ($(el).hasClass('folder')) {
 
-			this.click = function(el) {
-				var widget = this;
-				switch(this.seance.mode) {
-					case 'select':
-						this.select(el);
-					break;
-					case 'preview':
-						if ($(el).hasClass('folder')) {
-
-							// open folder
-							widget.appendLocation($(el).attr("rel"));						
-						} else {
-							this.preview(el);
-						};
-					break;
-				}
-			};
-
-	        this.preview = function(el) {
+	                        // open folder
+	                        widget.appendLocation($(el).attr("rel"));                       
+	                    }
+	                break;
+	            }
+	        },
+	        /*
+	        Preview file
+	        */
+	        preview : function(el) {
 	            var plugin = this;
 	            var el = el;
 	            $("body").component("overlay", {
@@ -1793,186 +1971,233 @@ return /******/ (function(modules) { // webpackBootstrap
 	                .and($('<ul />'))
 	                .put($('<li />'))
 	                .tie(function() {
-	                   if ("function"==typeof plugin.options.onUse) $(this).put($('<button />')).html('Использовать')
+	                   if ("function"==typeof plugin.options.receiver) $(this).put($('<button />')).html('Использовать')
 	                    .click(function() {
-	                       plugin.options.onUse({
-	                            files: [plugin.getCurrentLocation()+$(el).attr("rel")],
-	                            folders: []
-	                       }); 
+	                       plugin.sendback();
 	                       overlay.close();
-	                       plugin.close();
-
-	                       return false;
 	                    });
 	                });
 	                   
 	            }).show();
-	        }
+	        },
+	        appendLocation : function(loc) {
+	            var loc = loc.split('\\').join('/');
 
-			this.appendLocation = function(loc) {
-				var loc = loc.split('\\').join('/');
+	            if (/^[^\/]+/.test(loc)) {
+	                if (loc.indexOf(0)=='/') loc = loc.substr(1);
+	                if (loc.length==1 && loc.substring(-1)=='/') loc = loc.substr(0,-1);
+	                
+	                if (this.seance.location.substring(-1)!=='/') this.seance.location += '/';
+	                this.seance.location += loc;
+	                
+	                this.refresh();
+	            }
+	        },
+	        disableSelectionMode : function() {
+	            this.seance.mode = 'preview';
+	            $(this.wrappers.area).find('li.selected').removeClass('selected');
+	            
+	            this.seance.selectedItems = {
+	                'folders': [],
+	                'files': []
+	            };
+	            this.recheckSituation();
+	        },
+	        enableSelectionMode : function() {
 
-				if (/^[^\/]+/.test(loc)) {
-					if (loc.indexOf(0)=='/') loc = loc.substr(1);
-					if (loc.length==1 && loc.substring(-1)=='/') loc = loc.substr(0,-1);
-					
-					if (this.seance.location.substring(-1)!=='/') this.seance.location += '/';
-					this.seance.location += loc;
-					
-					this.refresh();
-				}
-			}
+	            this.seance.mode = 'select';
+	            
+	            this.recheckSituation();
 
-			/* SELECT MODE */
+	        },
+	        toogleSelectMode : function() {
+	            if (this.seance.mode == 'select') {
+	                this.disableSelectionMode();
+	            } else {
+	                this.enableSelectionMode();
+	            }
+	            this.$digest();
+	        },
+	        select : function(el) {
+	            $(el).toggleClass('selected');
+	            this.recheckSituation();
+	        },
+	        deleteDialog : function() {
+	            var message;
+	            if (this.seance.selectedItems.folders.length&&this.seance.selectedItems.files.length) {
+	                message = 'Are you sure to remove selected files and folders with all files inside?';
+	            } else if (this.seance.selectedItems.folders.length) {
+	                message = 'Are you sure to remove selected folders with all files inside?'
+	            } else if (this.seance.selectedItems.files.length) {
+	                message = 'Are you sure to remove selected files?'
+	            };
+	            if (confirm(message)) {
+	                this.deleteSelected();
+	                this.disableSelectionMode();
+	            }
+	        },
+	        deleteSelected : function() {
+	            var widget = this;
+	            this.component.$fetch(['$config.requests.remove'], function(removeCfg) {
+	                widget.request(removeCfg, function() {
+	                    widget.refresh();
+	                });
+	            });
+	        },
+	        createFolder : function() {
+	            var widget = this;
+	            if (this.seance.dirname = prompt("Укажите имя для новой директории")) {
+	                this.component.$fetch(['$config.requests.addFolder'], function(addFolderCfg) {
+	                    this.request(addFolderCfg, function() {
+	                        widget.refresh();
+	                    });
+	                });
+	            }
+	        },
+	        bindUploadFile : function(el) {
+	            var widget = this;
+	            new uploadFileOnClick($(el), {
+	                widget: this,
+	                onSuccess: function(response) {
+	                    widget.refresh();
+	                }
+	            });
+	        },
+	        recheckSituation : function() {
+	            var widget = this;
+	            /* Смотрим на выеделенные элементы */
+	            this.seance.selectedItems = {
+	                'folders': [],
+	                'files': []
+	            };
+	            var cloc = this.getCurrentLocation();
 
-			this.disableSelectionMode = function() {
-				this.seance.mode = 'preview';
-				$(this.wrappers.area).find('li.selected').removeClass('selected');
-				$(this.wrappers.controls).find('li[data-trigger=modeSelect]').removeClass('selected');
-				this.seance.selectedItems = {
-					'folders': [],
-					'files': []
-				};
-				this.recheckSituation();
-			};
-			
-			this.enableSelectionMode = function() {
+	            $(this.wrappers.area).find('li.selected').each(function() {
+	                if ($(this).hasClass("folder"))
+	                widget.seance.selectedItems.folders.push(cloc+'/'+$(this).attr("rel"));
+	                else
+	                widget.seance.selectedItems.files.push(cloc+'/'+$(this).attr("rel"));
+	            });
+	            
+	            
+	            this.$digest();
+	        },
+	        goTop : function() {
+	            if (this.seance.location=='/') return false;
+	            var aloc = this.seance.location.split('/');
 
-				this.seance.mode = 'select';
-				$(this.wrappers.controls).find('li[data-trigger=modeSelect]').addClass('selected');
-				this.recheckSituation();
-
-			};
-
-			this.toogleSelectMode  = function() {
-				if (this.seance.mode == 'select') {
-					this.disableSelectionMode();
-				} else {
-					this.enableSelectionMode();
-				}
-			}
-
-			this.select = function(el) {
-				$(el).toggleClass('selected');
-				this.recheckSituation();
-			};
-
-			/* Диалог перед удалением */
-			this.deleteDialog = function() {
-				if (confirm("Удалить выбранные файлы?")) {
-					this.deleteSelected();
-					this.disableSelectionMode();
-				}
-			}
-			/* Удаление */
-			this.deleteSelected = function() {
-				var widget = this;
-				if ("function"==typeof this.options.onDelete) {
-					this.options.onDelete.call(this, this.seance.selectedItems);
-				}
-				this.request({
-					mode: 'delete',
-					location: this.seance.location,
-					files: this.seance.selectedItems.files,
-					folders: this.seance.selectedItems.folders
-				}, function() {
-					widget.refresh();
-				});
-			}
-
-			/* Создание директории */
-			this.createFolder = function() {
-				var widget = this;
-				var dirname;
-				if (dirname = prompt("Укажите имя для новой директории")) {
-					if ("function"==typeof this.options.onDelete) {
-						this.options.onMakeDir.call(this, dirname);
-					}
-					if (typeof this.options.connector!="undefined" && this.options.connector) {
-						this.request({
-							mode: 'addfolder',
-							location: this.seance.location,
-							foldername: dirname
-						}, function() {
-							widget.refresh();
-						});
-					}
-				}
-			}
-
-			/* Накладываем на кнопку возможность выбора файла */
-			this.bindUploadFile = function(el) {
-				var widget = this;
-				new uploadFileOnClick($(el), function() {
-
-					return widget.seance.location;
-				}, {
-					connector: this.options.connector,
-					onSuccess: function(response) {
-						widget.refresh();
-					}
-				});
-			}
-
-			/* Переход на уровень выше */
-			this.goTop = function() {
-				if (this.seance.location=='/') return false;
-				var aloc = this.seance.location.split('/');
-
-				while (aloc[aloc.length-1]=='' && aloc.length>0) {
-					aloc.pop();
-					console.log('aloc', aloc);
-				}
-				aloc.pop();
-				var loc = aloc.length==0 ? '/' : aloc.join('/');
-				if (loc=='') loc = '/';
-				this.seance.location = loc;
-				this.refresh();
-			}
-
-			/* Пересматривает ситуацию активных элементов */
-			this.recheckSituation = function() {
-				var widget = this;
-				/* Смотрим на выеделенные элементы */
-				this.seance.selectedItems = {
-					'folders': [],
-					'files': []
-				};
-				var cloc = this.getCurrentLocation();
-
-				$(this.wrappers.area).find('li.selected').each(function() {
-					if ($(this).hasClass("folder"))
-					widget.seance.selectedItems.folders.push(cloc+'/'+$(this).attr("rel"));
-					else
-					widget.seance.selectedItems.files.push(cloc+'/'+$(this).attr("rel"));
-				});
-	            console.log(widget.seance.selectedItems);
-				/* Определяем показывать ли кнопку delete */
-				if (this.seance.selectedItems.folders.length>0 || this.seance.selectedItems.files.length>0) {
-					$(this.wrappers.controls).find('li[data-trigger=use]').removeClass("hidden");
-					$(this.wrappers.controls).find('li[data-trigger=delete]').removeClass("hidden");
-				} else {
-					$(this.wrappers.controls).find('li[data-trigger=use]').addClass("hidden");
-					$(this.wrappers.controls).find('li[data-trigger=delete]').addClass("hidden");
-				}
-			}	
-			/* Возврвщает текущую локацию файл без первого слеша */
-			this.getCurrentLocation = function() {
-				var loc = this.seance.location;
-				if (loc.substr(0,1)==='/') loc = loc.substr(1);
-				if (loc.substr(-1)==='/') loc = loc.substr(0,-1);
+	            while (aloc[aloc.length-1]=='' && aloc.length>0) {
+	                aloc.pop();
+	                console.log('aloc', aloc);
+	            }
+	            aloc.pop();
+	            var loc = aloc.length==0 ? '/' : aloc.join('/');
+	            if (loc=='') loc = '/';
+	            this.seance.location = loc;
+	            this.refresh();
+	        },
+	        getCurrentLocation : function() {
+	            var loc = this.seance.location;
+	            if (loc.substr(0,1)==='/') loc = loc.substr(1);
+	            if (loc.substr(-1)==='/') loc = loc.substr(0,-1);
 	            if (loc.length===1&&loc[0]==='/') loc = '';
-				return loc;
+	            return loc;
+	        }
+	    }
+
+		var FN = function(parent, wrapper, options) {
+
+			this.wrapper = wrapper;
+	        this.component = parent;
+			var options = options || {};
+
+			// main data
+			this.data = {
+				files: [],
+				folders: []
+			}
+			// options
+			this.options = $.extend({
+				isRoot: true,
+				connector: '',
+				location: '/',
+				receiver: false
+			}, options || {});
+			// wrappers
+			this.wrappers = {
+				area: null
+			};
+			// Phenotype
+			this.phenotype = {
+				controls: {
+					use: {
+						'icon': 'use',
+						'trigger': 'use',
+						'hidden': true,
+						"title": "Использовать",
+						'click': function() {
+							if ("function"==typeof this.options.receiver) this.options.receiver(this.seance.selectedItems); 
+						}
+					},
+					addfile: {
+						'icon': 'add',
+						'trigger': 'add',
+						'title': 'Создать',
+						'init': function(el) {
+							this.bindUploadFile(el);
+						}
+					},
+					addfolder: {
+						'icon': 'addfolder',
+						'trigger': 'addfolder',
+						'title': 'Создать директорию',
+						'click': function() {
+							this.createFolder();
+							return false;
+						}
+					},
+					select: {
+						'icon': 'list',
+						'trigger': 'modeSelect',
+						'click': function() {
+							this.toogleSelectMode();
+							return false;
+						},
+						'title': 'Выбрать'
+					},
+					del: {
+						'icon': 'delete',
+						'hidden': true,
+						'trigger': 'delete',
+						'title': 'Удалить выбранное',
+						'click': function() {
+							this.deleteDialog();
+							return false;
+						}
+					}
+				}
+			};
+
+			// 
+			this.seance = {
+				mode: 'preview',
+	            dirname: false,
+	            location: false
 			}
 
 			this.init();
 		}
 
-		$.fn.ntFileManager = $.fn.ntFileManager = function(data) {
+	    FN.prototype = FNPROTO;
+	    FN.prototype.constructor = FN;
+
+		$.fn.ntFileManager = $.fn.ntFileManager = function(data, component) {
 			
-			var data = data;
+
+			
 			return $(this).each(function() {
-				new FN(this, data);
+	            
+	            component.$newScope(FN, [this, data]);
 			});
 		};
 
@@ -1988,7 +2213,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var content = __webpack_require__(3);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(19)(content, {});
+	var update = __webpack_require__(13)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -2013,7 +2238,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "nt-filemanager {\n\tposition: relative;\n}\n\nnt-filemanager ul.filesArea {\n\toverflow: hidden;\n\tdisplay:table;\n\tlist-style: none;\n\tpadding: 0px;\n\tmargin:0 0 5px 0;\n\tborder-radius: 6px;\n\tbackground: none;\n\tclear:both;\n}\n\nnt-filemanager ul.filesArea li {\n\tpadding: 24px 24px;\n\theight: 162px;\n\tfloat: left;\n\tmargin: 0 1px 1px 1px;\n}\n\nnt-filemanager ul.filesArea li.file {\n\tbackground-color: rgba(3, 3, 3, 0.14);\n}\n\n\nnt-filemanager ul.filesArea li.folder {\n\tbackground-color: rgba(255, 255, 255, 0.03);\n}\n\nnt-filemanager ul.filesArea li.selected {\n\tbackground-color:#002D44;\n}\n\nnt-filemanager ul.filesArea li.selected img {\n\topacity:0.75;\n\tfilter:alpha(opacity=75);\n}\n\nnt-filemanager ul.filesArea li div.subscribe {\n\tfont-size: 12px;\n\tcolor: #8e877c;\n\tfont-weight: normal;\n\tmargin: 10px auto 0 auto;\n\theight:20px;\n\tline-height: 14px;\n\theight: 14px;\n\ttext-overflow: ellipsis;\n\toverflow: hidden;\n\twidth: 120px;\n\ttext-align:center;\n}\n\nnt-filemanager ul.filesArea li.selected div.subscribe {\n\tcolor:white;\n}\n\nnt-filemanager ul.filesArea li > div.thumb {\n\twidth:90px;\n\theight:90px;\n\ttext-align:center;\n\tmargin:0 auto;\n\tcursor:pointer;\n\t\n}\n\nnt-filemanager ul.filesArea li.image > div.thumb {\n\tbackground-color: #fff;\n\tbox-shadow:         3px 8px 10px 0px rgba(0, 14, 0, 0.47);\n}\n\nnt-filemanager ul.filesArea li.image > div.thumb > img {\n\tdisplay:none;\n}\n\nnt-filemanager div.location {\n\tdisplay:table;\n\toverflow: hidden;\n\theight:34px;\n\twidth:100%;\n\tposition: relative;\n}\n\nnt-filemanager div.location > table {\n\tpadding:0px;\n\twidth:100%;\n}\n\nnt-filemanager div.location > table:after {\n}\n\nnt-filemanager div.location > table td.backurl {\n\tdisplay:none;\n\twidth:34px;\n\theight:100%;\n\tvertical-align: middle;\n}\n\nnt-filemanager div.location > table td.backurl a.goback-icon {\n\tbackground:url(" + __webpack_require__(5) + ") center center no-repeat transparent;\n\twidth:100%;\n\theight:23px;\n\tdisplay:inline-block;\n\tcursor:pointer;\n}\n\nnt-filemanager div.location td.input {\n\tdisplay:table;\n\tfont-size:14px;\n\tcolor:#505057;\n\theight:100%;\n\twidth:100%;\n\t\n}\n\nnt-filemanager div.location td.input > div {\n\tpadding:6px 0;\n}\n\nnt-filemanager div.location td.input > div > div {\n\tborder:1px rgba(128, 128, 128, 0.19) solid;\n\tborder-radius: 3px;\n}\n\nnt-filemanager div.location td.input > div > div > div {\n\tpadding:0 12px;\n}\n\nnt-filemanager div.controls {\n\tpadding: 1px 0;\n\tmargin-bottom: 3px;\n\tborder-radius: 6px;\n\tfloat:left;\n\t\n}\n\nnt-filemanager div.controls ul {\n\tlist-style:none;\n\tmargin:0px;\n\tpadding:0px;\n}\n\nnt-filemanager div.controls ul:after {\n\tcontent: \"\";\n\tdisplay:block;\n\twidth:100%;\n\tclear:both;\n}\n\nnt-filemanager div.controls ul li {\n\tfloat:left;\n\tbackground-color:rgba(3, 3, 3, 0.14);\n\tmargin:0 3px 0 0;\n}\n\nnt-filemanager div.controls ul li.selected {\n\tbackground-color:#002D44;\n}\n\nnt-filemanager-modal {\n\tbackground-color:rgba(5,5,5,1);\n\tborder-radius: 12px;\n\tpadding:12px;\n\tbox-shadow:         0px 10px 24px -5px rgba(50, 50, 50, 0.75);\n\twidth:600px;\n}\n\nnt-filemanager-overlay {\n\tbackground-color:rgba(0,0,0,0.6);\n}\n\nnt-filemanager-modal > div {\n\tpadding:10px !important;\n}\n\nnt-filemanager-modal > div img.preview {\n\twidth:580px;\n}\n\nnt-filemanager-modal > div > div {\n\tposition:relative;\n}\n\nnt-filemanager-modal span.close {\n\tposition:absolute;\n\ttop:-30px;\n\tright:-30px;\n}\n\n/* Metro icons */\na.elbora-vcl-themes-metro-icon {\n\tbackground-position:center center;\n\tbackground-repeat: no-repeat;\n\tbackground-size:60%;\n}\n\na.elbora-vcl-themes-metro-icon > img.glow { display:none; }\na.elbora-vcl-themes-metro-icon > img.default { display:block; }\n\n.elbora-vcl-themes-metro-icon32x32 {\n\ttext-decoration:none;\n\twidth:32px;\n\theight:32px;\n\tdisplay:block;\n}\n\n.elbora-vcl-themes-metro-icon32x32-add {\n\tbackground-image:url(" + __webpack_require__(6) + ");\n}\n.elbora-vcl-themes-metro-icon32x32-add:hover {\n\tbackground-image:url(" + __webpack_require__(7) + ");\n}\n\n.elbora-vcl-themes-metro-icon32x32-addfolder {\n\tbackground-image:url(" + __webpack_require__(8) + ");\n}\n.elbora-vcl-themes-metro-icon32x32-addfolder:hover {\n\tbackground-image:url(" + __webpack_require__(9) + ");\n}\n\n.elbora-vcl-themes-metro-icon32x32-list {\n\tbackground-image:url(" + __webpack_require__(10) + ");\n}\n.elbora-vcl-themes-metro-icon32x32-list:hover {\n\tbackground-image:url(" + __webpack_require__(11) + ");\n}\n\n.elbora-vcl-themes-metro-icon32x32-delete {\n\tbackground-image:url(" + __webpack_require__(12) + ");\n}\n.elbora-vcl-themes-metro-icon32x32-delete:hover {\n\tbackground-image:url(" + __webpack_require__(13) + ");\n}\n\n.elbora-vcl-themes-metro-icon32x32-use {\n\tbackground-image:url(" + __webpack_require__(14) + ");\n}\n.elbora-vcl-themes-metro-icon32x32-use:hover {\n\tbackground-image:url(" + __webpack_require__(15) + ");\n}\n\n.elbora-vcl-themes-bold-icon32x32-close {\n\tbackground-image:url(" + __webpack_require__(16) + ");\n\t-webkit-transition: -webkit-transform 0.35s ease;\n\ttransition: -webkit-transform 0.35s ease;\n\ttransition: transform 0.35s ease;\n\ttransition:transform 0.35s ease, -webkit-transform 0.35s ease;\n\t-webkit-transform:scale(0.7);\n\t        transform:scale(0.7);\n}\n.elbora-vcl-themes-bold-icon32x32-close:hover {\n\t-webkit-transform:scale(1);\n\t        transform:scale(1);\n}\n\n.elbora-vcl-themes-metro-icon-filetype {\n\twidth:90px;\n\theight:90px;\n\tdisplay:inline-block;\n\tbackground-position:center center;\n\tbackground-repeat: no-repeat;\n}\n\n.elbora-vcl-themes-metro-icon-filetype-folder {\n\tbackground-image:url(" + __webpack_require__(17) + ");\n}\n.elbora-vcl-themes-metro-icon-filetype-folder:hover {\n\tbackground-image:url(" + __webpack_require__(18) + ");\n}", ""]);
+	exports.push([module.id, "nt-filemanager {\n\tposition: relative;\n\tbackground-color: rgba(37, 37, 37, 0.01);\n    display: block;\n}\n\n\nnt-filemanager ul.filesArea {\n\toverflow: hidden;\n\tdisplay:table;\n\tlist-style: none;\n\tpadding: 0px;\n\tmargin:0 0 5px 0;\n\tborder-radius: 6px;\n\tbackground: none;\n\tclear:both;\n}\n\n\nnt-filemanager ul.filesArea li {\n\tpadding: 24px 24px;\n\theight: 130px;\n\tfloat: left;\n\tmargin: 0 1px 1px 1px;\n\tposition: relative;\n}\n\n\nnt-filemanager ul.filesArea li.folder {\n\tbackground-color: rgba(255, 255, 255, 0.03);\n}\n\n\nnt-filemanager ul.filesArea li.file {\n\tbackground-color: rgba(224, 216, 201, 0.19);\n\t-webkit-transition: background 0.25s ease;\n\ttransition:background 0.25s ease;\n}\n\n\nnt-filemanager ul.filesArea li.file:hover {\n\tbackground-color:rgba(224, 216, 201, 0.29)\n}\n\n\nnt-filemanager ul.filesArea li > div.thumb {\n\twidth:110px;\n\theight:110px;\n\ttext-align:center;\n\tmargin:0 auto;\n\tcursor:pointer;\n\tposition: relative;\n}\n\n\nnt-filemanager ul.filesArea li > div.thumb >.nt-filemanager-overlay {\n\tposition: absolute;\n\ttop:0;\n\tleft:0;\n\twidth:100%;\n\theight:100%;\n\tdisplay:none;\n}\n\n\nnt-filemanager ul.filesArea li > div.thumb >.nt-filemanager-overlay >div {\n\tbackground-color:rgb(217, 216, 204);\n\t-webkit-transform-origin:50% 50%;\n\ttransform-origin:50% 50%;\n\t-webkit-transition: opacity 0.3s ease, -webkit-transform 0.25s ease;\n\ttransition: opacity 0.3s ease, -webkit-transform 0.25s ease;\n\ttransition: transform 0.25s ease, opacity 0.3s ease;\n\ttransition:transform 0.25s ease, opacity 0.3s ease, -webkit-transform 0.25s ease;\n\topacity:0;\n\tmargin: 0 auto;\n\tborder-radius: 16px;\n\tborder: 1px rgba(234, 204, 170, 0.69) solid;\n\tcursor: pointer;\n\tdisplay: block;\n\tposition: absolute;\n\ttop: 50%;\n\tleft: 50%;\n\t-webkit-transform: translateX(-50%) translateY(-50%) scale(0.85);\n\ttransform: translateX(-50%) translateY(-50%) scale(0.85);\n\twidth: 32px;\n\theight: 32px;\n\tcursor:pointer;\n}\n\n\nnt-filemanager ul.filesArea li > div.thumb >.nt-filemanager-overlay >div >symbol {\n\tcursor:pointer;\n}\n\n\nnt-filemanager ul.filesArea li > div.thumb >.nt-filemanager-overlay >div >symbol >div {\n\twidth: 80%;\n\theight: 80%;\n\tcursor: pointer;\n\tmargin-left: 10%;\n\tmargin-top: 10%;\n}\n\n\nnt-filemanager ul.filesArea li > div.thumb >.nt-filemanager-overlay >div >symbol >div >svg {\n\twidth: 100%;\n\theight: 100%;\n\tfill: #8FA0A5;\n\tcursor:pointer;\n}\n\n\nnt-filemanager ul.filesArea li.image > div.thumb {\n\tbackground-color: #8A8A8A;\n}\n\n\nnt-filemanager ul.filesArea li.image > div.thumb > img {\n\tdisplay:none;\n}\n\n\nnt-filemanager ul.filesArea li div.subscribe {\n\tfont-size: 11px;\n\tcolor: #131212;\n\tfont-weight: normal;\n\tmargin: 10px auto 0 auto;\n\theight:20px;\n\tline-height: 14px;\n\theight: 14px;\n\ttext-overflow: ellipsis;\n\toverflow: hidden;\n\twidth: 120px;\n\ttext-align:center;\n\tfont-weight: 100;\n\tfont-family: Arial;\n}\n\n\nnt-filemanager ul.filesArea li.selected {\n\tbackground-color:rgba(88, 84, 28, 0.22);\n}\n\n\nnt-filemanager ul.filesArea li.selected:hover {\n\tbackground-color:rgba(90, 86, 30, 0.35);\n}\n\n\nnt-filemanager ul.filesArea li.selected img {\n\topacity:0.75;\n\tfilter:alpha(opacity=75);\n}\n\n\nnt-filemanager ul.filesArea li.selected div.subscribe {\n\tcolor:white;\n\tfont-weight: 100;\n}\n\n\nnt-filemanager ul.filesArea li.selected.image > div.thumb {\n\n\t/*box-shadow:         1px 4px 17px 4px rgba(0, 0, 0, 0.39);*/\n\tbackground-color:#000000;\n}\n\n\nnt-filemanager ul.filesArea li.selected >div.thumb >.nt-filemanager-overlay {\n\tdisplay:block;\n}\n\n\nnt-filemanager ul.filesArea li.selected >div.thumb >.nt-filemanager-overlay >div {\n\topacity:1;\n}\n\n\nnt-filemanager ul.filesArea li:hover .acceptit {\n\topacity:1;\n\t-webkit-transform: translateX(-50%) scale(1);\n\ttransform: translateX(-50%) scale(1);\n}\n\n\nnt-filemanager div.location {\n\tdisplay:table;\n\toverflow: hidden;\n\theight:34px;\n\twidth:100%;\n\tposition: relative;\n}\n\nnt-filemanager div.location > table {\n\tpadding:0px;\n\twidth:100%;\n\tborder-spacing: 0;\n\tborder-collapse: collapse;\n}\n\nnt-filemanager div.location > table:after {\n}\n\nnt-filemanager div.location > table td.backurl {\n\tdisplay:none;\n\twidth:34px;\n\theight:100%;\n\tvertical-align: middle;\n}\n\nnt-filemanager div.location > table td.backurl a.goback-icon {\n\tbackground:url(" + __webpack_require__(5) + ") center center no-repeat transparent;\n\twidth:100%;\n\theight:23px;\n\tdisplay:inline-block;\n\tcursor:pointer;\n}\n\nnt-filemanager div.location td.input {\n\tdisplay: table;\n    font-size: 12px;\n    color: #505057;\n    height: 100%;\n    width: 100%;\n    font-family: sans-serif;\n}\n\nnt-filemanager div.location td.input > div {\n\tpadding:6px 0;\n\tborder:1px rgb(204, 202, 202) solid;\n}\n\nnt-filemanager div.location td.input > div > div {\n\tborder-radius: 3px;\n}\n\nnt-filemanager div.location td.input > div > div > div {\n\tpadding:0 12px;\n}\n\nnt-filemanager div.add-area {\n\tdisplay:-webkit-box;\n\tdisplay:-webkit-flex;\n\tdisplay:-ms-flexbox;\n\tdisplay:flex;\n\tclear:both;\n}\n\nnt-filemanager div.add-area .add-area-section {\n\tdisplay:block;\n\tborder:none;\n\tbackground-color:rgb(245, 245, 245);\n\tmargin:0 0 4px 0;\n\tpadding:10px 0;\n\tclear: both;\n\tfont-family: Arial;\n\ttext-align: center;\n\t-webkit-box-flex:0;\n\t-webkit-flex:0 1 100%;\n\t-ms-flex:0 1 100%;\n\tflex:0 1 100%;\n\tmargin-right: 2px;\n}\n\nnt-filemanager div.add-area .add-area-section > figure {\n\tmargin:0 auto;\n\tdisplay:inline-block;\n\ttext-align: center;\n}\n\nnt-filemanager div.add-area .add-area-section > figure >div {\n\twidth:50px;\n\theight:50px;\n\tmargin: 0;\n\tdisplay: inline-block;\n\tvertical-align: top;\n}\n\nnt-filemanager div.add-area .add-area-section > figure >div >svg {\n\twidth:100%;\n\theight:100%;\n\tfill:#403737;\n\t-webkit-transition: fill 0.25s ease;\n\ttransition:fill 0.25s ease;\n}\n\nnt-filemanager div.add-area .add-area-section > figure >figcaption {\n\tfont-size:11px;\n\tcolor:#403737;\n\t-webkit-transition: color 0.25s ease;\n\ttransition:color 0.25s ease;\n\tdisplay: inline-block;\n\theight: 50px;\n\tvertical-align: middle;\n\tline-height: 50px;\n\tfont-size: 13px;\n}\n\nnt-filemanager div.add-area .add-area-section.add-area-section-box {\n\twidth:70px;\n\t-webkit-box-flex:0;\n\t-webkit-flex:0 0 70px;\n\t-ms-flex:0 0 70px;\n\tflex:0 0 70px;\n}\n\nnt-filemanager div.add-area .add-area-section.add-area-section-box >figure {\n\tposition: relative;\n\t-webkit-transform: translateY(-5px);\n\ttransform: translateY(-5px);\n}\n\nnt-filemanager div.add-area .add-area-section.add-area-section-box >figure >div {\n\twidth:35px;\n\theight:35px;\n}\n\nnt-filemanager div.add-area .add-area-section.add-area-section-box >figure >figcaption {\n\tline-height: normal;\n\tposition: absolute;\n\ttop: 100%;\n\tleft: 50%;\n\twidth: 100%;\n\t-webkit-transform: translateX(-50%) translateY(-5px);\n\ttransform: translateX(-50%) translateY(-5px);\n\ttext-align: center;\n\twidth: 140%;\n\tfont-size: 11px;\n}\n\nnt-filemanager div.add-area .add-area-section.add-area-section-box >figure.are-box-standalone {\n\t-webkit-transform:translateY(8px);\n\ttransform:translateY(8px);\n}\n\nnt-filemanager div.add-area .add-area-section:hover {\n\tbackground-color:#EFECEC;\n}\n\nnt-filemanager div.add-area .add-area-section:hover > figure >div >svg {\n\tfill:#8FA0A5;\n}\n\nnt-filemanager div.add-area .add-area-section:hover > figure >figcaption {\n\tcolor:#58534B;\n}\n\nnt-filemanager div.add-area .add-area-section.pointable {\n\tcursor:pointer;\n}\n\nnt-filemanager div.add-area .add-area-section.active {\n\tbackground-color:#8FA0A5;\n}\n\nnt-filemanager div.add-area .add-area-section.active > figure >div >svg {\n\tfill:#F9F2E6;\n}\n\nnt-filemanager div.add-area .add-area-section.active > figure >figcaption {\n\tcolor:#58534B;\n}\n\nnt-filemanager div.add-area .add-area-section:last-child {\n\tmargin-right: 0px;\n}\n\nnt-filemanager div.controls {\n\tpadding: 1px 0;\n\tmargin-bottom: 3px;\n\tborder-radius: 6px;\n\tfloat:left;\n}\n\nnt-filemanager div.controls ul {\n\tlist-style:none;\n\tmargin:0px;\n\tpadding:0px;\n}\n\nnt-filemanager div.controls ul:after {\n\tcontent: \"\";\n\tdisplay:block;\n\twidth:100%;\n\tclear:both;\n}\n\nnt-filemanager div.controls ul li {\n\tfloat:left;\n\tbackground-color:rgba(37, 37, 37, 0.01);\n\tmargin:0 3px 0 0;\n}\n\nnt-filemanager div.controls ul li.selected {\n\tbackground-color:#8FA0A5;\n}\n\nnt-filemanager-modal {\n\tbackground-color:rgba(5,5,5,1);\n\tborder-radius: 12px;\n\tpadding:12px;\n\tbox-shadow:         0px 10px 24px -5px rgba(50, 50, 50, 0.75);\n\twidth:600px;\n}\n\nnt-filemanager-overlay {\n\tbackground-color:rgba(0,0,0,0.6);\n}\n\nnt-filemanager-modal > div {\n\tpadding:10px !important;\n}\n\nnt-filemanager-modal > div img.preview {\n\twidth:580px;\n}\n\nnt-filemanager-modal > div > div {\n\tposition:relative;\n}\n\nnt-filemanager-modal span.close {\n\tposition:absolute;\n\ttop:-30px;\n\tright:-30px;\n}\n\n/* Metro icons */\na.elbora-vcl-themes-metro-icon {\n\tbackground-position:center center;\n\tbackground-repeat: no-repeat;\n\tbackground-size:60%;\n}\n\na.elbora-vcl-themes-metro-icon > img.glow { display:none; }\na.elbora-vcl-themes-metro-icon > img.default { display:block; }\n\n.elbora-vcl-themes-metro-icon32x32 {\n\ttext-decoration:none;\n\twidth:32px;\n\theight:32px;\n\tdisplay:block;\n}\n\n.elbora-vcl-themes-metro-icon32x32-add {\n\tbackground-image:url(" + __webpack_require__(6) + ");\n}\n\n.elbora-vcl-themes-metro-icon32x32-addfolder {\n\tbackground-image:url(" + __webpack_require__(7) + ");\n}\n\n.elbora-vcl-themes-metro-icon32x32-list {\n\tbackground-image:url(" + __webpack_require__(8) + ");\n}\n\n.elbora-vcl-themes-metro-icon32x32-delete {\n\tbackground-image:url(" + __webpack_require__(9) + ");\n}\n\n.elbora-vcl-themes-metro-icon32x32-use {\n\tbackground-image:url(" + __webpack_require__(10) + ");\n}\n\n.elbora-vcl-themes-bold-icon32x32-close {\n\tbackground-image:url(" + __webpack_require__(11) + ");\n\t-webkit-transition: -webkit-transform 0.25s ease;\n\ttransition: -webkit-transform 0.25s ease;\n\ttransition: transform 0.25s ease;\n\ttransition:transform 0.25s ease, -webkit-transform 0.25s ease;\n\t-webkit-transform:scale(0.7);\n\t        transform:scale(0.7);\n}\n.elbora-vcl-themes-bold-icon32x32-close:hover {\n\t-webkit-transform:scale(1);\n\t        transform:scale(1);\n}\n\n.elbora-vcl-themes-metro-icon-filetype {\n\twidth:110px;\n\theight:110px;\n\tdisplay:inline-block;\n\tbackground-position:center center;\n\tbackground-repeat: no-repeat;\n}\n\n.elbora-vcl-themes-metro-icon-filetype-folder {\n\tbackground-image:url(" + __webpack_require__(12) + ");\n}", ""]);
 
 	// exports
 
@@ -2090,76 +2315,40 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "2887e3beb7ef411b9643357a91b0f3d4.png";
+	module.exports = __webpack_require__.p + "e8a3e0db0119837cf3bc999b7512eb4d.png";
 
 /***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "e8a3e0db0119837cf3bc999b7512eb4d.png";
+	module.exports = __webpack_require__.p + "c20b15db4b17b07c14ad06e077f37543.png";
 
 /***/ },
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "ccecb2549c6e4d09ffb4a3f29214d112.png";
+	module.exports = __webpack_require__.p + "9ffaa3c3b207aa22780a8a1ca990bdb5.png";
 
 /***/ },
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "c20b15db4b17b07c14ad06e077f37543.png";
+	module.exports = __webpack_require__.p + "3b18c9593c47c62947144fba8fc1f811.png";
 
 /***/ },
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "19be5b9521f85f9464dfc7c8cde35638.png";
+	module.exports = __webpack_require__.p + "c21c7707b49fac7653e67d8d28dd0109.png";
 
 /***/ },
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "9ffaa3c3b207aa22780a8a1ca990bdb5.png";
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "528cf688e0980da5ddb31f8380a0ce75.png";
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "3b18c9593c47c62947144fba8fc1f811.png";
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "b0db050318937e08d343ed156ad3f64c.png";
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "c21c7707b49fac7653e67d8d28dd0109.png";
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
 	module.exports = __webpack_require__.p + "f69eef3e1a500b93f5044c1a877ec22a.png";
 
 /***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "8151aa0bc52a96bb6cfac29762f68a77.png";
-
-/***/ },
-/* 19 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
