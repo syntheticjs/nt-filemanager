@@ -1937,7 +1937,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        preview : function(el) {
 	            var plugin = this;
 	            var el = el;
-	            $("body").component("overlay", {
+
+	            plugin.sendback($(el).attr("rel"));
+
+	            /*$("body").component("overlay", {
 	                "panel": {
 	                    "class": "brahma-visualpack-filemanager-modal"
 	                },
@@ -1975,7 +1978,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    });
 	                });
 	                   
-	            }).show();
+	            }).show();*/
 	        },
 	        appendLocation : function(loc) {
 	            var loc = loc.split('\\').join('/');
