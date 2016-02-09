@@ -1389,7 +1389,6 @@ function log() {
         },
         request : function(data, success, error) {
             var widget = this;
-            if (!this.options.connector) return;
             var data = data || {};
             var success = success || false;
 
