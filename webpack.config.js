@@ -1,6 +1,7 @@
 var path = require('path');
 var autoprefixer = require('autoprefixer');
 var nested = require('postcss-nested');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
     context: path.join(__dirname, './'), // исходная директория
 	entry: './src/nt-filemanager.js', // файл для сборки, если несколько - указываем hash (entry name => filename)
@@ -15,7 +16,7 @@ module.exports = {
 	],
 	module: {
 		loaders: [
-	        { test: /\.css$/, loader: "style-loader!css-loader!postcss-loader" },
+	        { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader", "postcss-loader") },
 	        {
 		        test: /\.(jpe?g|png|gif|svg)$/i,
 		        loaders: [
@@ -27,6 +28,9 @@ module.exports = {
      		{ test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }
 	    ]
 	},
+	plugins: [
+        new ExtractTextPlugin("[name].css")
+    ],
     postcss: function () {
         return [autoprefixer, nested];
     },

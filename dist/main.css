@@ -1,0 +1,454 @@
+nt-filemanager {
+	position: relative;
+	background-color: rgba(37, 37, 37, 0.01);
+    display: block;
+
+    ul.filesArea {
+		overflow: hidden;
+		display:table;
+		list-style: none;
+		padding: 0px;
+		margin:0 0 5px 0;
+		-webkit-border-radius: 6px;
+		-moz-border-radius: 6px;
+		border-radius: 6px;
+		background: none;
+		clear:both;
+
+		li {
+			padding: 24px 24px;
+			height: 130px;
+			float: left;
+			margin: 0 1px 1px 1px;
+			position: relative;
+			
+			&.folder {
+				background-color: rgba(255, 255, 255, 0.03);
+			}
+
+			&.file {
+				background-color: rgba(224, 216, 201, 0.19);
+				transition:background 0.25s ease;
+				&:hover {
+					background-color:rgba(224, 216, 201, 0.29)
+				}
+			}
+
+			> div.thumb {
+				width:110px;
+				height:110px;
+				text-align:center;
+				margin:0 auto;
+				cursor:pointer;
+				position: relative;
+
+				>.nt-filemanager-overlay {
+					position: absolute;
+					top:0;
+					left:0;
+					width:100%;
+					height:100%;
+					display:none;
+					>div {
+						background-color:rgb(217, 216, 204);
+						transform-origin:50% 50%;
+						transition:transform 0.25s ease, opacity 0.3s ease;
+						opacity:0;
+						margin: 0 auto;
+					    border-radius: 16px;
+					    border: 1px rgba(234, 204, 170, 0.69) solid;
+					    cursor: pointer;
+					    display: block;
+					    position: absolute;
+					    top: 50%;
+					    left: 50%;
+					    transform: translateX(-50%) translateY(-50%) scale(0.85);
+					    width: 32px;
+					    height: 32px;
+					    cursor:pointer;
+						
+						>symbol {
+							cursor:pointer;
+							>div {
+					    	    width: 80%;
+							    height: 80%;
+							    cursor: pointer;
+							    margin-left: 10%;
+							    margin-top: 10%;
+							    >svg {
+							    	width: 100%;
+								    height: 100%;
+								    fill: #8FA0A5;
+								    cursor:pointer;
+							    }
+						    }
+						}
+					}
+				}
+			}
+
+			&.image > div.thumb {
+				background-color: #8A8A8A;
+
+				
+
+				> img {
+					display:none;
+				}
+			}
+
+			div.subscribe {
+				font-size: 11px;
+				color: #131212;
+				font-weight: normal;
+				margin: 10px auto 0 auto;
+				height:20px;
+				line-height: 14px;
+				height: 14px;
+				-o-text-overflow: ellipsis;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				width: 120px;
+				text-align:center;
+				font-weight: 100;
+				font-family: Arial;
+			}
+
+			&.selected {
+				background-color:rgba(88, 84, 28, 0.22);
+
+				&:hover {
+					background-color:rgba(90, 86, 30, 0.35);
+				}
+
+				img {
+					opacity:0.75;
+					filter:alpha(opacity=75);
+				}
+
+				div.subscribe {
+					color:white;
+					font-weight: 100;
+				}
+
+				&.image {
+					> div.thumb {
+						/*box-shadow:         1px 4px 17px 4px rgba(0, 0, 0, 0.39);*/
+						background-color:#000000;
+					}
+				}
+
+				>div.thumb {
+					>.nt-filemanager-overlay {
+						display:block;
+						>div {
+							opacity:1;
+						}
+					}
+				}
+			}
+
+			&:hover {
+				.acceptit {
+					opacity:1;
+					transform: translateX(-50%) scale(1);
+				}
+			}
+		}
+	}
+}
+
+
+nt-filemanager div.location {
+	display:table;
+	overflow: hidden;
+	height:34px;
+	width:100%;
+	position: relative;
+}
+
+nt-filemanager div.location > table {
+	padding:0px;
+	width:100%;
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+
+nt-filemanager div.location > table:after {
+}
+
+nt-filemanager div.location > table td.backurl {
+	display:none;
+	width:34px;
+	height:100%;
+	vertical-align: middle;
+}
+
+nt-filemanager div.location > table td.backurl a.goback-icon {
+	background:url(c5e7f50976b061083c49616504a77c04.png) center center no-repeat transparent;
+	width:100%;
+	height:23px;
+	display:inline-block;
+	cursor:pointer;
+}
+
+nt-filemanager div.location td.input {
+	display: table;
+    font-size: 12px;
+    color: #505057;
+    height: 100%;
+    width: 100%;
+    font-family: sans-serif;
+}
+
+nt-filemanager div.location td.input > div {
+	padding:6px 0;
+	border:1px rgb(204, 202, 202) solid;
+}
+
+nt-filemanager div.location td.input > div > div {
+	border-radius: 3px;
+}
+
+nt-filemanager div.location td.input > div > div > div {
+	padding:0 12px;
+}
+
+nt-filemanager div.add-area {
+	display:flex;
+	clear:both;
+	.add-area-section {
+		display:block;
+		border:none;
+		background-color:rgb(245, 245, 245);
+		margin:0 0 4px 0;
+		padding:10px 0;
+		clear: both;
+		font-family: Arial;
+		text-align: center;
+		
+
+		flex:0 1 100%;
+		margin-right: 2px;
+
+		> figure {
+			margin:0 auto;
+			display:inline-block;
+			text-align: center;
+
+			>div {
+				width:50px;
+				height:50px;
+				margin: 0;
+			    display: inline-block;
+			    vertical-align: top;
+				>svg {
+					width:100%;
+					height:100%;
+					fill:#403737;
+					transition:fill 0.25s ease;
+				}
+			}
+
+			>figcaption {
+				font-size:11px;
+				color:#403737;
+				transition:color 0.25s ease;
+				display: inline-block;
+			    height: 50px;
+			    vertical-align: middle;
+			    line-height: 50px;
+			    font-size: 13px;
+			}
+		}
+
+		&.add-area-section-box {
+			width:70px;
+			flex:0 0 70px;
+			>figure {
+				position: relative;
+    			transform: translateY(-5px);
+				>div {
+					width:35px;
+					height:35px;
+				}
+				>figcaption {
+					line-height: normal;
+					position: absolute;
+				    top: 100%;
+				    left: 50%;
+				    width: 100%;
+				    transform: translateX(-50%) translateY(-5px);
+				    text-align: center;
+				    width: 140%;
+				    font-size: 11px;
+				}
+
+				&.are-box-standalone {
+					transform:translateY(8px);
+				}
+			}
+		}
+
+		&:hover {
+			background-color:#EFECEC;
+
+			> figure {
+				>div {
+					>svg {
+						fill:#8FA0A5;
+					}
+				}
+				>figcaption {
+					color:#58534B;
+				}
+			}
+		}
+
+		&.pointable {
+			cursor:pointer;
+		}
+
+		&.active {
+			background-color:#8FA0A5;
+
+			> figure {
+				>div {
+					>svg {
+						fill:#F9F2E6;
+					}
+				}
+				>figcaption {
+					color:#58534B;
+				}
+			}
+		}
+
+
+		&:last-child {
+			margin-right: 0px;
+		}
+	}
+}
+
+nt-filemanager div.controls {
+	padding: 1px 0;
+	margin-bottom: 3px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	float:left;
+}
+
+nt-filemanager div.controls ul {
+	list-style:none;
+	margin:0px;
+	padding:0px;
+}
+
+nt-filemanager div.controls ul:after {
+	content: "";
+	display:block;
+	width:100%;
+	clear:both;
+}
+
+nt-filemanager div.controls ul li {
+	float:left;
+	background-color:rgba(37, 37, 37, 0.01);
+	margin:0 3px 0 0;
+}
+
+nt-filemanager div.controls ul li.selected {
+	background-color:#8FA0A5;
+}
+
+nt-filemanager-modal {
+	background-color:rgba(5,5,5,1);
+	border-radius: 12px;
+	padding:12px;
+	-webkit-box-shadow: 0px 10px 24px -5px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow:    0px 10px 24px -5px rgba(50, 50, 50, 0.75);
+	box-shadow:         0px 10px 24px -5px rgba(50, 50, 50, 0.75);
+	width:600px;
+}
+
+nt-filemanager-overlay {
+	background-color:rgba(0,0,0,0.6);
+}
+
+nt-filemanager-modal > div {
+	padding:10px !important;
+}
+
+nt-filemanager-modal > div img.preview {
+	width:580px;
+}
+
+nt-filemanager-modal > div > div {
+	position:relative;
+}
+
+nt-filemanager-modal span.close {
+	position:absolute;
+	top:-30px;
+	right:-30px;
+}
+
+/* Metro icons */
+a.elbora-vcl-themes-metro-icon {
+	background-position:center center;
+	background-repeat: no-repeat;
+	background-size:60%;
+}
+
+a.elbora-vcl-themes-metro-icon > img.glow { display:none; }
+a.elbora-vcl-themes-metro-icon > img.default { display:block; }
+
+.elbora-vcl-themes-metro-icon32x32 {
+	text-decoration:none;
+	width:32px;
+	height:32px;
+	display:block;
+}
+
+.elbora-vcl-themes-metro-icon32x32-add {
+	background-image:url(c521ab41d0a8cb74e4fac53100ab6101.png);
+}
+
+.elbora-vcl-themes-metro-icon32x32-addfolder {
+	background-image:url(e8a3e0db0119837cf3bc999b7512eb4d.png);
+}
+
+.elbora-vcl-themes-metro-icon32x32-list {
+	background-image:url(c20b15db4b17b07c14ad06e077f37543.png);
+}
+
+.elbora-vcl-themes-metro-icon32x32-delete {
+	background-image:url(9ffaa3c3b207aa22780a8a1ca990bdb5.png);
+}
+
+.elbora-vcl-themes-metro-icon32x32-use {
+	background-image:url(3b18c9593c47c62947144fba8fc1f811.png);
+}
+
+.elbora-vcl-themes-bold-icon32x32-close {
+	background-image:url(c21c7707b49fac7653e67d8d28dd0109.png);
+	transition:transform 0.25s ease;
+	transform:scale(0.7);
+}
+.elbora-vcl-themes-bold-icon32x32-close:hover {
+	transform:scale(1);
+}
+
+.elbora-vcl-themes-metro-icon-filetype {
+	width:110px;
+	height:110px;
+	display:inline-block;
+	background-position:center center;
+	background-repeat: no-repeat;
+}
+
+.elbora-vcl-themes-metro-icon-filetype-folder {
+	background-image:url(f69eef3e1a500b93f5044c1a877ec22a.png);
+}

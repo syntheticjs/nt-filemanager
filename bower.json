@@ -5,7 +5,10 @@
     "Vladimir Morulus <vladimirmorulus@gmail.com>"
   ],
   "description": "File manager UI",
-  "main": "dist/nt-filemanager.js",
+  "main": [
+    "dist/nt-filemanager.js",
+    "dist/main.css"
+  ],
   "moduleType": [
     "amd",
     "globals"
