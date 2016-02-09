@@ -1769,7 +1769,10 @@ function log() {
         preview : function(el) {
             var plugin = this;
             var el = el;
-            $("body").component("overlay", {
+
+            plugin.sendback($(el).attr("rel"));
+
+            /*$("body").component("overlay", {
                 "panel": {
                     "class": "brahma-visualpack-filemanager-modal"
                 },
@@ -1807,7 +1810,7 @@ function log() {
                     });
                 });
                    
-            }).show();
+            }).show();*/
         },
         appendLocation : function(loc) {
             var loc = loc.split('\\').join('/');
