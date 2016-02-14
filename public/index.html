@@ -3,15 +3,17 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Bower</title>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
 	  <script src="./vendor/angular/angular.js"></script>
 	  <script src="./vendor/jquery/dist/jquery.js"></script>
 	  <script src="./vendor/jquery.tie/jquery.tie.js"></script>
 	  <script src="./vendor/jquery.fitimage/jquery.fitimage.js"></script>
 	  <script src="./vendor/synthetic/dist/synthetic.js"></script>
 	  <script src="nt-filemanager.js"></script>
+	  <link rel="stylesheet" href="main.css">
 	  <style>
 		body {
-			background-color:#fff;
+			background-color:#2F2F2F;
 		}
 	  </style>
 	  <script>
@@ -26,6 +28,15 @@
 	  	});
 	  });
 	  </script>
+	  <style>
+	  		html, body {
+	  			height:100%;
+	  		}
+			body {
+				margin:0;
+				background:black;
+			}
+	  </style>
 </head>
 <body>
 	<nt-filemanager preset="tester"></nt-filemanager>

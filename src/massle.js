@@ -1446,6 +1446,11 @@ function log() {
         },
         build : function() {
             var widget = this;
+            // Topbar
+            this.wrappers.header = $(this.wrapper)
+            .put($('<div />', {
+                "class": "nt-filemanager-header"
+            }));
             // Create main area
             this.buildLocation();
             this.buildControls();   
@@ -1456,17 +1461,12 @@ function log() {
             var widget = this;
             // Create controls
             var addCaption = 'Добавить изображение с '+(navigator.platform.toUpperCase().indexOf('MAC') >= 0 ? 'моего Mac`а' : 'компьютера');
-            
-            this.wrappers.controls = $(this.wrapper)
+            // New folder area
+            this.wrappers.addArea = $(this.wrappers.header)
             .put($("<div />", {
-                "class": "controls"
-            }));
-            
-            // Topbar
-            this.wrappers.addArea = $(this.wrapper)
-            .put($("<div />", {
-                "class": "add-area "
+                "class": "add-area"
             }))
+            /*
             .put($("<div />", {
                 "class": "add-area-section add-area-section-box pointable"
             }))
@@ -1482,9 +1482,82 @@ function log() {
                 widget.createFolder();
                 return false;
             })
-            // Add files section
+
+            // Use it
+            */
+            .put($("<div />", {
+                "class": "add-area-section add-area-section-box pointable"
+            }))
+            .tie(function() {
+                $(this).put($('<figure />', {
+                    "class": "are-box-standalone"
+                }))
+                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-checked"></use></svg></div>');
+                 widget.bindUploadFile(this);
+
+                 var element = this;
+                 widget.$fetch(['+seance.activeFile.src'], function(isSrc) {
+                    $(element)[isSrc ? 'show' : 'hide']();
+                 });
+            })
+            // Delete
             .and($("<div />", {
-                "class": "add-area-section pointable"
+                "class": "add-area-section add-area-section-box pointable"
+            }))
+            .tie(function() {
+                $(this).put($('<figure />', {
+                    "class": "are-box-standalone"
+                }))
+                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-delete-icon"></use></svg></div>')
+                
+
+                var element = this;
+                
+                widget.$fetch(['+this.seance.mode', '+seance.selectedItems.files.length||seance.selectedItems.folders.length'], function(mode, isSelected) {
+                    
+                    $(element)[mode=='select'&&isSelected ? 'show' : 'hide']();
+                });
+
+                $(this).click(function() {
+                    widget.deleteDialog();
+                    return false;
+                })
+            })
+            // Ditails
+            .and($("<div />", {
+                "class": "add-area-section"
+            }))
+            .tie(function() {
+                var element = this;
+                widget.wrappers.dialog = $(this).put($('<figure />', {
+                    "class": ""
+                }))
+                .put($('<figcaption />'))
+                .put($('<span />'))
+                .tie(function() {
+
+                    widget.wrappers.ditailsText = $(this).put('<i />')
+                    .html('File info');
+
+                    
+
+                    /*$(this).put($('<button />', {
+                        "type": "button"
+                    })).html('yes').click(function() {
+                        if ("function"===typeof widget.dialogData.yes) widget.dialogData.yes();
+                    });*/
+
+                    widget.$fetch(['+seance.activeFile.src'], function(isSrc) {
+                        
+                        $(element)[isSrc ? 'show' : 'hide']();
+                        $(widget.wrappers.ditailsText).html('File: <b>'+widget.seance.activeFile.rel+'</b>');
+                        //element[mode=='dialog'?'addClass':'removeClass']("active");
+                     });
+                });
+            })
+            // Add area
+            .and($("<div />", {
+                "class": "add-area-section pointable add-area-section-buttoned add-area-mobile-compactable"
             }))
             .tie(function() {
                 $(this).put($('<figure />', {
@@ -1494,11 +1567,12 @@ function log() {
                  widget.bindUploadFile(this);
 
                  var element = this;
-                 widget.$fetch('+this.seance.mode!="preview"||seance.selectedItems.files.length||seance.selectedItems.folders.length', 
+                 widget.$fetch('+this.seance.mode=="preview"', 
                     function(isSelected) {
-                    $(element)[!isSelected ? 'show' : 'hide']();
+                    $(element)[isSelected ? 'show' : 'hide']();
                  });
             })
+            
             // Info table
             .and($("<div />", {
                 "class": "add-area-section"
@@ -1513,38 +1587,52 @@ function log() {
                  var element = this;
                  widget.$fetch(['+this.seance.mode', '+seance.selectedItems.files.length','+seance.selectedItems.folders.length'], function(mode, filesCount, foldersCount) {
                     
-                    $(element)[mode=='select'||filesCount||foldersCount ? 'show' : 'hide']();
+                    $(element)[mode=='select' ? 'show' : 'hide']();
                     $(span).html(
                         foldersCount||filesCount ?
-                        'Selected '+(foldersCount ? foldersCount+' folders' : '')+(filesCount ? (foldersCount ? ' and ' : '')+filesCount+' files' : '')
+                        'Selected <b>'+(foldersCount ? foldersCount+'</b> folders' : '</b>')+(filesCount ? (foldersCount ? ' and <b>' : '<b>')+filesCount+'</b> files' : '')
                         : 'Select items'
                     );
                  });
 
 
             })
+            
+            // Dealog
             .and($("<div />", {
-                "class": "add-area-section add-area-section-box pointable"
+                "class": "add-area-section"
             }))
             .tie(function() {
-                $(this).put($('<figure />', {
-                    "class": "are-box-standalone"
-                }))
-                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-delete-icon"></use></svg></div>')
-                
-
                 var element = this;
-                
-                widget.$fetch('+seance.selectedItems.files.length||seance.selectedItems.folders.length', function(isSelected) {
-                    
-                    $(element)[isSelected ? 'show' : 'hide']();
-                });
+                widget.wrappers.dialog = $(this).put($('<figure />', {
+                    "class": ""
+                }))
+                .put($('<figcaption />'))
+                .put($('<span />'))
+                .tie(function() {
 
-                $(this).click(function() {
-                    widget.deleteDialog();
-                    return false;
-                })
+                    widget.wrappers.dialogText = $(this).put('<i />');
+
+                    widget.wrappers.dialogCancel = $(this).put($('<button />', {
+                        "type": "button"
+                    })).html('cancel').click(function() {
+                        if ("function"===typeof widget.dialogData.no) widget.dialogData.no();
+                    });
+
+                    $(this).put($('<button />', {
+                        "type": "button"
+                    })).html('yes').click(function() {
+                        if ("function"===typeof widget.dialogData.yes) widget.dialogData.yes();
+                    });
+
+                    widget.$fetch(['+this.seance.mode'], function(mode) {
+                        
+                        $(element)[mode=='dialog' ? 'show' : 'hide']();
+                        //element[mode=='dialog'?'addClass':'removeClass']("active");
+                     });
+                });
             })
+            
             .and($("<div />", {
                 "class": "add-area-section add-area-section-box pointable"
             }))
@@ -1560,6 +1648,7 @@ function log() {
                 widget.$fetch('+seance.mode=="select"', function(isSelect) {
                     
                     element[isSelect?'addClass':'removeClass']("active");
+
                 });
             })
             .click(function() {
@@ -1569,47 +1658,67 @@ function log() {
         },
         buildLocation : function() {
             var widget = this;
-            this.wrappers.area = $(this.wrapper)
+            this.wrappers.loc = $(this.wrappers.header)
             .put($("<div />", {
                 "class": "location"
-            }));
+            }))
+            .put($('<div />'))
+            .tie(function() {
+                widget.wrappers.location = this;
+                widget.$fetch(['+seance.location'], function(location) {
+                    
+                    $(widget.wrappers.location).empty();
+                    var rootName = 'images';
+                    if ("string"===typeof location) {
+                        if (location.indexOf(location.length-1)=='/') location.substr(0,-1);
+                        var loca = location.split('/');
 
-            $(this.wrappers.area)
-            .put($("<table />"))
-            .ramp($("<tbody />"),$("<tr />"))
-                .put($('<td />', {
-                    "class": "backurl"
-                }))
-                .tie(function() {
-                    widget.wrappers.backurl = this;
-                    $(this)
-                    .put($("<a />", {
-                        "class": "goback-icon"
-                    }))
-                    .click(function() {
-                        widget.goTop();
-                        return false;
-                    });
-                })
-                .and($("<td />", {
-                    "class": "input"
-                }))
-                    .put($("<div />"))
-                    .put($("<div />"))
-                    .put($("<div />"))
-                    .tie(function() {
-                        widget.wrappers.location = this;
-                    })
-                    .html(this.seance.location);
+                        loca.forEach(function(folder, i) {
+                            if (folder===''&&i!==0) return;
+                            $(widget.wrappers.location).put($('<figure />'))
+                            .condition(i===loca.length-1, function() {
+                                $(this).addClass('current');
+                                return this;
+                            })
+                            .put($('<figcaption />'))
+                            .html(i===0 ? rootName : (folder!='' ? folder : 'empty'))
+                            .and($('<i />'))
+                            .and($('<figcaption />'))
+                            .html(i===0 ? rootName : (folder!='' ? folder : 'empty'));
+                        });
+
+                        $(widget.wrappers.location).put($('<figure />', {
+                            "class": "nt-filemanager-location-addIcon"
+                        }))
+                        .click(function() {
+                            widget.createFolder();
+                        })
+                        .put($('<div />'))
+                        .and($('<div />'))
+                        .and($('<figcaption />'))
+                        .html('Add new folder');
+                    }
+                    
+                });
+            });
         },
         buildArea : function() {
             var widget = this;
             // Build area self
             this.wrappers.area = $(this.wrapper)
+            .put($('<div />', {
+                "class": "nt-filemanager-body"
+            }))
             .put($("<ul />", {
                 "class": "filesArea"
-            }));
-            
+            }))
+            .tie(function() {
+
+                widget.$fetch(['+seance.mode=="dialog"'], function(isDialog) {
+
+                    $(widget.wrappers.area)[isDialog ? 'addClass' : 'removeClass']('danger');
+                });
+            });
         },
         updateView : function() {
             var widget = this;
@@ -1670,10 +1779,12 @@ function log() {
                             $(this).put($("<img />", {
                                 "alt": file.name,
                                 "src": file.thumb
-                            }))
+                            }));
+                            /*
                             .and($('<div />',  {
                                 "class": "nt-filemanager-overlay"
                             }))
+                            
                             .tie(function() {
                                 $(this)
                                 .put($('<div />'))
@@ -1687,7 +1798,7 @@ function log() {
                                         widget.sendback(file.name); 
                                     }
                                 });
-                            });
+                            });*/
                         })
                         .and($("<div />", {
                             "class": "subscribe"
@@ -1698,6 +1809,20 @@ function log() {
                 widget.postRender();
             });
             
+        },
+        dialog: function(message) {
+            var widget = this;
+            return new Promise(function(resolve, reject) {
+                $(widget.wrappers.dialogText).html(message);
+                $(widget.wrappers.dialogCancel).focus();
+                widget.dialogData.yes = resolve;
+                widget.dialogData.no = function() {
+                    widget.seance.mode = 'select';
+                    widget.$digest();
+                };
+                widget.seance.mode = 'dialog';
+                widget.$digest();
+            });
         },
         sendback : function(rel) {
             if (rel)
@@ -1712,9 +1837,7 @@ function log() {
             return false;
         },
         redrawLocation : function() {
-            $(this.wrappers.location).html(this.seance.location);
-            if (this.seance.location!='/') $(this.wrappers.backurl).show();
-            else $(this.wrappers.backUrl).hide();
+            this.$digest();
         },
         postRender : function() {
             var widget = this;
@@ -1763,6 +1886,14 @@ function log() {
                 break;
             }
         },
+        reset: function() {
+            this.disableSelectionMode();
+            this.seance.selectedItems = {
+                files: [],
+                folder: []
+            };
+            this.$digest();
+        },
         /*
         Preview file
         */
@@ -1770,7 +1901,14 @@ function log() {
             var plugin = this;
             var el = el;
 
-            plugin.sendback($(el).attr("rel"));
+            
+            this.seance.activeFile.el = el;
+            this.seance.activeFile.rel = $(el).attr("rel");
+            this.seance.activeFile.src = $(el).attr("origin");
+
+            this.$digest();
+
+            //plugin.sendback($(el).attr("rel"));
 
             /*$("body").component("overlay", {
                 "panel": {
@@ -1813,6 +1951,8 @@ function log() {
             }).show();*/
         },
         appendLocation : function(loc) {
+
+            this.reset();
             var loc = loc.split('\\').join('/');
 
             if (/^[^\/]+/.test(loc)) {
@@ -1856,17 +1996,20 @@ function log() {
         },
         deleteDialog : function() {
             var message;
+
             if (this.seance.selectedItems.folders.length&&this.seance.selectedItems.files.length) {
-                message = 'Are you sure to remove selected files and folders with all files inside?';
+                message = 'Are you sure to remove '+this.seance.selectedItems.files.length+' files and '+this.seance.selectedItems.folders.length+' folders with all files inside?';
             } else if (this.seance.selectedItems.folders.length) {
-                message = 'Are you sure to remove selected folders with all files inside?'
+                message = 'Are you sure to remove '+this.seance.selectedItems.folders.length+' folders with all files inside?'
             } else if (this.seance.selectedItems.files.length) {
-                message = 'Are you sure to remove selected files?'
+                message = 'Are you sure to remove '+this.seance.selectedItems.files.length+' files?'
             };
-            if (confirm(message)) {
+            this.dialog(message, function() {
                 this.deleteSelected();
                 this.disableSelectionMode();
-            }
+            }.bind(this), function() {
+
+            });
         },
         deleteSelected : function() {
             var widget = this;
@@ -1878,7 +2021,7 @@ function log() {
         },
         createFolder : function() {
             var widget = this;
-
+            this.reset();
             if (this.seance.dirname = prompt("Укажите имя для новой директории")) {
 
                 this.component.$fetch(['$config.requests.addFolder'], function(addFolderCfg) {
@@ -1918,6 +2061,7 @@ function log() {
             this.$digest();
         },
         goTop : function() {
+            this.reset();
             if (this.seance.location=='/') return false;
             var aloc = this.seance.location.split('/');
 
@@ -1944,6 +2088,10 @@ function log() {
 
 		this.wrapper = wrapper;
         this.component = parent;
+        this.dialogData = {
+            yes: function() {},
+            no: function() {}
+        }
 		var options = options || {};
 
 		// main data
@@ -2017,7 +2165,10 @@ function log() {
 		this.seance = {
 			mode: 'preview',
             dirname: false,
-            location: false
+            location: false,
+            activeFile: {
+
+            }
 		}
 
 		this.init();

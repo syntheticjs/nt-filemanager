@@ -45,6 +45,9 @@ Synthetic.createComponent({
 	$setup({
 		type: 'post', // post only for now
 		url: 'testServer.json', // url of server script
+		theme: {
+			accent: '#FFC56C'
+		},
 		requests: {
 			upload: {
 				data:  {

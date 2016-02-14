@@ -1,334 +1,485 @@
+$activeColor: rgb(127, 255, 139);
+
+
 nt-filemanager {
 	position: relative;
 	background-color: rgba(37, 37, 37, 0.01);
-    display: block;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: initial;
+    min-height: 284px;
+    height:100%;
+	
+	>div.nt-filemanager-header {
+		div.add-area {
+			display:flex;
+			clear:both;
+			background-color:#F9F9F9;
+			height:70px;
+			.add-area-section {
+				display: block;
+			    border: none;
+			    background-color: rgb(255, 255, 255);
+			    margin: 0 0 0 0;
+			    padding: 10px 0;
+			    clear: both;
+			    font-family: Arial;
+			    text-align: center;
+			    -webkit-box-flex: 0;
+			    -webkit-flex: 0 1 100%;
+			    -ms-flex: 0 1 100%;
+			    flex: 0 1 100%;
+			    border-right: 1px #FFFFFF solid;
+			    border-left: 1px rgba(128, 128, 128, 0.1) solid;
+				
+				> figure {
+					margin:0 auto;
+					display:inline-block;
+					text-align: center;
 
-    ul.filesArea {
-		overflow: hidden;
-		display:table;
-		list-style: none;
-		padding: 0px;
-		margin:0 0 5px 0;
-		-webkit-border-radius: 6px;
-		-moz-border-radius: 6px;
-		border-radius: 6px;
-		background: none;
-		clear:both;
-
-		li {
-			padding: 24px 24px;
-			height: 130px;
-			float: left;
-			margin: 0 1px 1px 1px;
-			position: relative;
-			
-			&.folder {
-				background-color: rgba(255, 255, 255, 0.03);
-			}
-
-			&.file {
-				background-color: rgba(224, 216, 201, 0.19);
-				transition:background 0.25s ease;
-				&:hover {
-					background-color:rgba(224, 216, 201, 0.29)
-				}
-			}
-
-			> div.thumb {
-				width:110px;
-				height:110px;
-				text-align:center;
-				margin:0 auto;
-				cursor:pointer;
-				position: relative;
-
-				>.nt-filemanager-overlay {
-					position: absolute;
-					top:0;
-					left:0;
-					width:100%;
-					height:100%;
-					display:none;
 					>div {
-						background-color:rgb(217, 216, 204);
-						transform-origin:50% 50%;
-						transition:transform 0.25s ease, opacity 0.3s ease;
-						opacity:0;
-						margin: 0 auto;
-					    border-radius: 16px;
-					    border: 1px rgba(234, 204, 170, 0.69) solid;
-					    cursor: pointer;
-					    display: block;
-					    position: absolute;
-					    top: 50%;
-					    left: 50%;
-					    transform: translateX(-50%) translateY(-50%) scale(0.85);
-					    width: 32px;
-					    height: 32px;
-					    cursor:pointer;
-						
-						>symbol {
-							cursor:pointer;
-							>div {
-					    	    width: 80%;
-							    height: 80%;
-							    cursor: pointer;
-							    margin-left: 10%;
-							    margin-top: 10%;
-							    >svg {
-							    	width: 100%;
-								    height: 100%;
-								    fill: #8FA0A5;
-								    cursor:pointer;
-							    }
+						width:50px;
+						height:50px;
+						margin: 0;
+					    display: inline-block;
+					    vertical-align: top;
+						>svg {
+							width:100%;
+							height:100%;
+							fill:rgb(64, 55, 55);
+							transition:fill 0.25s ease;
+						}
+					}
+
+					>figcaption {
+						font-size:11px;
+						color:rgb(64, 55, 55);
+						transition:color 0.25s ease;
+						display: inline-block;
+					    height: 50px;
+					    vertical-align: middle;
+					    line-height: 50px;
+					    font-size: 13px;
+
+					    b {
+					    	color:rgb(45, 183, 144);
+					    }
+	
+						>span {
+							>i {
+						    	padding-right:10px;
+						    	font-style:normal;
+						    }
+
+						    >button {
+						    	margin-right:10px;
+						    	border-radius: 7px;
+							    color: #5D4242;
+							    font-weight: bold;
+							    background-color: rgb(255, 255, 255);
+							    border: 1px rgb(191, 197, 195) solid;
+						    	&:focus {
+						    		
+						    		border-color:1px rgb(24, 255, 185) solid;
+						    	}
 						    }
 						}
-					}
-				}
-			}
-
-			&.image > div.thumb {
-				background-color: #8A8A8A;
-
-				
-
-				> img {
-					display:none;
-				}
-			}
-
-			div.subscribe {
-				font-size: 11px;
-				color: #131212;
-				font-weight: normal;
-				margin: 10px auto 0 auto;
-				height:20px;
-				line-height: 14px;
-				height: 14px;
-				-o-text-overflow: ellipsis;
-				text-overflow: ellipsis;
-				overflow: hidden;
-				width: 120px;
-				text-align:center;
-				font-weight: 100;
-				font-family: Arial;
-			}
-
-			&.selected {
-				background-color:rgba(88, 84, 28, 0.22);
-
-				&:hover {
-					background-color:rgba(90, 86, 30, 0.35);
-				}
-
-				img {
-					opacity:0.75;
-					filter:alpha(opacity=75);
-				}
-
-				div.subscribe {
-					color:white;
-					font-weight: 100;
-				}
-
-				&.image {
-					> div.thumb {
-						/*box-shadow:         1px 4px 17px 4px rgba(0, 0, 0, 0.39);*/
-						background-color:#000000;
+					    
 					}
 				}
 
-				>div.thumb {
-					>.nt-filemanager-overlay {
-						display:block;
+				&.add-area-section-box {
+					width:70px;
+					flex:0 0 70px;
+					>figure {
+						position: relative;
+		    			transform: translateY(-5px);
 						>div {
-							opacity:1;
+							width:35px;
+							height:35px;
+						}
+						>figcaption {
+							line-height: normal;
+							position: absolute;
+						    top: 100%;
+						    left: 50%;
+						    width: 100%;
+						    transform: translateX(-50%) translateY(-5px);
+						    text-align: center;
+						    width: 140%;
+						    font-size: 11px;
+						}
+
+						&.are-box-standalone {
+							transform:translateY(8px);
 						}
 					}
 				}
-			}
 
-			&:hover {
-				.acceptit {
-					opacity:1;
-					transform: translateX(-50%) scale(1);
+				&:hover {
+					background-color:#FDFAF4;
+
+					> figure {
+						>div {
+							>svg {
+								fill:#00001E;
+							}
+						}
+						>figcaption {
+							color:#58534B;
+						}
+					}
+				}
+
+				&.pointable {
+					cursor:pointer;
+				}
+
+				&.active {
+					background-color:#FFD97F;
+
+					> figure {
+						>div {
+							>svg {
+								fill:#2D2D2D;
+							}
+						}
+						>figcaption {
+							color:#58534B;
+						}
+					}
+				}
+
+				&.add-area-section-buttoned {
+					 border-radius: 8px;
+					 @media screen and (min-width)
+				}
+
+
+				&:last-child {
+					margin-right: 0px;
 				}
 			}
 		}
 	}
+
+	>div.nt-filemanager-body {
+		position: relative;
+	    flex: 1 1 100%;
+	    overflow: hidden;
+	    overflow-y: scroll;
+	    background-color: rgb(45, 45, 45);
+
+	    ul.filesArea {
+			overflow: hidden;
+			display:table;
+			list-style: none;
+			padding: 0px;
+			margin:0 0 5px 0;
+			-webkit-border-radius: 6px;
+			-moz-border-radius: 6px;
+			border-radius: 6px;
+			background: none;
+			clear:both;
+			padding:12px;
+			background-color:rgb(45, 45, 45);
+			position:absolute;
+		    display: flex;
+		    flex-wrap: wrap;
+		    align-items: flex-start;
+    		justify-content: flex-start;
+
+			li {
+				padding: 12px;
+				height: 130px;
+				float: left;
+				margin: 0 1px 1px 1px;
+				position: relative;
+				
+				&.folder {
+					
+				}
+
+				&.file {
+					
+					transition:background 0.25s ease;
+					
+				}
+
+				> div.thumb {
+					width:110px;
+					height:110px;
+					text-align:center;
+					margin:0 auto;
+					cursor:pointer;
+					position: relative;
+
+					>.nt-filemanager-overlay {
+						position: absolute;
+						top:0;
+						left:0;
+						width:100%;
+						height:100%;
+						display:none;
+						>div {
+							background-color:transparent;
+							transform-origin:50% 50%;
+							transition:transform 0.25s ease, opacity 0.3s ease;
+							opacity:0;
+							margin: 0 auto;
+						    border-radius: 20px;
+						    border: 3px rgb(61, 250, 253) solid;
+						    cursor: pointer;
+						    display: block;
+						    position: absolute;
+						    top: 50%;
+						    left: 50%;
+						    transform: translateX(-50%) translateY(-50%) scale(0.85);
+						    width: 32px;
+						    height: 32px;
+						    cursor:pointer;
+							
+							>symbol {
+								cursor:pointer;
+								>div {
+									width: 120%;
+									height: 120%;
+									cursor: pointer;
+									margin-left: -10%;
+									margin-top: -10%;
+								    >svg {
+								    	width: 100%;
+									    height: 100%;
+									    fill: transparent;
+									    cursor:pointer;
+								    }
+							    }
+							}
+						}
+					}
+				}
+
+				&.image {
+					div.thumb {
+					background-color: transparent;
+						> img {
+							display:none;
+							-webkit-box-shadow: -1px 4px 24px 0px rgba(0,0,0,0.66);
+							-moz-box-shadow: -1px 4px 24px 0px rgba(0,0,0,0.66);
+							box-shadow: -1px 4px 24px 0px rgba(0,0,0,0.66);
+						}
+					}
+				}
+
+				div.subscribe {
+					font-size: 11px;
+					font-weight: normal;
+					margin: 10px auto 0 auto;
+					height:20px;
+					line-height: 14px;
+					height: 14px;
+					-o-text-overflow: ellipsis;
+					text-overflow: ellipsis;
+					overflow: hidden;
+					width: 120px;
+					text-align:center;
+					font-weight: 100;
+					font-family: Arial;
+					color:rgb(230, 226, 226);
+				}
+
+				&.selected {
+					background-color:transparent;
+
+					div.subscribe {
+						color:rgb(255, 217, 127);
+						font-weight: 100;
+					}
+
+					&.image {
+						> div.thumb {
+
+							/*box-shadow:         1px 4px 17px 4px rgba(0, 0, 0, 0.39);*/
+							>img {
+								background-color:transparent;
+								
+
+								-webkit-box-shadow: 0px 0px 0px 2px $activeColor;
+								-moz-box-shadow: 0px 0px 0px 2px $activeColor;
+								box-shadow: 0px 0px 0px 2px $activeColor;
+								
+							}
+							
+						}
+					}
+
+					>div.thumb {
+						>.nt-filemanager-overlay {
+							display:block;
+							>div {
+								opacity:1;
+							}
+						}
+					}
+
+					&:hover {
+						div.subscribe {
+							color:#FFD97F;
+							font-weight: 100;
+						}
+					}
+				}
+
+				&:hover {
+					.acceptit {
+						opacity:1;
+						transform: translateX(-50%) scale(1);
+					}
+
+					div.subscribe {
+						color:rgb(218, 218, 218);
+					}
+				}
+			}
+
+			&.danger {
+				>li {
+					&.selected {
+						background-color:rgba(121, 13, 13, 0.74);
+					}
+				}
+			}
+		}
+	}
+
+    
 }
 
 
 nt-filemanager div.location {
-	display:table;
-	overflow: hidden;
-	height:34px;
-	width:100%;
-	position: relative;
-}
-
-nt-filemanager div.location > table {
-	padding:0px;
-	width:100%;
-	border-spacing: 0;
-	border-collapse: collapse;
-}
-
-nt-filemanager div.location > table:after {
-}
-
-nt-filemanager div.location > table td.backurl {
-	display:none;
-	width:34px;
-	height:100%;
-	vertical-align: middle;
-}
-
-nt-filemanager div.location > table td.backurl a.goback-icon {
-	background:url(images/goback-icon.png) center center no-repeat transparent;
-	width:100%;
-	height:23px;
-	display:inline-block;
-	cursor:pointer;
-}
-
-nt-filemanager div.location td.input {
 	display: table;
-    font-size: 12px;
-    color: #505057;
-    height: 100%;
+    overflow: hidden;
+    height: auto;
     width: 100%;
-    font-family: sans-serif;
-}
+    position: relative;
+    background-color: #F7F7F7;
+    padding: 0px;
+    border-bottom:1px #DDD9D9 solid;
 
-nt-filemanager div.location td.input > div {
-	padding:6px 0;
-	border:1px rgb(204, 202, 202) solid;
-}
-
-nt-filemanager div.location td.input > div > div {
-	border-radius: 3px;
-}
-
-nt-filemanager div.location td.input > div > div > div {
-	padding:0 12px;
-}
-
-nt-filemanager div.add-area {
-	display:flex;
-	clear:both;
-	.add-area-section {
-		display:block;
-		border:none;
-		background-color:rgb(245, 245, 245);
-		margin:0 0 4px 0;
-		padding:10px 0;
-		clear: both;
-		font-family: Arial;
-		text-align: center;
-		
-
-		flex:0 1 100%;
-		margin-right: 2px;
-
-		> figure {
-			margin:0 auto;
-			display:inline-block;
-			text-align: center;
-
-			>div {
-				width:50px;
-				height:50px;
-				margin: 0;
-			    display: inline-block;
-			    vertical-align: top;
-				>svg {
-					width:100%;
-					height:100%;
-					fill:#403737;
-					transition:fill 0.25s ease;
-				}
-			}
-
-			>figcaption {
-				font-size:11px;
-				color:#403737;
-				transition:color 0.25s ease;
-				display: inline-block;
-			    height: 50px;
-			    vertical-align: middle;
-			    line-height: 50px;
+    >div {
+    	height:auto;
+    	>figure {
+    		display: inline-block;
+		    vertical-align: top;
+		    padding: 2px 12px;
+		    margin: 0;
+		    position: relative;
+		    border-bottom: 1px #D8D3D3 solid;
+    		
+    		>figcaption {
+				position: absolute;
+			    left: 18px;
+			    top: 3px;
+			    font-family: Arial;
 			    font-size: 13px;
-			}
-		}
+			    line-height: 10px;
+			    margin: 5px 0;
+			    cursor: pointer;
+				text-shadow:0 1px 1px rgba(255,255,255,1);
+				&:first-child {
+	    			position:static;
+					
+					visibility:hidden;
 
-		&.add-area-section-box {
-			width:70px;
-			flex:0 0 70px;
-			>figure {
-				position: relative;
-    			transform: translateY(-5px);
-				>div {
-					width:35px;
-					height:35px;
-				}
+	    		}
+
+	    		&:hover {
+					border-bottom: 2px hsl(202, 100%, 55%) dotted;
+	    		}
+    		}
+
+    		>i {
+			    width: 16px;
+			    height: 16px;
+			    -webkit-transform: rotateZ(45deg);
+			    transform: translateX(-145%) rotateZ(45deg);
+			    background-color: #F9F9F9;
+			    display: block;
+			    position: absolute;
+			    right: -34px;
+			    top: 4px;
+			    border-top: 1px #D8D3D3 solid;
+			    border-right: 1px #BBB8B8 solid;
+    		}
+
+    		&:first-child {
+    			padding-left:4px;
+				background-color:#C0C1AE;
 				>figcaption {
-					line-height: normal;
-					position: absolute;
-				    top: 100%;
-				    left: 50%;
-				    width: 100%;
-				    transform: translateX(-50%) translateY(-5px);
-				    text-align: center;
-				    width: 140%;
-				    font-size: 11px;
+					left:11px;
 				}
-
-				&.are-box-standalone {
-					transform:translateY(8px);
+				>i {
+					background-color:#C0C1AE;
 				}
-			}
-		}
+    		}
 
-		&:hover {
-			background-color:#EFECEC;
+    		&.current {
+    			>figcaption {
+    				
+    			}
+    		}
 
-			> figure {
-				>div {
-					>svg {
-						fill:#8FA0A5;
+    		&:hover {
+				>figcaption {
+					
+				}
+    		}
+
+    		&.nt-filemanager-location-addIcon {
+    			width: 20px;
+			    padding: 0;
+			    height: 20px;
+			    margin-left: 12px;
+			    margin-top: 3px;
+			    border-bottom:0px;
+    			>div {
+    				width: 2px;
+				    height: 10px;
+				    background-color: black;
+				    position: absolute;
+				    top: 5px;
+				    left: 9px;
+				    transform-origin:50% 50%;
+				    &:first-child {
+						transform:rotateZ(90deg);
+				    }
+    			}
+    			>figcaption {
+    				opacity:0;
+    				width: auto;
+				    color: gray;
+				    font-size: 10px;
+				    line-height: 12px;
+				    left: 100%;
+				    white-space: nowrap;
+				    transition:opacity 0.25s ease;
+				    margin:2px 0;
+    			}
+    			&:hover {
+    				cursor:pointer;
+					>div {
+						background-color: #545454;
 					}
-				}
-				>figcaption {
-					color:#58534B;
-				}
-			}
-		}
-
-		&.pointable {
-			cursor:pointer;
-		}
-
-		&.active {
-			background-color:#8FA0A5;
-
-			> figure {
-				>div {
-					>svg {
-						fill:#F9F2E6;
+					>figcaption {
+						opacity:1;
+						&:hover {
+							border:0;
+						}
 					}
-				}
-				>figcaption {
-					color:#58534B;
-				}
-			}
-		}
-
-
-		&:last-child {
-			margin-right: 0px;
-		}
-	}
+    			}
+    		}
+    	}
+    }
 }
 
 nt-filemanager div.controls {
