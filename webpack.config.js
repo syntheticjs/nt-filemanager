@@ -1,6 +1,7 @@
 var path = require('path');
 var autoprefixer = require('autoprefixer');
 var nested = require('postcss-nested');
+var simplevars = require('postcss-simple-vars');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
     context: path.join(__dirname, './'), // исходная директория
@@ -32,7 +33,7 @@ module.exports = {
         new ExtractTextPlugin("[name].css")
     ],
     postcss: function () {
-        return [autoprefixer, nested];
+        return [autoprefixer, nested, simplevars];
     },
 	externals: { Synthetic: "synthetic" }
 };

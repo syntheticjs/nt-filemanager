@@ -25,10 +25,8 @@ nt-filemanager {
 			    clear: both;
 			    font-family: Arial;
 			    text-align: center;
-			    -webkit-box-flex: 0;
-			    -webkit-flex: 0 1 100%;
-			    -ms-flex: 0 1 100%;
-			    flex: 0 1 100%;
+			    
+			    flex: 0 8 100%;
 			    border-right: 1px #FFFFFF solid;
 			    border-left: 1px rgba(128, 128, 128, 0.1) solid;
 				
@@ -116,6 +114,10 @@ nt-filemanager {
 					}
 				}
 
+				&.add-area-section-wide {
+					flex:0 1 100%;
+				}
+
 				&:hover {
 					background-color:#FDFAF4;
 
@@ -196,9 +198,7 @@ nt-filemanager {
 				margin: 0 1px 1px 1px;
 				position: relative;
 				
-				&.folder {
-					
-				}
+				
 
 				&.file {
 					
@@ -259,6 +259,38 @@ nt-filemanager {
 					}
 				}
 
+				&.folder {
+					>div.thumb {
+						>div {
+							width: 72%;
+						    height: 72%;
+						    position: absolute;
+						    top: 50%;
+						    left: 50%;
+						    -webkit-transform: translateX(-50%) translateY(-50%);
+						    transform: translateX(-50%) translateY(-50%);
+						    border-radius: 12px;
+						    border: 1px rgba(107, 107, 99, 0.23) solid;
+						    background-color: #232323;
+						    box-shadow: -1px 4px 24px 0px rgba(0,0,0,0.66);
+						    
+						    padding: 10px;
+    						box-sizing: border-box;
+    						text-align:left;
+
+    						>i {
+    							display: inline-block;
+							    vertical-align: top;
+							    width: 10px;
+							    height: 10px;
+							    background-color: white;
+							    border-radius: 3px;
+							    margin: 0 5px 0 0;
+    						}
+						}
+					}
+				}
+
 				&.image {
 					div.thumb {
 					background-color: transparent;
@@ -304,9 +336,9 @@ nt-filemanager {
 								background-color:transparent;
 								
 
-								-webkit-box-shadow: 0px 0px 0px 2px $activeColor;
-								-moz-box-shadow: 0px 0px 0px 2px $activeColor;
-								box-shadow: 0px 0px 0px 2px $activeColor;
+								-webkit-box-shadow: 0px 0px 0px 1px $activeColor;
+								-moz-box-shadow: 0px 0px 0px 1px $activeColor;
+								box-shadow: 0px 0px 0px 1px $activeColor;
 								
 							}
 							
@@ -318,6 +350,17 @@ nt-filemanager {
 							display:block;
 							>div {
 								opacity:1;
+							}
+						}
+					}
+
+					&.folder {
+						>div.thumb {
+							>div {
+								border:1px rgb(127, 255, 139) solid;
+								>i {
+									background-color:rgb(127, 255, 139);
+								}
 							}
 						}
 					}

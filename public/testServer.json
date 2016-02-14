@@ -10,88 +10,34 @@
 		],
 		"files": [
 			{
-				"name": "this is name",
+				"name": "IMG_1038.jpg",
 				"origin": "origin path",
-				"title": "this is long long long title",
 				"thumb": "images/thumbs/IMG_1038.jpg"
 			},
 			{
-				"name": "this is name",
+				"name": "IMG_1040.jpg",
 				"origin": "origin path",
-				"title": "this is title",
-				"thumb": "images/thumbs/IMG_1038.jpg"
+				"thumb": "images/thumbs/IMG_1040.jpg"
 			},
 			{
-				"name": "this is name",
+				"name": "IMG_1041.jpg",
 				"origin": "origin path",
-				"title": "this is title",
-				"thumb": "images/thumbs/IMG_1038.jpg"
+				"thumb": "images/thumbs/IMG_1041.jpg"
 			},
 			{
-				"name": "this is name",
+				"name": "IMG_1042.jpg",
 				"origin": "origin path",
-				"title": "this is title",
-				"thumb": "images/thumbs/IMG_1038.jpg"
+				"thumb": "images/thumbs/IMG_1042.jpg"
 			},
 			{
-				"name": "this is name",
+				"name": "IMG_1043.jpg",
 				"origin": "origin path",
-				"title": "this is title",
-				"thumb": "images/thumbs/IMG_1038.jpg"
+				"thumb": "images/thumbs/IMG_1043.jpg"
 			},
 			{
-				"name": "this is name",
+				"name": "IMG_1044.jpg",
 				"origin": "origin path",
-				"title": "this is title",
-				"thumb": "images/thumbs/IMG_1038.jpg"
-			},
-			{
-				"name": "this is name",
-				"origin": "origin path",
-				"title": "this is title",
-				"thumb": "images/thumbs/IMG_1038.jpg"
-			},
-			{
-				"name": "this is name",
-				"origin": "origin path",
-				"title": "this is long long long title",
-				"thumb": "images/thumbs/IMG_1038.jpg"
-			},
-			{
-				"name": "this is name",
-				"origin": "origin path",
-				"title": "this is title",
-				"thumb": "images/thumbs/IMG_1038.jpg"
-			},
-			{
-				"name": "this is name",
-				"origin": "origin path",
-				"title": "this is title",
-				"thumb": "images/thumbs/IMG_1038.jpg"
-			},
-			{
-				"name": "this is name",
-				"origin": "origin path",
-				"title": "this is title",
-				"thumb": "images/thumbs/IMG_1038.jpg"
-			},
-			{
-				"name": "this is name",
-				"origin": "origin path",
-				"title": "this is title",
-				"thumb": "images/thumbs/IMG_1038.jpg"
-			},
-			{
-				"name": "this is name",
-				"origin": "origin path",
-				"title": "this is title",
-				"thumb": "images/thumbs/IMG_1038.jpg"
-			},
-			{
-				"name": "this is name",
-				"origin": "origin path",
-				"title": "this is title",
-				"thumb": "images/thumbs/IMG_1038.jpg"
+				"thumb": "images/thumbs/IMG_1044.jpg"
 			}
 		]
 	}

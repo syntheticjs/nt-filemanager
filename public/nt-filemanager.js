@@ -95,7 +95,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			document.body.appendChild(ssvg);
 			ssvg.style.display = 'none';
-			ssvg.innerHTML+='<symbol id="ei-share-apple-icon" viewBox="0 0 50 50"><path d="M30.3 13.7L25 8.4l-5.3 5.3-1.4-1.4L25 5.6l6.7 6.7z"></path><path d="M24 7h2v21h-2z"></path><path d="M35 40H15c-1.7 0-3-1.3-3-3V19c0-1.7 1.3-3 3-3h7v2h-7c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1h20c.6 0 1-.4 1-1V19c0-.6-.4-1-1-1h-7v-2h7c1.7 0 3 1.3 3 3v18c0 1.7-1.3 3-3 3z"></path></symbol><symbol id="ei-camera-icon" viewBox="0 0 50 50"><path d="M39 38H11c-1.7 0-3-1.3-3-3V17c0-1.7 1.3-3 3-3h6c.2 0 .5-.2.6-.3l1.1-2.2c.4-.8 1.4-1.4 2.3-1.4h8c.9 0 1.9.6 2.3 1.4l1.1 2.2c.1.2.4.3.6.3h6c1.7 0 3 1.3 3 3v18c0 1.7-1.3 3-3 3zM11 16c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1h28c.6 0 1-.4 1-1V17c0-.6-.4-1-1-1h-6c-.9 0-1.9-.6-2.3-1.4l-1.1-2.2c-.1-.2-.4-.4-.6-.4h-8c-.2 0-.5.2-.6.3l-1.1 2.2c-.4.9-1.4 1.5-2.3 1.5h-6z"></path><path d="M25 34c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9zm0-16c-3.9 0-7 3.1-7 7s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7z"></path><circle cx="35" cy="18" r="1"></circle><path d="M12 12h4v1h-4z"></path><path d="M25 21v-1c-2.8 0-5 2.2-5 5h1c0-2.2 1.8-4 4-4z"></path></symbol><symbol id="sm-checked" viewBox="-150 -152 800 800"><polygon points="142.8,323.85 35.7,216.75 0,252.45 142.8,395.25 448.8,89.25 413.1,53.55"/></symbol><symbol id="sm-delete-icon" viewBox="-150 -152 800 800"><path d="M76.5,408c0,28.05,22.95,51,51,51h204c28.05,0,51-22.95,51-51V102h-306V408z M408,25.5h-89.25L293.25,0h-127.5l-25.5,25.5 H51v51h357V25.5z"/></symbol><symbol id="sm-add-folder-icon" viewBox="-150 -152 800 800"><path d="M444.955,31.782H333.208c-17.576,0-37.758,8.931-47.165,31.782c0,0-4.132,29.145-31.782,31.782 H31.782C14.239,95.347,0,109.077,0,126.621v286.551c0,17.544,14.239,31.783,31.782,31.783h413.172 c17.544,0,31.782-14.239,31.782-31.783V63.565C476.737,46.021,462.499,31.782,444.955,31.782z M444.955,126.621v286.551H31.782 V127.13H254.26l3.051-0.159c29.812-2.829,48.246-23.71,56.732-45.163c8.263-20.722,22.661-18.243,22.661-18.243h108.251V126.621 z"/><path d="M317.825,254.26H254.26v-63.565c0-8.772-7.151-15.891-15.891-15.891 c-8.772,0-15.891,7.119-15.891,15.891v63.565h-63.565c-8.772,0-15.891,7.151-15.891,15.891s7.119,15.891,15.891,15.891h63.565 v63.565c0,8.74,7.119,15.891,15.891,15.891c8.74,0,15.891-7.151,15.891-15.891v-63.565h63.565 c8.74,0,15.891-7.151,15.891-15.891S326.565,254.26,317.825,254.26z"/></symbol><symbol id="ei-navicon-icon" viewBox="0 0 50 50"><path d="M10 12h30v4H10z"></path><path d="M10 22h30v4H10z"></path><path d="M10 32h30v4H10z"></path></symbol>';
+			ssvg.innerHTML+='<symbol id="ei-share-apple-icon" viewBox="0 0 50 50"><path d="M30.3 13.7L25 8.4l-5.3 5.3-1.4-1.4L25 5.6l6.7 6.7z"></path><path d="M24 7h2v21h-2z"></path><path d="M35 40H15c-1.7 0-3-1.3-3-3V19c0-1.7 1.3-3 3-3h7v2h-7c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1h20c.6 0 1-.4 1-1V19c0-.6-.4-1-1-1h-7v-2h7c1.7 0 3 1.3 3 3v18c0 1.7-1.3 3-3 3z"></path></symbol><symbol id="ei-camera-icon" viewBox="0 0 50 50"><path d="M39 38H11c-1.7 0-3-1.3-3-3V17c0-1.7 1.3-3 3-3h6c.2 0 .5-.2.6-.3l1.1-2.2c.4-.8 1.4-1.4 2.3-1.4h8c.9 0 1.9.6 2.3 1.4l1.1 2.2c.1.2.4.3.6.3h6c1.7 0 3 1.3 3 3v18c0 1.7-1.3 3-3 3zM11 16c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1h28c.6 0 1-.4 1-1V17c0-.6-.4-1-1-1h-6c-.9 0-1.9-.6-2.3-1.4l-1.1-2.2c-.1-.2-.4-.4-.6-.4h-8c-.2 0-.5.2-.6.3l-1.1 2.2c-.4.9-1.4 1.5-2.3 1.5h-6z"></path><path d="M25 34c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9zm0-16c-3.9 0-7 3.1-7 7s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7z"></path><circle cx="35" cy="18" r="1"></circle><path d="M12 12h4v1h-4z"></path><path d="M25 21v-1c-2.8 0-5 2.2-5 5h1c0-2.2 1.8-4 4-4z"></path></symbol><symbol id="sm-checked" viewBox="-150 -152 800 800"><polygon points="142.8,323.85 35.7,216.75 0,252.45 142.8,395.25 448.8,89.25 413.1,53.55"/></symbol><symbol id="sm-delete-icon" viewBox="-150 -152 800 800"><path d="M76.5,408c0,28.05,22.95,51,51,51h204c28.05,0,51-22.95,51-51V102h-306V408z M408,25.5h-89.25L293.25,0h-127.5l-25.5,25.5 H51v51h357V25.5z"/></symbol><symbol id="sm-add-folder-icon" viewBox="-150 -152 800 800"><path d="M444.955,31.782H333.208c-17.576,0-37.758,8.931-47.165,31.782c0,0-4.132,29.145-31.782,31.782 H31.782C14.239,95.347,0,109.077,0,126.621v286.551c0,17.544,14.239,31.783,31.782,31.783h413.172 c17.544,0,31.782-14.239,31.782-31.783V63.565C476.737,46.021,462.499,31.782,444.955,31.782z M444.955,126.621v286.551H31.782 V127.13H254.26l3.051-0.159c29.812-2.829,48.246-23.71,56.732-45.163c8.263-20.722,22.661-18.243,22.661-18.243h108.251V126.621 z"/><path d="M317.825,254.26H254.26v-63.565c0-8.772-7.151-15.891-15.891-15.891 c-8.772,0-15.891,7.119-15.891,15.891v63.565h-63.565c-8.772,0-15.891,7.151-15.891,15.891s7.119,15.891,15.891,15.891h63.565 v63.565c0,8.74,7.119,15.891,15.891,15.891c8.74,0,15.891-7.151,15.891-15.891v-63.565h63.565 c8.74,0,15.891-7.151,15.891-15.891S326.565,254.26,317.825,254.26z"/></symbol><symbol id="ei-navicon-icon" viewBox="0 0 50 50"><path d="M10 12h30v4H10z"></path><path d="M10 22h30v4H10z"></path><path d="M10 32h30v4H10z"></path></symbol><symbol id="sm-folder" viewBox="-150 -152 560 560"><path d="M273.081,101.378c-3.3-4.651-8.86-7.319-15.255-7.319h-24.34v-26.47c0-10.201-8.299-18.5-18.5-18.5 h-85.322c-3.63,0-9.295-2.876-11.436-5.806l-6.386-8.735c-4.982-6.814-15.104-11.954-23.546-11.954H58.731 c-9.293,0-18.639,6.608-21.738,15.372l-2.033,5.752c-0.958,2.71-4.721,5.371-7.596,5.371H18.5c-10.201,0-18.5,8.299-18.5,18.5 v167.07c0,0.885,0.161,1.73,0.443,2.519c0.152,3.306,1.18,6.424,3.053,9.064c3.3,4.652,8.86,7.319,15.255,7.319h188.486 c11.395,0,23.27-8.424,27.035-19.179l40.677-116.188C277.061,112.159,276.381,106.03,273.081,101.378z M18.5,64.089h8.864 c9.295,0,18.64-6.608,21.738-15.372l2.032-5.75c0.959-2.711,4.722-5.372,7.597-5.372h29.564c3.63,0,9.295,2.876,11.437,5.806 l6.386,8.734c4.982,6.815,15.104,11.954,23.546,11.954h85.322c1.898,0,3.5,1.603,3.5,3.5v26.47H69.34 c-11.395,0-23.27,8.424-27.035,19.179L15,191.231V67.589C15,65.692,16.603,64.089,18.5,64.089z M260.791,113.238l-40.677,116.188 c-1.674,4.781-7.812,9.135-12.877,9.135H18.751c-1.448,0-2.577-0.373-3.02-0.998c-0.443-0.625-0.423-1.814,0.056-3.181 l40.677-116.188c1.674-4.781,7.812-9.135,12.877-9.135h188.486c1.448,0,2.577,0.373,3.021,0.998 C261.29,110.682,261.27,111.871,260.791,113.238z"/></symbol>';
 		});
 
 		$setup({
@@ -113,7 +113,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						}
 					}
 				},
-				refresh: {
+				contents: {
 					data: {
 						type: "'contents'",
 						content: {
@@ -1525,6 +1525,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var FNPROTO = {
 	        init : function() {
 	            this.seance.location = this.options.location;
+	            this.seance.selectedItems = {
+	                files: [],
+	                folders: []
+	            };
 	            this.build();
 	            this.refresh();
 	        },
@@ -1580,7 +1584,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                request.success = function(res) {
 	                    if (res) { 
 	                        if (res.type==='contents' && res.content) {
-	                            ;("function"==typeof success) && (success.call(widget, res.content)); 
+	                            ;("function"==typeof success) && (success.call(widget, res.content, res.type)); 
 	                        } else {
 	                            if (res.errorMsg) widget.alert(res.errorMsg);
 	                        }
@@ -1601,11 +1605,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 	        refresh : function() {
 	            var widget = this;
-	            this.component.$fetch(['$config.requests.refresh'], function(refreshCfg) {
-	                widget.request(refreshCfg, function(res) {
+	            this.component.$fetch(['$config.requests.contents'], function(refreshCfg) {
 
-	                    if (res) { widget.data = res; widget.updateView(); }
-	                    else { widget.throwError('INVALID_SERVER_RESPONSE'); }
+	                widget.request(refreshCfg, function(content, type) {
+	                    
+	                    if (type==='contents') {
+	                        widget.data = content; 
+	                    } else {
+	                        widget.data = {};
+	                    }
+
+	                    widget.updateView();
+
+	                    
 	                }, function(r) {
 	                    console.error('Server response error: ', r.responseText);
 	                });
@@ -1667,7 +1679,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                 widget.bindUploadFile(this);
 
 	                 var element = this;
-	                 widget.$fetch(['+seance.activeFile.src'], function(isSrc) {
+	                 widget.$fetch(['+seance.selectedItems.files.length>0'], function(isSrc) {
 	                    $(element)[isSrc ? 'show' : 'hide']();
 	                 });
 	            })
@@ -1681,7 +1693,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }))
 	                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-delete-icon"></use></svg></div>')
 	                
-
 	                var element = this;
 	                
 	                widget.$fetch(['+this.seance.mode', '+seance.selectedItems.files.length||seance.selectedItems.folders.length'], function(mode, isSelected) {
@@ -1696,7 +1707,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            })
 	            // Ditails
 	            .and($("<div />", {
-	                "class": "add-area-section"
+	                "class": "add-area-section add-area-section-wide"
 	            }))
 	            .tie(function() {
 	                var element = this;
@@ -1718,10 +1729,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        if ("function"===typeof widget.dialogData.yes) widget.dialogData.yes();
 	                    });*/
 
-	                    widget.$fetch(['+seance.activeFile.src'], function(isSrc) {
+	                    widget.$fetch(['+seance.selectedItems.files.length===1&&seance.selectedItems.folders.length===0'], function(isSrc) {
 	                        
 	                        $(element)[isSrc ? 'show' : 'hide']();
-	                        $(widget.wrappers.ditailsText).html('File: <b>'+widget.seance.activeFile.rel+'</b>');
+	                        $(widget.wrappers.ditailsText).html('File: <b>'+widget.seance.selectedItems.files[0]+'</b>');
 	                        //element[mode=='dialog'?'addClass':'removeClass']("active");
 	                     });
 	                });
@@ -1734,7 +1745,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	                $(this).put($('<figure />', {
 	                    "class": ""
 	                }))
-	                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-camera-icon"></use></svg></div><figcaption><span class="capitalized">'+addCaption+'</span></figcaption>');
+	                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-camera-icon"></use></svg></div>')
+	                .put($("<figcaption />"))
+	                .put($("<span />", {
+	                    "class": "capitalized"
+	                }))
+	                .html(addCaption)
+	                .tie(function() {
+	                    // Enable/disable text
+	                    var element = this;
+	                    widget.$fetch(["+!(seance.selectedItems.files.length||seance.selectedItems.folders.length)"], function(enabled) {
+	                        $(element)[enabled ? 'show' : 'hide']();
+	                    });
+	                });
 	                 widget.bindUploadFile(this);
 
 	                 var element = this;
@@ -1756,9 +1779,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                .put($('<span />'));
 
 	                 var element = this;
-	                 widget.$fetch(['+this.seance.mode', '+seance.selectedItems.files.length','+seance.selectedItems.folders.length'], function(mode, filesCount, foldersCount) {
+	                 widget.$fetch(['+seance.mode=="select"&&(seance.selectedItems.files.length!=1||seance.selectedItems.folders.length>0)', '+seance.selectedItems.files.length','+seance.selectedItems.folders.length'], function(allowed, filesCount, foldersCount) {
 	                    
-	                    $(element)[mode=='select' ? 'show' : 'hide']();
+	                    $(element)[allowed ? 'show' : 'hide']();
 	                    $(span).html(
 	                        foldersCount||filesCount ?
 	                        'Selected <b>'+(foldersCount ? foldersCount+'</b> folders' : '</b>')+(filesCount ? (foldersCount ? ' and <b>' : '<b>')+filesCount+'</b> files' : '')
@@ -1842,10 +1865,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    var rootName = 'images';
 	                    if ("string"===typeof location) {
 	                        if (location.indexOf(location.length-1)=='/') location.substr(0,-1);
-	                        var loca = location.split('/');
+	                        var loca = location.split('/').filter(function(val) {
+	                            return val!=='';
+	                        });
 
+	                        loca.unshift('');
+	                        
 	                        loca.forEach(function(folder, i) {
-	                            if (folder===''&&i!==0) return;
+	                            
 	                            $(widget.wrappers.location).put($('<figure />'))
 	                            .condition(i===loca.length-1, function() {
 	                                $(this).addClass('current');
@@ -1855,7 +1882,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            .html(i===0 ? rootName : (folder!='' ? folder : 'empty'))
 	                            .and($('<i />'))
 	                            .and($('<figcaption />'))
-	                            .html(i===0 ? rootName : (folder!='' ? folder : 'empty'));
+	                            .html(i===0 ? rootName : (folder!='' ? folder : 'empty'))
+	                            .click(function() {
+	                                widget.changeLocation(loca.slice(1, i+1).join('/'));
+	                                return false;
+	                            });
 	                        });
 
 	                        $(widget.wrappers.location).put($('<figure />', {
@@ -1913,17 +1944,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            "class": "thumb",
 	                        }))
 	                        .tie(function() {
-	                            $(this).put($("<a />", {
-	                                "class": "elbora-vcl-themes-metro-icon elbora-vcl-themes-metro-icon32x32"
-	                            }))
-	                                .put($("<div />", {
-	                                    "class": "elbora-vcl-themes-metro-icon-filetype elbora-vcl-themes-metro-icon-filetype-folder"
-	                                }));
+	                            $(this).put($("<div />"))
+	                            .html('<i></i><i></i><i></i>');
 	                        })
 	                        .and($("<div />", {
 	                            "class": "subscribe"
 	                        }))
-	                        .html(this.title);                          
+	                        .html(this.name);                          
 	                });
 	                // Draw files
 	                $.each(widget.data.files, function() {
@@ -1951,30 +1978,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                "alt": file.name,
 	                                "src": file.thumb
 	                            }));
-	                            /*
-	                            .and($('<div />',  {
-	                                "class": "nt-filemanager-overlay"
-	                            }))
-	                            
-	                            .tie(function() {
-	                                $(this)
-	                                .put($('<div />'))
-	                                .put($('<symbol />', {
-	                                    "title": "Use it"
-	                                }))
-	                                .html('<div class="icon icon--ei-share-apple icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-checked"></use></svg></div>')
-	                                .click(function() {
-	                                    
-	                                    if ("function"==typeof widget.options.receiver && widget.seance.mode!=='select') {
-	                                        widget.sendback(file.name); 
-	                                    }
-	                                });
-	                            });*/
 	                        })
 	                        .and($("<div />", {
 	                            "class": "subscribe"
 	                        }))
-	                        .html(this.title)
+	                        .html(this.name)
 	                        
 	                });
 	                widget.postRender();
@@ -2059,10 +2067,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 	        reset: function() {
 	            this.disableSelectionMode();
+	            this.resetSelection();
+	        },
+	        resetSelection: function() {
 	            this.seance.selectedItems = {
 	                files: [],
-	                folder: []
+	                folders: []
 	            };
+
+	            $(this.wrappers.area).find('li.selected').removeClass('selected');
 	            this.$digest();
 	        },
 	        /*
@@ -2070,56 +2083,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        */
 	        preview : function(el) {
 	            var plugin = this;
-	            var el = el;
-
 	            
-	            this.seance.activeFile.el = el;
-	            this.seance.activeFile.rel = $(el).attr("rel");
-	            this.seance.activeFile.src = $(el).attr("origin");
-
-	            this.$digest();
-
-	            //plugin.sendback($(el).attr("rel"));
-
-	            /*$("body").component("overlay", {
-	                "panel": {
-	                    "class": "brahma-visualpack-filemanager-modal"
-	                },
-	                "overlay": {
-	                    "class": "brahma-visualpack-filemanager-overlay"
-	                },
-	                "effect": {
-	                    "type": "hang"
-	                },
-	                outsideClose: true,
-	                escapeClose: false,
-	                freezeDocument: false
-	            }).html(function(element) {
-	                var overlay = this;
-	                var element = element;
-	                $(element)
-	                .put($('<div />'))
-	                .tie(function() {
-	                    $(this).put($('<img />', {
-	                        "class": "preview",
-	                        "src": $(el).attr("origin")
-	                    }))
-	                })
-	                .and($('<span />', {
-	                    "class": "close elbora-vcl-themes-metro-icon32x32 elbora-vcl-themes-bold-icon32x32-close",
-	                    "trigger": "close-overlay"
-	                })).click(function() { overlay.close(); return false})
-	                .and($('<ul />'))
-	                .put($('<li />'))
-	                .tie(function() {
-	                   if ("function"==typeof plugin.options.receiver) $(this).put($('<button />')).html('Использовать')
-	                    .click(function() {
-	                       plugin.sendback();
-	                       overlay.close();
-	                    });
-	                });
-	                   
-	            }).show();*/
+	            this.select(el, this.seance.mode==='preview' ? 1 : false);
+	        },
+	        changeLocation : function(loc) {
+	           
+	            this.reset();
+	            var loc = loc.split('\\').join('/');
+	            
+	            if (loc.indexOf(0)=='/') loc = loc.substr(1);
+	            if (loc.length==1 && loc.substring(-1)=='/') loc = loc.substr(0,-1);
+	            
+	            if (loc.substring(-1)!=='/') loc += '/';
+	            this.seance.location = loc;
+	            
+	            this.refresh();
 	        },
 	        appendLocation : function(loc) {
 
@@ -2161,8 +2139,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            this.$digest();
 	        },
-	        select : function(el) {
+	        select : function(el, totalLimit) {
+	            var startStatus = $(el).hasClass('selected');
 	            $(el).toggleClass('selected');
+	            if ("number"===typeof totalLimit) {
+	                
+	                var selected = $(this.wrappers.area).find('li.selected');
+	                if (selected.length>totalLimit) {
+	                    if (!startStatus) var selected = selected.not(el);
+	                    selected.slice(0, 1).removeClass("selected");
+	                }
+	            }
+	            
+
 	            this.recheckSituation();
 	        },
 	        deleteDialog : function() {
@@ -2256,7 +2245,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 		var FN = function(parent, wrapper, options) {
-
+	        window.debug = this;
 			this.wrapper = wrapper;
 	        this.component = parent;
 	        this.dialogData = {
@@ -2281,65 +2270,12 @@ return /******/ (function(modules) { // webpackBootstrap
 			this.wrappers = {
 				area: null
 			};
-			// Phenotype
-			this.phenotype = {
-				controls: {
-					use: {
-						'icon': 'use',
-						'trigger': 'use',
-						'hidden': true,
-						"title": "Использовать",
-						'click': function() {
-							if ("function"==typeof this.options.receiver) this.options.receiver(this.seance.selectedItems); 
-						}
-					},
-					addfile: {
-						'icon': 'add',
-						'trigger': 'add',
-						'title': 'Создать',
-						'init': function(el) {
-							this.bindUploadFile(el);
-						}
-					},
-					addfolder: {
-						'icon': 'addfolder',
-						'trigger': 'addfolder',
-						'title': 'Создать директорию',
-						'click': function() {
-							this.createFolder();
-							return false;
-						}
-					},
-					select: {
-						'icon': 'list',
-						'trigger': 'modeSelect',
-						'click': function() {
-							this.toogleSelectMode();
-							return false;
-						},
-						'title': 'Выбрать'
-					},
-					del: {
-						'icon': 'delete',
-						'hidden': true,
-						'trigger': 'delete',
-						'title': 'Удалить выбранное',
-						'click': function() {
-							this.deleteDialog();
-							return false;
-						}
-					}
-				}
-			};
 
 			// 
 			this.seance = {
 				mode: 'preview',
 	            dirname: false,
-	            location: false,
-	            activeFile: {
-
-	            }
+	            location: false
 			}
 
 			this.init();

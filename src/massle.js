@@ -1354,6 +1354,10 @@ function log() {
     var FNPROTO = {
         init : function() {
             this.seance.location = this.options.location;
+            this.seance.selectedItems = {
+                files: [],
+                folders: []
+            };
             this.build();
             this.refresh();
         },
@@ -1409,7 +1413,7 @@ function log() {
                 request.success = function(res) {
                     if (res) { 
                         if (res.type==='contents' && res.content) {
-                            ;("function"==typeof success) && (success.call(widget, res.content)); 
+                            ;("function"==typeof success) && (success.call(widget, res.content, res.type)); 
                         } else {
                             if (res.errorMsg) widget.alert(res.errorMsg);
                         }
@@ -1430,11 +1434,19 @@ function log() {
         },
         refresh : function() {
             var widget = this;
-            this.component.$fetch(['$config.requests.refresh'], function(refreshCfg) {
-                widget.request(refreshCfg, function(res) {
+            this.component.$fetch(['$config.requests.contents'], function(refreshCfg) {
 
-                    if (res) { widget.data = res; widget.updateView(); }
-                    else { widget.throwError('INVALID_SERVER_RESPONSE'); }
+                widget.request(refreshCfg, function(content, type) {
+                    
+                    if (type==='contents') {
+                        widget.data = content; 
+                    } else {
+                        widget.data = {};
+                    }
+
+                    widget.updateView();
+
+                    
                 }, function(r) {
                     console.error('Server response error: ', r.responseText);
                 });
@@ -1496,7 +1508,7 @@ function log() {
                  widget.bindUploadFile(this);
 
                  var element = this;
-                 widget.$fetch(['+seance.activeFile.src'], function(isSrc) {
+                 widget.$fetch(['+seance.selectedItems.files.length>0'], function(isSrc) {
                     $(element)[isSrc ? 'show' : 'hide']();
                  });
             })
@@ -1510,7 +1522,6 @@ function log() {
                 }))
                 .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-delete-icon"></use></svg></div>')
                 
-
                 var element = this;
                 
                 widget.$fetch(['+this.seance.mode', '+seance.selectedItems.files.length||seance.selectedItems.folders.length'], function(mode, isSelected) {
@@ -1525,7 +1536,7 @@ function log() {
             })
             // Ditails
             .and($("<div />", {
-                "class": "add-area-section"
+                "class": "add-area-section add-area-section-wide"
             }))
             .tie(function() {
                 var element = this;
@@ -1547,10 +1558,10 @@ function log() {
                         if ("function"===typeof widget.dialogData.yes) widget.dialogData.yes();
                     });*/
 
-                    widget.$fetch(['+seance.activeFile.src'], function(isSrc) {
+                    widget.$fetch(['+seance.selectedItems.files.length===1&&seance.selectedItems.folders.length===0'], function(isSrc) {
                         
                         $(element)[isSrc ? 'show' : 'hide']();
-                        $(widget.wrappers.ditailsText).html('File: <b>'+widget.seance.activeFile.rel+'</b>');
+                        $(widget.wrappers.ditailsText).html('File: <b>'+widget.seance.selectedItems.files[0]+'</b>');
                         //element[mode=='dialog'?'addClass':'removeClass']("active");
                      });
                 });
@@ -1563,7 +1574,19 @@ function log() {
                 $(this).put($('<figure />', {
                     "class": ""
                 }))
-                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-camera-icon"></use></svg></div><figcaption><span class="capitalized">'+addCaption+'</span></figcaption>');
+                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-camera-icon"></use></svg></div>')
+                .put($("<figcaption />"))
+                .put($("<span />", {
+                    "class": "capitalized"
+                }))
+                .html(addCaption)
+                .tie(function() {
+                    // Enable/disable text
+                    var element = this;
+                    widget.$fetch(["+!(seance.selectedItems.files.length||seance.selectedItems.folders.length)"], function(enabled) {
+                        $(element)[enabled ? 'show' : 'hide']();
+                    });
+                });
                  widget.bindUploadFile(this);
 
                  var element = this;
@@ -1585,9 +1608,9 @@ function log() {
                 .put($('<span />'));
 
                  var element = this;
-                 widget.$fetch(['+this.seance.mode', '+seance.selectedItems.files.length','+seance.selectedItems.folders.length'], function(mode, filesCount, foldersCount) {
+                 widget.$fetch(['+seance.mode=="select"&&(seance.selectedItems.files.length!=1||seance.selectedItems.folders.length>0)', '+seance.selectedItems.files.length','+seance.selectedItems.folders.length'], function(allowed, filesCount, foldersCount) {
                     
-                    $(element)[mode=='select' ? 'show' : 'hide']();
+                    $(element)[allowed ? 'show' : 'hide']();
                     $(span).html(
                         foldersCount||filesCount ?
                         'Selected <b>'+(foldersCount ? foldersCount+'</b> folders' : '</b>')+(filesCount ? (foldersCount ? ' and <b>' : '<b>')+filesCount+'</b> files' : '')
@@ -1671,10 +1694,14 @@ function log() {
                     var rootName = 'images';
                     if ("string"===typeof location) {
                         if (location.indexOf(location.length-1)=='/') location.substr(0,-1);
-                        var loca = location.split('/');
+                        var loca = location.split('/').filter(function(val) {
+                            return val!=='';
+                        });
 
+                        loca.unshift('');
+                        
                         loca.forEach(function(folder, i) {
-                            if (folder===''&&i!==0) return;
+                            
                             $(widget.wrappers.location).put($('<figure />'))
                             .condition(i===loca.length-1, function() {
                                 $(this).addClass('current');
@@ -1684,7 +1711,11 @@ function log() {
                             .html(i===0 ? rootName : (folder!='' ? folder : 'empty'))
                             .and($('<i />'))
                             .and($('<figcaption />'))
-                            .html(i===0 ? rootName : (folder!='' ? folder : 'empty'));
+                            .html(i===0 ? rootName : (folder!='' ? folder : 'empty'))
+                            .click(function() {
+                                widget.changeLocation(loca.slice(1, i+1).join('/'));
+                                return false;
+                            });
                         });
 
                         $(widget.wrappers.location).put($('<figure />', {
@@ -1742,17 +1773,13 @@ function log() {
                             "class": "thumb",
                         }))
                         .tie(function() {
-                            $(this).put($("<a />", {
-                                "class": "elbora-vcl-themes-metro-icon elbora-vcl-themes-metro-icon32x32"
-                            }))
-                                .put($("<div />", {
-                                    "class": "elbora-vcl-themes-metro-icon-filetype elbora-vcl-themes-metro-icon-filetype-folder"
-                                }));
+                            $(this).put($("<div />"))
+                            .html('<i></i><i></i><i></i>');
                         })
                         .and($("<div />", {
                             "class": "subscribe"
                         }))
-                        .html(this.title);                          
+                        .html(this.name);                          
                 });
                 // Draw files
                 $.each(widget.data.files, function() {
@@ -1780,30 +1807,11 @@ function log() {
                                 "alt": file.name,
                                 "src": file.thumb
                             }));
-                            /*
-                            .and($('<div />',  {
-                                "class": "nt-filemanager-overlay"
-                            }))
-                            
-                            .tie(function() {
-                                $(this)
-                                .put($('<div />'))
-                                .put($('<symbol />', {
-                                    "title": "Use it"
-                                }))
-                                .html('<div class="icon icon--ei-share-apple icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-checked"></use></svg></div>')
-                                .click(function() {
-                                    
-                                    if ("function"==typeof widget.options.receiver && widget.seance.mode!=='select') {
-                                        widget.sendback(file.name); 
-                                    }
-                                });
-                            });*/
                         })
                         .and($("<div />", {
                             "class": "subscribe"
                         }))
-                        .html(this.title)
+                        .html(this.name)
                         
                 });
                 widget.postRender();
@@ -1888,10 +1896,15 @@ function log() {
         },
         reset: function() {
             this.disableSelectionMode();
+            this.resetSelection();
+        },
+        resetSelection: function() {
             this.seance.selectedItems = {
                 files: [],
-                folder: []
+                folders: []
             };
+
+            $(this.wrappers.area).find('li.selected').removeClass('selected');
             this.$digest();
         },
         /*
@@ -1899,56 +1912,21 @@ function log() {
         */
         preview : function(el) {
             var plugin = this;
-            var el = el;
-
             
-            this.seance.activeFile.el = el;
-            this.seance.activeFile.rel = $(el).attr("rel");
-            this.seance.activeFile.src = $(el).attr("origin");
-
-            this.$digest();
-
-            //plugin.sendback($(el).attr("rel"));
-
-            /*$("body").component("overlay", {
-                "panel": {
-                    "class": "brahma-visualpack-filemanager-modal"
-                },
-                "overlay": {
-                    "class": "brahma-visualpack-filemanager-overlay"
-                },
-                "effect": {
-                    "type": "hang"
-                },
-                outsideClose: true,
-                escapeClose: false,
-                freezeDocument: false
-            }).html(function(element) {
-                var overlay = this;
-                var element = element;
-                $(element)
-                .put($('<div />'))
-                .tie(function() {
-                    $(this).put($('<img />', {
-                        "class": "preview",
-                        "src": $(el).attr("origin")
-                    }))
-                })
-                .and($('<span />', {
-                    "class": "close elbora-vcl-themes-metro-icon32x32 elbora-vcl-themes-bold-icon32x32-close",
-                    "trigger": "close-overlay"
-                })).click(function() { overlay.close(); return false})
-                .and($('<ul />'))
-                .put($('<li />'))
-                .tie(function() {
-                   if ("function"==typeof plugin.options.receiver) $(this).put($('<button />')).html('Использовать')
-                    .click(function() {
-                       plugin.sendback();
-                       overlay.close();
-                    });
-                });
-                   
-            }).show();*/
+            this.select(el, this.seance.mode==='preview' ? 1 : false);
+        },
+        changeLocation : function(loc) {
+           
+            this.reset();
+            var loc = loc.split('\\').join('/');
+            
+            if (loc.indexOf(0)=='/') loc = loc.substr(1);
+            if (loc.length==1 && loc.substring(-1)=='/') loc = loc.substr(0,-1);
+            
+            if (loc.substring(-1)!=='/') loc += '/';
+            this.seance.location = loc;
+            
+            this.refresh();
         },
         appendLocation : function(loc) {
 
@@ -1990,8 +1968,19 @@ function log() {
             }
             this.$digest();
         },
-        select : function(el) {
+        select : function(el, totalLimit) {
+            var startStatus = $(el).hasClass('selected');
             $(el).toggleClass('selected');
+            if ("number"===typeof totalLimit) {
+                
+                var selected = $(this.wrappers.area).find('li.selected');
+                if (selected.length>totalLimit) {
+                    if (!startStatus) var selected = selected.not(el);
+                    selected.slice(0, 1).removeClass("selected");
+                }
+            }
+            
+
             this.recheckSituation();
         },
         deleteDialog : function() {
@@ -2085,7 +2074,7 @@ function log() {
     }
 
 	var FN = function(parent, wrapper, options) {
-
+        window.debug = this;
 		this.wrapper = wrapper;
         this.component = parent;
         this.dialogData = {
@@ -2110,65 +2099,12 @@ function log() {
 		this.wrappers = {
 			area: null
 		};
-		// Phenotype
-		this.phenotype = {
-			controls: {
-				use: {
-					'icon': 'use',
-					'trigger': 'use',
-					'hidden': true,
-					"title": "Использовать",
-					'click': function() {
-						if ("function"==typeof this.options.receiver) this.options.receiver(this.seance.selectedItems); 
-					}
-				},
-				addfile: {
-					'icon': 'add',
-					'trigger': 'add',
-					'title': 'Создать',
-					'init': function(el) {
-						this.bindUploadFile(el);
-					}
-				},
-				addfolder: {
-					'icon': 'addfolder',
-					'trigger': 'addfolder',
-					'title': 'Создать директорию',
-					'click': function() {
-						this.createFolder();
-						return false;
-					}
-				},
-				select: {
-					'icon': 'list',
-					'trigger': 'modeSelect',
-					'click': function() {
-						this.toogleSelectMode();
-						return false;
-					},
-					'title': 'Выбрать'
-				},
-				del: {
-					'icon': 'delete',
-					'hidden': true,
-					'trigger': 'delete',
-					'title': 'Удалить выбранное',
-					'click': function() {
-						this.deleteDialog();
-						return false;
-					}
-				}
-			}
-		};
 
 		// 
 		this.seance = {
 			mode: 'preview',
             dirname: false,
-            location: false,
-            activeFile: {
-
-            }
+            location: false
 		}
 
 		this.init();
