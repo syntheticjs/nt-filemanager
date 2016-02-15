@@ -1635,8 +1635,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                "class": "nt-filemanager-header"
 	            }));
 	            // Create main area
-	            this.buildLocation();
-	            this.buildControls();   
+	            
+	            this.buildControls();  
+	            this.buildLocation(); 
 	            
 	            this.buildArea();
 	        },
@@ -1676,12 +1677,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    "class": "are-box-standalone"
 	                }))
 	                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-checked"></use></svg></div>');
-	                 widget.bindUploadFile(this);
+	                 
 
 	                 var element = this;
 	                 widget.$fetch(['+seance.selectedItems.files.length>0'], function(isSrc) {
 	                    $(element)[isSrc ? 'show' : 'hide']();
 	                 });
+	            })
+	            .click(function() {
+	                widget.sendback();
 	            })
 	            // Delete
 	            .and($("<div />", {
@@ -1697,7 +1701,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                
 	                widget.$fetch(['+this.seance.mode', '+seance.selectedItems.files.length||seance.selectedItems.folders.length'], function(mode, isSelected) {
 	                    
-	                    $(element)[mode=='select'&&isSelected ? 'show' : 'hide']();
+	                    $(element)[mode=='preview'&&isSelected ? 'show' : 'hide']();
 	                });
 
 	                $(this).click(function() {
@@ -1729,47 +1733,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        if ("function"===typeof widget.dialogData.yes) widget.dialogData.yes();
 	                    });*/
 
-	                    widget.$fetch(['+seance.selectedItems.files.length===1&&seance.selectedItems.folders.length===0'], function(isSrc) {
-	                        
+	                    widget.$fetch(['+seance.selectedItems.files.length===1&&seance.selectedItems.folders.length===0&&seance.mode!="dialog"', '+seance.selectedItems.files[0]'], function(isSrc, zero) {
+
 	                        $(element)[isSrc ? 'show' : 'hide']();
-	                        $(widget.wrappers.ditailsText).html('File: <b>'+widget.seance.selectedItems.files[0]+'</b>');
+	                        $(widget.wrappers.ditailsText).html('File: <b>'+zero+'</b>');
 	                        //element[mode=='dialog'?'addClass':'removeClass']("active");
 	                     });
 	                });
 	            })
-	            // Add area
-	            .and($("<div />", {
-	                "class": "add-area-section pointable add-area-section-buttoned add-area-mobile-compactable"
-	            }))
-	            .tie(function() {
-	                $(this).put($('<figure />', {
-	                    "class": ""
-	                }))
-	                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-camera-icon"></use></svg></div>')
-	                .put($("<figcaption />"))
-	                .put($("<span />", {
-	                    "class": "capitalized"
-	                }))
-	                .html(addCaption)
-	                .tie(function() {
-	                    // Enable/disable text
-	                    var element = this;
-	                    widget.$fetch(["+!(seance.selectedItems.files.length||seance.selectedItems.folders.length)"], function(enabled) {
-	                        $(element)[enabled ? 'show' : 'hide']();
-	                    });
-	                });
-	                 widget.bindUploadFile(this);
-
-	                 var element = this;
-	                 widget.$fetch('+this.seance.mode=="preview"', 
-	                    function(isSelected) {
-	                    $(element)[isSelected ? 'show' : 'hide']();
-	                 });
-	            })
+	            
 	            
 	            // Info table
 	            .and($("<div />", {
-	                "class": "add-area-section"
+	                "class": "add-area-section  add-area-section-wide"
 	            }))
 	            .tie(function() {
 	                var span = $(this).put($('<figure />', {
@@ -1779,7 +1755,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                .put($('<span />'));
 
 	                 var element = this;
-	                 widget.$fetch(['+seance.mode=="select"&&(seance.selectedItems.files.length!=1||seance.selectedItems.folders.length>0)', '+seance.selectedItems.files.length','+seance.selectedItems.folders.length'], function(allowed, filesCount, foldersCount) {
+	                 widget.$fetch(['+(seance.selectedItems.files.length>1||seance.selectedItems.folders.length>0)&&seance.mode!="dialog"', '+seance.selectedItems.files.length','+seance.selectedItems.folders.length'], function(allowed, filesCount, foldersCount) {
 	                    
 	                    $(element)[allowed ? 'show' : 'hide']();
 	                    $(span).html(
@@ -1826,8 +1802,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	                     });
 	                });
 	            })
-	            
+
+	            // Add area
 	            .and($("<div />", {
+	                "class": "add-area-section pointable add-area-section-buttoned add-area-mobile-compactable"
+	            }))
+	            .tie(function() {
+	                $(this).put($('<figure />', {
+	                    "class": ""
+	                }))
+	                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-camera-icon"></use></svg></div>')
+	                .put($("<figcaption />"))
+	                .put($("<span />", {
+	                    "class": "capitalized"
+	                }))
+	                .html(addCaption)
+	                .tie(function() {
+	                    // Enable/disable text
+	                    var element = this;
+	                    widget.$fetch(["+!(seance.selectedItems.files.length>0||seance.selectedItems.folders.length>0)"], function(enabled) {
+
+	                        $(element)[enabled ? 'show' : 'hide']();
+	                    });
+	                });
+	                 widget.bindUploadFile(this);
+
+	                 var element = this;
+	                 widget.$fetch("+seance.mode=='preview'", 
+	                    function(isSelected) {
+	                    $(element)[isSelected ? 'show' : 'hide']();
+	                 });
+	            })
+	            
+	            /*.and($("<div />", {
 	                "class": "add-area-section add-area-section-box pointable"
 	            }))
 	            .tie(function() {
@@ -1848,7 +1855,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            .click(function() {
 	                widget.toogleSelectMode();
 	                return false;
-	            });
+	            });*/
 	        },
 	        buildLocation : function() {
 	            var widget = this;
@@ -1907,20 +1914,147 @@ return /******/ (function(modules) { // webpackBootstrap
 	        buildArea : function() {
 	            var widget = this;
 	            // Build area self
-	            this.wrappers.area = $(this.wrapper)
+	            $(this.wrapper)
 	            .put($('<div />', {
 	                "class": "nt-filemanager-body"
 	            }))
-	            .put($("<ul />", {
-	                "class": "filesArea"
-	            }))
 	            .tie(function() {
 
-	                widget.$fetch(['+seance.mode=="dialog"'], function(isDialog) {
+	                widget.wrappers.area = $(this).put($("<ul />", {
+	                    "class": "filesArea"
+	                }))
+	                .tie(function() {
+	                    // Danger mode (delete or something else danger!)
+	                    // Seems like attention. Mark files that can be terminated
+	                    widget.$fetch(['+seance.mode=="dialog"'], function(isDialog) {
 
-	                    $(widget.wrappers.area)[isDialog ? 'addClass' : 'removeClass']('danger');
+	                        $(widget.wrappers.area)[isDialog ? 'addClass' : 'removeClass']('danger');
+	                    });
 	                });
-	            });
+	                // Disable selection
+	                $(this).attr('unselectable', 'on')
+	                 .css('user-select', 'none')
+	                 .on('selectstart', false);
+
+	                // Select by selected area
+	                var div = $(this).put($('<div />')).css({
+	                    border: "1px dotted rgb(255, 255, 255)",
+	                    backgroundColor: "rgba(129, 251, 0, 0.06)",
+	                    position: "absolute"
+	                })[0], x1 = 0, y1 = 0, x2 = 0, y2 = 0, offset, map = [], firstMove = true;
+	                
+	                var rectangleIntersect = function(a, b)
+	                {
+	                  var x = Math.max(a.x, b.x);
+	                  var num1 = Math.min(a.x + a.width, b.x + b.width);
+	                  var y = Math.max(a.y, b.y);
+	                  var num2 = Math.min(a.y + a.height, b.y + b.height);
+	                  if (num1 >= x && num2 >= y)
+	                    return true;
+	                  else
+	                    return false;
+	                }
+
+	                var here = this,
+	                calcRect = function(e) {
+
+	                    
+
+	                    var x3 = Math.min(x1,x2);
+	                    var x4 = Math.max(x1,x2);
+	                    var y3 = Math.min(y1,y2);
+	                    var y4 = Math.max(y1,y2);
+
+	                    if (firstMove && ((x4 - x3) > 10 && (y4 - y3) > 10) || (e.target===here)) {
+	                        if (!e.ctrlKey&&!e.metaKey) widget.resetSelection();
+	                        
+	                    }
+
+	                    var rect = {
+	                        x: x3,
+	                        y: y3,
+	                        width: x4 - x3,
+	                        height: y4 - y3
+	                    };
+
+	                    div.style.left = rect.x + 'px';
+	                    div.style.top = rect.y + 'px';
+	                    div.style.width = rect.width + 'px';
+	                    div.style.height = rect.height + 'px';
+
+	                    var selected = [];
+
+	                    for (var i = 0;i<map.length;++i) {
+
+	                        if (rectangleIntersect(map[i][1], rect)) {
+	                            map[i][0].classList[map[i][2]?'remove':'add']('selected');
+
+	                            selected.push(map[i][0]);
+	                        } else {
+	                            map[i][0].classList[!map[i][2]?'remove':'add']('selected');
+	                        }
+	                    }
+
+	                    console.log('selected', selected.length, selected.map(function(el) { return el.getAttribute('rel'); }).join(", "));
+	                }
+
+	                var mm = function(e) {
+	                        
+
+
+	                        x2 = e.pageX - offset.left;
+	                        y2 = e.pageY - offset.top;
+
+	                        calcRect(e);
+	                    };
+
+	                
+	                
+	                $(this).bind('mousedown', function(e) {
+	                    
+	                    if (e.target == here[0] && (!e.ctrlKey&&!e.metaKey)) {
+
+	                        widget.resetSelection();
+	                    }
+
+	                    offset = $(here).offset(); 
+	                    firstMove = true;
+	                    
+	                    div.hidden = 0;
+	                    x1 = e.pageX - offset.left;
+	                    y1 = e.pageY - offset.top;
+	                    x2 = e.pageX - offset.left;
+	                    y2 = e.pageY - offset.top;
+	                    
+	                    // Get position and size of each elements in area
+	                    map = [];
+	                    $(here).find('>ul>li').each(function() {
+	                        
+	                        var el = $(this),
+	                        pos = $(this).position();
+
+	                        map.push([this, {
+	                            x: pos.left,
+	                            y: pos.top,
+	                            width: $(el).width(),
+	                            height: $(el).height()
+	                        }, $(this).hasClass('selected')]);
+	                    });
+
+	                    $(here).bind('mousemove', mm);
+
+	                    $(window).one('mouseup', function(e) {
+	                        widget.recheckSituation();
+	                        $(here).unbind('mousemove', mm);
+	                        div.hidden = 1;
+	                        div.style.left = "-99999px";
+	                        div.style.top = "-99999px";
+	                    });
+
+	                    return false;
+	                });
+	            })
+	            
 	        },
 	        updateView : function() {
 	            var widget = this;
@@ -1996,7 +2130,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                $(widget.wrappers.dialogCancel).focus();
 	                widget.dialogData.yes = resolve;
 	                widget.dialogData.no = function() {
-	                    widget.seance.mode = 'select';
+	                    widget.seance.mode = 'preview';
 	                    widget.$digest();
 	                };
 	                widget.seance.mode = 'dialog';
@@ -2012,7 +2146,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            else {
 	                this.options.receiver(this.seance.selectedItems);
 	            }
-	            this.close();
+	            
 	            return false;
 	        },
 	        redrawLocation : function() {
