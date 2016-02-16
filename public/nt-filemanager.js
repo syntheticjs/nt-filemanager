@@ -1995,7 +1995,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        }
 	                    }
 
-	                    console.log('selected', selected.length, selected.map(function(el) { return el.getAttribute('rel'); }).join(", "));
+	                    if (selected.length!=(widget.seance.selectedItems.files.length+widget.seance.selectedItems.folders.length)) {
+	                        widget.recheckSituation();
+	                    }
+
+	                    
 	                }
 
 	                var mm = function(e) {
@@ -2070,8 +2074,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        "class": "folder",
 	                        "rel": this.name
 	                    }))
-	                    .click(function() {
-	                        widget.click($(this));
+	                    .click(function(e) {
+
+	                        widget.click($(this), (e.ctrlKey||e.metaKey));
 	                        return false;
 	                    })
 	                        .put($("<div />", {
@@ -2096,17 +2101,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        "rel": this.name,
 	                        "origin": this.origin
 	                    }))
-	                    .click(function() {
-	                        widget.click($(this));
+	                    .click(function(e) {
+	                        widget.previewClick($(this), (e.ctrlKey||e.metaKey));
 	                        return false;
 	                    })
 	                        .put($("<div />", {
 	                            "class": "thumb"
 	                        }))
-	                        .click(function() {
-	                            widget.previewClick($(this).parent());
-	                            return false;
-	                        })
+	                        
 	                        .tie(function() {
 	                            $(this).put($("<img />", {
 	                                "alt": file.name,
@@ -2167,7 +2169,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	            
 	        },
-	        previewClick : function(el) {
+	        previewClick : function(el, multipart) {
 	            var widget = this;
 	            switch (this.seance.mode) {
 	                case 'select':
@@ -2178,17 +2180,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        // open folder
 	                        widget.appendLocation($(el).attr("rel"));                       
 	                    } else {
-	                        this.preview(el);
+	                        this.preview(el, multipart);
 	                    };
 	                break;
 	            }
 	            
 	        },
-	        click : function(el) {
+	        click : function(el, multiSelect) {
 	            var widget = this;
 	            switch(this.seance.mode) {
 	                case 'select':
-	                    this.select(el);
+	                    this.select(el, multiSelect);
 	                break;
 	                case 'preview':
 	                    if ($(el).hasClass('folder')) {
@@ -2215,10 +2217,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /*
 	        Preview file
 	        */
-	        preview : function(el) {
+	        preview : function(el, multipart) {
+	            
 	            var plugin = this;
 	            
-	            this.select(el, this.seance.mode==='preview' ? 1 : false);
+	            this.select(el, !multipart&&this.seance.mode==='preview' ? 1 : false);
 	        },
 	        changeLocation : function(loc) {
 	           
@@ -2346,9 +2349,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            $(this.wrappers.area).find('li.selected').each(function() {
 	                if ($(this).hasClass("folder"))
-	                widget.seance.selectedItems.folders.push(cloc+'/'+$(this).attr("rel"));
+	                widget.seance.selectedItems.folders.push($(this).attr("rel"));
 	                else
-	                widget.seance.selectedItems.files.push(cloc+'/'+$(this).attr("rel"));
+	                widget.seance.selectedItems.files.push($(this).attr("rel"));
 	            });
 	            
 	            
