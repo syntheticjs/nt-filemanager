@@ -20,6 +20,7 @@ nt-filemanager {
 				display: block;
 			    border: none;
 			    background-color: rgb(255, 255, 255);
+
 			    margin: 0 0 0 0;
 			    padding: 10px 0;
 			    clear: both;
@@ -60,7 +61,7 @@ nt-filemanager {
 					    font-size: 13px;
 
 					    b {
-					    	color:rgb(160, 113, 27);
+					    	color:rgb(6, 52, 76);;
 					    }
 	
 						>span {

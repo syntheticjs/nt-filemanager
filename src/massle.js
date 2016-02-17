@@ -2005,7 +2005,7 @@ function log() {
                     this.select(el);
                 break;
                 case 'preview':
-                    if ($(el).hasClass('folder')) {
+                    if ($(el).hasClass('folder') && !multipart) {
                         // open folder
                         widget.appendLocation($(el).attr("rel"));                       
                     } else {
@@ -2016,16 +2016,18 @@ function log() {
             
         },
         click : function(el, multiSelect) {
+            debugger;
             var widget = this;
             switch(this.seance.mode) {
                 case 'select':
                     this.select(el, multiSelect);
                 break;
                 case 'preview':
-                    if ($(el).hasClass('folder')) {
-
+                    if ($(el).hasClass('folder')&&!multiSelect) {
                         // open folder
                         widget.appendLocation($(el).attr("rel"));                       
+                    } else {
+                        this.preview(el, multiSelect);
                     }
                 break;
             }
