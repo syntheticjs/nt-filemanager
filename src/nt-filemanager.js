@@ -45,9 +45,6 @@ Synthetic.createComponent({
 	$setup({
 		type: 'post', // post only for now
 		url: 'testServer.json', // url of server script
-		theme: {
-			accent: '#FFC56C'
-		},
 		requests: {
 			upload: {
 				data:  {
@@ -93,7 +90,13 @@ Synthetic.createComponent({
 			}
 
 		},
-		receiver: false
+		employer: function() {
+			alert('ok');
+		}, // The function that take employed elements
+		maxEmployCount: 1, // Max count of elements that can be employ
+		allowFilesUpload: true,
+		allowDelete: true,
+		allowCreateNewFolder: true
 	});
 
 	$init(function($element, $self, $config) {

@@ -310,6 +310,7 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li {
 	float: left;
 	margin: 1px;
 	position: relative;
+	box-sizing: content-box;
 
     
 }
@@ -685,11 +686,11 @@ nt-filemanager div.location >div >figure >i {
 	width: 16px;
 	height: 16px;
 	-webkit-transform: rotateZ(45deg);
-	transform: translateX(-145%) rotateZ(45deg);
+	transform: translateX(0px) rotateZ(45deg);
 	background-color: #F9F9F9;
 	display: block;
 	position: absolute;
-	right: -34px;
+	right: -8px;
 	top: 4px;
 	border-top: 1px #D8D3D3 solid;
 	border-right: 1px #BBB8B8 solid;

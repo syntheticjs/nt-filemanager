@@ -100,7 +100,7 @@ nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section > figur
 
 
 nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section > figure >figcaption b {
-	color:rgb(160, 113, 27);
+	color:rgb(6, 52, 76);
 
     
 }
@@ -308,8 +308,9 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li {
 	padding: 12px;
 	height: 130px;
 	float: left;
-	margin: 0 1px 1px 1px;
+	margin: 1px;
 	position: relative;
+	box-sizing: content-box;
 
     
 }
@@ -449,22 +450,25 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div >
 nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div >i:nth-child(1n) {
 	width: 12px;
 	height: 8px;
+	background-color: aqua;
 
     
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div >i:nth-child(1n) {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div >i:nth-child(2n) {
 	width: 8px;
 	height: 12px;
+	background-color: violet;
 
     
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div >i:nth-child(1n) {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div >i:nth-child(3n) {
 	width: 12px;
 	height: 12px;
+	background-color: yellowgreen;
 
     
 }
@@ -514,7 +518,9 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li div.subscribe {
 
 
 nt-filemanager >div.nt-filemanager-body ul.filesArea li.selected {
-	background-color:rgba(93, 40, 19, 0.22);
+	background-color: rgba(93, 40, 19, 0.22);
+	border: 1px rgba(153, 128, 82, 0.13) solid;
+	margin: 0;
 
     
 }
@@ -623,7 +629,7 @@ nt-filemanager div.location {
     position: relative;
     background-color: #F7F7F7;
     padding: 0px;
-    border-bottom:1px #DDD9D9 solid;
+    border-top:1px #DDD9D9 solid;
 }
 
 
@@ -680,11 +686,11 @@ nt-filemanager div.location >div >figure >i {
 	width: 16px;
 	height: 16px;
 	-webkit-transform: rotateZ(45deg);
-	transform: translateX(-145%) rotateZ(45deg);
+	transform: translateX(0px) rotateZ(45deg);
 	background-color: #F9F9F9;
 	display: block;
 	position: absolute;
-	right: -34px;
+	right: -8px;
 	top: 4px;
 	border-top: 1px #D8D3D3 solid;
 	border-right: 1px #BBB8B8 solid;
