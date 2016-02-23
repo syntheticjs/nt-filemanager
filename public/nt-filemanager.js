@@ -114,7 +114,8 @@ return /******/ (function(modules) { // webpackBootstrap
 					data: {
 						type: "'contents'",
 						content: {
-	                        location: 'seance.location'
+	                        location: 'seance.location',
+	                        fields: 'component.$scope.$config.responseFields'
 	                    }
 					}
 				},
@@ -123,8 +124,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						type: "'delete'",
 						content: {
 							location: 'seance.location',
-		                    files: 'seance.selectedItems.files',
-		                    folders: 'seance.selectedItems.folders'
+		                    items: 'selected.simplify("name")'
 						}
 					}
 				},
@@ -150,9 +150,13 @@ return /******/ (function(modules) { // webpackBootstrap
 				alert('ok');
 			}, // The function that take employed elements
 			maxEmployCount: 1, // Max count of elements that can be employ
-			allowFilesUpload: true,
-			allowDelete: true,
-			allowCreateNewFolder: true
+			allowFilesUpload: true, // Allow to upload files
+			allowDelete: true, // Allow to delete files and folders
+			allowCreateNewFolder: true, // Allow to create folders
+			responseFields: ["attributes","name","mimetype","url","thumbUrl"], // File info properties
+			notifyHandler: function(message, content) { // custom server notify handler
+				alert(message);
+			}
 		});
 
 		$init(function($element, $self, $config) {
@@ -352,13 +356,129 @@ return /******/ (function(modules) { // webpackBootstrap
 			this.binds();
 		};
 
+	    // CONSTANTS
+	    var FILE_ATTRIBUTE_ARCHIVE = 1 << 5; // 32
+	    var FILE_ATTRIBUTE_COMPRESSED = 1 << 11; // 2048
+	    var FILE_ATTRIBUTE_DEVICE = 1 << 6; // 64
+	    var FILE_ATTRIBUTE_DIRECTORY = 1 << 4; // 16
+	    var FILE_ATTRIBUTE_INTEGRITY_STREAM = 1 << 15; // 32768 
+	    var FILE_ATTRIBUTE_NORMAL = 1 << 7; // 128
+
+	    var SelectedList = function(widget) {
+	        // Reference to widget
+	        Object.defineProperty(this, 'widget', {
+	            enumerable: false,
+	            writable: false,
+	            configurable: false,
+	            value: widget
+	        });
+	        // List of selected keys
+	        Object.defineProperty(this, 'keys', {
+	            enumerable: false,
+	            writable: false,
+	            configurable: false,
+	            value: []
+	        });
+	        // List of selected keys
+	        Object.defineProperty(this, '__files__', {
+	            enumerable: false,
+	            writable: true,
+	            configurable: false,
+	            value: []
+	        });
+	        // List of selected keys
+	        Object.defineProperty(this, '__folders__', {
+	            enumerable: false,
+	            writable: true,
+	            configurable: false,
+	            value: []
+	        });
+	        // Length
+	        this.length = 0;
+	    }
+
+	    SelectedList.prototype = {
+	        constructor: SelectedList,
+	        // Add file key to selected list
+	        add: function(key) {
+	           
+	            if (!~this.keys.indexOf(key)) {
+	                
+	                if ("undefined"===typeof this.widget.contents[key]) throw 'I cant be. File is undefined';
+	                this.keys[this.length] = key;
+	                this[this.length] = this.widget.contents[key];
+	                this.length++;
+	                this.reset();
+	            }   
+	        },
+	        remove: function(key) {
+	            var keyIndex = this.keys.indexOf(key);
+	            if (!!~keyIndex) {
+	                this.keys.splice(keyIndex, 1);
+	                delete this[keyIndex];
+	                this.length--;
+	                this.reset();
+	            }
+	        },
+	        /*
+	        Converts selected files list to the simple array.
+	        To do this you must specify property as a single value.
+	        */
+	        simplify: function(propertyName) {
+	            
+	            var result = [];
+	            for (var i = 0;i<this.length;++i) {
+	                result.push(this.widget.getFileInfoProperty(this[i], propertyName));
+	            }
+	            return result;
+	        },
+	        /*
+	        Clear selection list. Reset in a short way.
+	        */
+	        clear: function() {
+	            this.keys.splice(0, this.keys.length);
+	            
+	            for (var i = 0;i<this.length;++i) {
+	                delete this[i];
+	            }
+
+	            this.length = 0;
+
+	            this.reset();
+	        },
+	        /*
+	        Reset all calculated properties
+	        */
+	        reset: function() {
+	            this.__folders__ = false;
+	            this.__files__ = false;
+	        },
+	        get folders() {
+	            if (!this.__folders__) {
+	                this.__folders__=[];
+	                for (var i = 0;i<this.length;++i) {
+	                    if (this.widget.isFolder(this[i]))
+	                    this.__folders__.push(this[i]);
+	                }
+	            }
+	            return this.__folders__;
+	        },
+	        get files() {
+	            if (!this.__files__) {
+	                this.__files__=[];
+	                for (var i = 0;i<this.length;++i) {
+	                    if (!this.widget.isFolder(this[i]))
+	                    this.__files__.push(this[i]);
+	                }
+	            }
+	            return this.__files__;
+	        }
+	    }
+
 	    var FNPROTO = {
 	        init : function() {
 	            this.seance.location = this.options.location;
-	            this.seance.selectedItems = {
-	                files: [],
-	                folders: []
-	            };
+	            this.selected = new SelectedList(this);
 	            this.build();
 	            this.refresh();
 	        },
@@ -412,14 +532,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	                // Add functions
 	                // Success callback
 	                request.success = function(res) {
-	                    if (res) { 
-	                        if (res.type==='contents' && res.content) {
-	                            ;("function"==typeof success) && (success.call(widget, res.content, res.type)); 
-	                        } else {
-	                            if (res.errorMsg) widget.alert(res.errorMsg);
-	                        }
+	                    
+	                    switch(res.type) {
+	                        case 'contents': // Content
+	                            widget.contents = res.content; 
+	                            widget.updateView();
+	                        break; 
+	                        case 'location': // Force change location
+	                            widget.changeLocation(res.content);
+	                        break;
+	                        case 'notify':
+	                            widget.component.$fetch(['$config.notifyHandler'], function(notifyHandler) {
+	                                if ("function"===typeof notifyHandler) {
+	                                    notifyHandler(res.content.message, res.content);
+	                                } else {
+	                                    console.log('Notify: ', res.content.message);
+	                                }
+	                            });
+	                            
+	                        break;
+	                        default:
+	                            widget.throwError('INVALID_SERVER_RESPONSE');
+	                            return;
+	                        break;
 	                    }
-	                    else { widget.throwError('INVALID_SERVER_RESPONSE'); }
+	                    ;("function"==typeof success) && (success.call(widget, res.content, res.type)); 
 	                };
 	                // Error callback
 	                request.error = function(r) {
@@ -433,20 +570,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        alert : function(msg) {
 	            alert(msg);
 	        },
+	        resetContents: function() {
+	            this.contents = [];
+	        },
 	        refresh : function() {
 	            var widget = this;
+	            this.resetContents();
+	            this.updateView();
+
 	            this.component.$fetch(['$config.requests.contents'], function(refreshCfg) {
-
 	                widget.request(refreshCfg, function(content, type) {
-	                    
-	                    if (type==='contents') {
-	                        widget.data = content; 
-	                    } else {
-	                        widget.data = {};
-	                    }
-
-	                    widget.updateView();
-
 	                    
 	                }, function(r) {
 	                    console.error('Server response error: ', r.responseText);
@@ -480,25 +613,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            .put($("<div />", {
 	                "class": "add-area"
 	            }))
-	            /*
-	            .put($("<div />", {
-	                "class": "add-area-section add-area-section-box pointable"
-	            }))
-	            .tie(function() {
-	                $(this).put($('<figure />', {
-	                    "class": ""
-	                }))
-	                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sm-add-folder-icon"></use></svg></div><figcaption><span class="capitalized">Новая папка</span></figcaption>')
-	                
-	                
-	            })
-	            .click(function() {
-	                widget.createFolder();
-	                return false;
-	            })
+	            
 
 	            // Use it
-	            */
 	            .put($("<div />", {
 	                "class": "add-area-section add-area-section-box pointable"
 	            }))
@@ -510,7 +627,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                 
 
 	                 var element = this;
-	                 widget.$fetch(['+seance.selectedItems.files.length>0 && seance.selectedItems.files.length<=component.$scope.$config.maxEmployCount'], function(isSrc) {
+	                 widget.$fetch(['+selected.files.length>0 && selected.files.length<=component.$scope.$config.maxEmployCount'], function(isSrc) {
 	                    $(element)[isSrc ? 'show' : 'hide']();
 	                 });
 	            })
@@ -529,7 +646,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                
 	                var element = this;
 	                
-	                widget.$fetch(['+component.$scope.$config.allowDelete', '+this.seance.mode', '+seance.selectedItems.files.length||seance.selectedItems.folders.length'], function(allowDelete, mode, isSelected) {
+	                widget.$fetch(['+component.$scope.$config.allowDelete', '+this.seance.mode', '+selected.length'], function(allowDelete, mode, isSelected) {
 	                    
 	                    $(element)[allowDelete&&mode=='preview'&&isSelected ? 'show' : 'hide']();
 	                });
@@ -563,10 +680,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        if ("function"===typeof widget.dialogData.yes) widget.dialogData.yes();
 	                    });*/
 
-	                    widget.$fetch(['+seance.selectedItems.files.length===1&&seance.selectedItems.folders.length===0&&seance.mode!="dialog"', '+seance.selectedItems.files[0]'], function(isSrc, zero) {
-
+	                    widget.$fetch(['+selected.files.length===1&&selected.length===1&&seance.mode!="dialog"', '+selected[0]'], function(isSrc, zero) {
+	                        
 	                        $(element)[isSrc ? 'show' : 'hide']();
-	                        $(widget.wrappers.ditailsText).html('File: <b>'+zero+'</b>');
+	                        $(widget.wrappers.ditailsText).html('File: <b>'+this.getFileInfoProperty(zero, "name")+'</b>');
 	                        //element[mode=='dialog'?'addClass':'removeClass']("active");
 	                     });
 	                });
@@ -585,7 +702,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                .put($('<span />'));
 
 	                 var element = this;
-	                 widget.$fetch(['+(seance.selectedItems.files.length>1||seance.selectedItems.folders.length>0)&&seance.mode!="dialog"', '+seance.selectedItems.files.length','+seance.selectedItems.folders.length'], function(allowed, filesCount, foldersCount) {
+	                 widget.$fetch(['+(selected.length>1)&&seance.mode!="dialog"', '+selected.files.length','+selected.folders.length'], function(allowed, filesCount, foldersCount) {
 	                    
 	                    $(element)[allowed ? 'show' : 'hide']();
 	                    $(span).html(
@@ -622,14 +739,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    $(this).put($('<button />', {
 	                        "type": "button"
 	                    })).html('yes').click(function() {
+	                       
 	                        if ("function"===typeof widget.dialogData.yes) widget.dialogData.yes();
 	                    });
 
 	                    widget.$fetch(['+this.seance.mode'], function(mode) {
-	                        
 	                        $(element)[mode=='dialog' ? 'show' : 'hide']();
-	                        //element[mode=='dialog'?'addClass':'removeClass']("active");
-	                     });
+	                    });
 	                });
 	            })
 
@@ -650,7 +766,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                .tie(function() {
 	                    // Enable/disable text
 	                    var element = this;
-	                    widget.$fetch(["+!(seance.selectedItems.files.length>0||seance.selectedItems.folders.length>0)"], function(enabled) {
+	                    widget.$fetch(["+!(selected.length>0)"], function(enabled) {
 
 	                        $(element)[enabled ? 'show' : 'hide']();
 	                    });
@@ -664,50 +780,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	                 });
 	            })
 	            .tie(function() {
-	                        
-	                        var sub = this;
-	                        widget.component.$injectors[0].$config(['+advancedButtons'], function(advancedButtons) {
-	                            widget.component.$hitch(function() {
-	                                var cleanup = function() {}
-	                                $(sub).parent().find('.add-area-section-adv-button').remove();
+	                var sub = this;
+	                widget.component.$injectors[0].$config(['+advancedButtons'], function(advancedButtons) {
+	                    widget.component.$hitch(function() {
+	                        var cleanup = function() {}
+	                        $(sub).parent().find('.add-area-section-adv-button').remove();
 
-	                                if ("object"===typeof advancedButtons) {
-	                                    for (var prop in advancedButtons) {
+	                        if ("object"===typeof advancedButtons) {
+	                            for (var prop in advancedButtons) {
 
-	                                        if (advancedButtons.hasOwnProperty(prop)) {
-	                                            cleanup = cleanup.inherit(widget.buildTopBarButton(advancedButtons[prop], sub));
-	                                            
-	                                        }
-	                                    }
+	                                if (advancedButtons.hasOwnProperty(prop)) {
+	                                    cleanup = cleanup.inherit(widget.buildTopBarButton(advancedButtons[prop], sub));
+	                                    
 	                                }
+	                            }
+	                        }
 
-	                                return cleanup;
-	                            });
-	                        });
-	            });
-	            
-	            /*.and($("<div />", {
-	                "class": "add-area-section add-area-section-box pointable"
-	            }))
-	            .tie(function() {
-	                $(this).put($('<figure />', {
-	                    "class": "are-box-standalone"
-	                }))
-	                .html('<div class="icon icon--m"><svg class="icon__cnt"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ei-navicon-icon"></use></svg></div>')
-	                
-
-	                var element = this;
-
-	                widget.$fetch('+seance.mode=="select"', function(isSelect) {
-	                    
-	                    element[isSelect?'addClass':'removeClass']("active");
-
+	                        return cleanup;
+	                    });
 	                });
-	            })
-	            .click(function() {
-	                widget.toogleSelectMode();
-	                return false;
-	            });*/
+	            });
 	        },
 	        buildTopBarButton: function(config, sublink) {
 	            var hereElement, widget = this;
@@ -730,7 +822,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                    $(this).put('<i />')
 	                    .html(config.title||'Button');
-
 	                    
 	                    if (config.condition) {
 	                        var watcher = widget.$fetch([config.condition], function(condition) {
@@ -743,8 +834,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            watcher.destory();
 	                        });
 	                    }
-
-	                    
 	                });
 	                if (config.click)
 	                $(this).click(config.click);
@@ -890,27 +979,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        }
 	                    }
 
-	                    if (selected.length!=(widget.seance.selectedItems.files.length+widget.seance.selectedItems.folders.length)) {
+	                    if (selected.length!=(widget.selected.length)) {
 	                        widget.recheckSituation();
 	                    }
-
-	                    
 	                }
 
 	                var mm = function(e) {
-	                        
+	                    x2 = e.pageX - offset.left;
+	                    y2 = e.pageY - offset.top;
 
-
-	                        x2 = e.pageX - offset.left;
-	                        y2 = e.pageY - offset.top;
-
-	                        calcRect(e);
-	                    };
-
-	                
+	                    calcRect(e);
+	                };
 	                
 	                $(this).bind('mousedown', function(e) {
-	                    
+	                    if (e.which!==1) return;
+	                    console.log('click', e.which);
 	                    if (e.target == here[0] && (!e.ctrlKey&&!e.metaKey)) {
 
 	                        widget.resetSelection();
@@ -961,74 +1044,98 @@ return /******/ (function(modules) { // webpackBootstrap
 	            $(this.wrappers.area)
 	            .empty()
 	            .tie(function() {
+	                // Filter folders first
+	                var fo=[],fi=[];
+	                widget.contents.forEach(function(item, index) {
+	                    var fileArguments = widget.getFileInfoProperty(item, "attributes");
+	                    if (!!(fileArguments & FILE_ATTRIBUTE_DIRECTORY))
+	                    fo.push([index, item])
+	                    else
+	                    fi.push([index, item]);
+	                });
 	                
-	                // Draw folders
-	                $.each(widget.data.folders, function() {
-	                    $(widget.wrappers.area)
-	                    .put($('<li />', {
-	                        "class": "folder",
-	                        "rel": this.name
-	                    }))
-	                    .click(function(e) {
-
-	                        widget.click($(this), (e.ctrlKey||e.metaKey));
-	                        return false;
-	                    })
-	                        .put($("<div />", {
-	                            "class": "thumb",
-	                        }))
-	                        .tie(function() {
-	                            $(this).put($("<div />"))
-	                            .html('<i></i><i></i><i></i>');
-	                        })
-	                        .and($("<div />", {
-	                            "class": "subscribe"
-	                        }))
-	                        .html(this.name);                          
-	                });
-	                // Draw files
-	                $.each(widget.data.files, function() {
-	                    var file = this;
+	                $.each(fo.concat(fi), function(i, set) {
+	                    var index = set[0], file = set[1];
 	                    
+	                    // Render item class
+	                    var itemClassList = [],
+	                    fileArguments = widget.getFileInfoProperty(file, "attributes"),
+	                    name = widget.getFileInfoProperty(file, "name");
+	                    switch(true) {
+	                        case !!(fileArguments & FILE_ATTRIBUTE_DIRECTORY):
+	                            itemClassList.push('nt-filemanager__itemtype__folder');
+	                        break;
+	                        case !!(fileArguments & FILE_ATTRIBUTE_NORMAL):
+	                            itemClassList.push('nt-filemanager__itemtype__file');
+	                        break;
+	                    }
+
+	                    // Get mimetype
+	                    var mimetype = widget.getFileInfoProperty(file, "mimetype");
+	                    switch(mimetype) {
+	                        case 'image/jpeg':
+	                        case 'image/gif':
+	                        case 'image/png':
+	                            itemClassList.push('nt-filemanager__itempreview__image');
+	                        break;
+	                    }
+
 	                    $(widget.wrappers.area)
 	                    .put($('<li />', {
-	                        "class": "file image",
-	                        "rel": this.name,
-	                        "origin": this.origin
+	                        "class": itemClassList.join(' '),
+	                        "rel": index // Index in contents
 	                    }))
 	                    .click(function(e) {
-	                        widget.previewClick($(this), (e.ctrlKey||e.metaKey));
+	                        widget.click($(this), (e.ctrlKey||e.metaKey)); // Click handler
 	                        return false;
 	                    })
-	                        .put($("<div />", {
-	                            "class": "thumb"
-	                        }))
-	                        
-	                        .tie(function() {
-	                            $(this).put($("<img />", {
-	                                "alt": file.name,
-	                                "src": file.thumb
-	                            }));
-	                        })
-	                        .and($("<div />", {
-	                            "class": "subscribe"
-	                        }))
-	                        .html(this.name)
-	                        
+	                    .put($("<div />", {
+	                        "class": "nt-filemanager__thumb",
+	                    }))
+	                    .condition(fileArguments & FILE_ATTRIBUTE_DIRECTORY, function() {
+	                        $(this).put($("<div />"))
+	                        .html('<i></i><i></i><i></i>');
+	                        return this;
+	                    }, function() {
+	                        switch(mimetype) {
+	                            case 'image/jpeg':
+	                            case 'image/gif':
+	                            case 'image/png':
+	                                var thumbUrl = widget.getFileInfoProperty(file, "thumbUrl");
+	                                // Preview
+	                                widget.calcThumbSize($(this).put($("<img />", {
+	                                    "alt": name,
+	                                    "src": thumbUrl
+	                                })));
+	                            break;
+	                            default:
+	                                $(this).put($("<div />"))
+	                                .html('Unsopprted type');
+	                            break;
+	                        }
+	                        return this; 
+	                     })
+	                    .and($("<div />", {
+	                        "class": "subscribe"
+	                    }))
+	                    .html(name);             
 	                });
+	                
 	                widget.postRender();
 	            });
 	            
 	        },
 	        dialog: function(message) {
+	            
 	            var widget = this;
 	            return new Promise(function(resolve, reject) {
 	                $(widget.wrappers.dialogText).html(message);
 	                $(widget.wrappers.dialogCancel).focus();
-	                widget.dialogData.yes = resolve;
+	                if ("function"===typeof resolve) widget.dialogData.yes = function() { resolve(); }
 	                widget.dialogData.no = function() {
 	                    widget.seance.mode = 'preview';
 	                    widget.$digest();
+	                    if ("function"===typeof reject) reject();
 	                };
 	                widget.seance.mode = 'dialog';
 	                widget.$digest();
@@ -1046,6 +1153,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        redrawLocation : function() {
 	            this.$digest();
 	        },
+	        /*
+	        Make correct sizes for thumb images
+	        */
 	        postRender : function() {
 	            var widget = this;
 	            $(this.wrappers.area).find('div.thumb>img').each(function() {
@@ -1062,36 +1172,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	            
 	        },
 	        previewClick : function(el, multipart) {
+	            throw 'fuck it';
+	        },
+	        click : function(el, multipart) {
+
+	            //debugger;
 	            var widget = this;
 	            switch (this.seance.mode) {
 	                case 'select':
 	                    this.select(el);
 	                break;
 	                case 'preview':
-	                    if ($(el).hasClass('folder') && !multipart) {
+	                    if (this.isFolder(parseInt($(el).attr("rel"))) && !multipart) {
 	                        // open folder
-	                        widget.appendLocation($(el).attr("rel"));                       
+	                        
+	                        widget.appendLocation(""+this.getFileInfoProperty(this.contents[parseInt($(el).attr("rel"))], "name"));                       
 	                    } else {
 	                        this.preview(el, multipart);
 	                    };
-	                break;
-	            }
-	            
-	        },
-	        click : function(el, multiSelect) {
-	           
-	            var widget = this;
-	            switch(this.seance.mode) {
-	                case 'select':
-	                    this.select(el, multiSelect);
-	                break;
-	                case 'preview':
-	                    if ($(el).hasClass('folder')&&!multiSelect) {
-	                        // open folder
-	                        widget.appendLocation($(el).attr("rel"));                       
-	                    } else {
-	                        this.preview(el, multiSelect);
-	                    }
 	                break;
 	            }
 	        },
@@ -1100,10 +1198,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.resetSelection();
 	        },
 	        resetSelection: function() {
-	            this.seance.selectedItems = {
-	                files: [],
-	                folders: []
-	            };
+	            this.selected.clear();
 
 	            $(this.wrappers.area).find('li.selected').removeClass('selected');
 	            this.$digest();
@@ -1149,10 +1244,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.seance.mode = 'preview';
 	            $(this.wrappers.area).find('li.selected').removeClass('selected');
 	            
-	            this.seance.selectedItems = {
-	                'folders': [],
-	                'files': []
-	            };
+	            this.selected.clear();
 	            this.recheckSituation();
 	        },
 	        enableSelectionMode : function() {
@@ -1171,6 +1263,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.$digest();
 	        },
 	        select : function(el, totalLimit) {
+	            
 	            var startStatus = $(el).hasClass('selected');
 	            $(el).toggleClass('selected');
 	            if ("number"===typeof totalLimit) {
@@ -1180,36 +1273,68 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    if (!startStatus) var selected = selected.not(el);
 	                    selected.slice(0, 1).removeClass("selected");
 	                }
-	            }
-	            
-
+	            };
 	            this.recheckSituation();
 	        },
+	        isFolder: function(file) {
+	            if ("number"===typeof file)
+	            file = this.contents[file];
+	            return !!(this.getFileInfoProperty(file, "attributes") & FILE_ATTRIBUTE_DIRECTORY);
+	        },
+	        // 
+	        /**
+	        Get file property by its name
+	        The index of property specified in configuration "fileInfoFormat".
+	        */
+	        getFileInfoProperty: function(file, name) {
+	            
+	            var result, index;
+	            this.component.$injectors[0].$config(['responseFields'], function(fileInfoFormat) {
+	                index = fileInfoFormat.indexOf(name);
+	                if (!~index) {
+	                    result = undefined;
+	                } else {
+	                    result = file[index] || undefined;
+	                }
+	            });
+	            return result;
+	        },
+	        /*
+	        Open dialog to delete selected files
+	        */
 	        deleteDialog : function() {
 	            var message;
 
-	            if (this.seance.selectedItems.folders.length&&this.seance.selectedItems.files.length) {
-	                message = 'Are you sure to remove '+this.seance.selectedItems.files.length+' files and '+this.seance.selectedItems.folders.length+' folders with all files inside?';
-	            } else if (this.seance.selectedItems.folders.length) {
-	                message = 'Are you sure to remove '+this.seance.selectedItems.folders.length+' folders with all files inside?'
-	            } else if (this.seance.selectedItems.files.length) {
-	                message = 'Are you sure to remove '+this.seance.selectedItems.files.length+' files?'
+	            if (selected.folders.length&&selected.files.length) {
+	                message = 'Are you sure to remove '+this.selected.files.length+' files and '+this.selected.folders.length+' folders with all files inside?';
+	            } else if (selected.folders.length) {
+	                message = 'Are you sure to remove '+this.selected.folders.length+' folders with all files inside?'
+	            } else if (selected.files.length) {
+	                message = 'Are you sure to remove '+this.selected.files.length+' files?'
 	            };
-	            this.dialog(message, function() {
+	            this.dialog(message)
+	            .then(function() {
+	                
 	                this.deleteSelected();
 	                this.disableSelectionMode();
-	            }.bind(this), function() {
-
-	            });
+	                
+	            }.bind(this));
 	        },
+	        /*
+	        Delete selected files
+	        */
 	        deleteSelected : function() {
 	            var widget = this;
 	            this.component.$fetch(['$config.requests.remove'], function(removeCfg) {
+	                
 	                widget.request(removeCfg, function() {
 	                    widget.refresh();
 	                });
 	            });
 	        },
+	        /*
+	        Craate folder UI interface
+	        */
 	        createFolder : function() {
 	            var widget = this;
 	            this.reset();
@@ -1223,6 +1348,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                });
 	            }
 	        },
+	        /*
+	        Make element button to load images
+	        */
 	        bindUploadFile : function(el) {
 	            var widget = this;
 	            new uploadFileOnClick($(el), {
@@ -1232,25 +1360,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            });
 	        },
+	        /*
+	        Construct model by view (old fucking method but it works)
+	        */
 	        recheckSituation : function() {
 	            var widget = this;
 	            /* Смотрим на выеделенные элементы */
-	            this.seance.selectedItems = {
-	                'folders': [],
-	                'files': []
-	            };
+	            this.selected.clear();
 	            var cloc = this.getCurrentLocation();
 
 	            $(this.wrappers.area).find('li.selected').each(function() {
-	                if ($(this).hasClass("folder"))
-	                widget.seance.selectedItems.folders.push($(this).attr("origin"));
-	                else
-	                widget.seance.selectedItems.files.push($(this).attr("origin"));
+	                widget.selected.add(parseInt($(this).attr('rel')));
 	            });
 	            
 	            
 	            this.$digest();
 	        },
+	        /*
+	        Go to location upper level
+	        */
 	        goTop : function() {
 	            this.reset();
 	            if (this.seance.location=='/') return false;
@@ -1275,6 +1403,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }
 
+
+	    /*
+	    This plugin is old shit. But if I apply a fair amount of effort, 
+	    I will bring him to order.
+	    */
 		var FN = function(parent, wrapper, options) {
 	        window.debug = this;
 			this.wrapper = wrapper;
@@ -1286,40 +1419,44 @@ return /******/ (function(modules) { // webpackBootstrap
 			var options = options || {};
 
 			// main data
-			this.data = {
-				files: [],
-				folders: []
-			}
+			this.contents = [];
 			// options
 			this.options = $.extend({
 				isRoot: true,
 				connector: '',
 				location: '/'
 			}, options || {});
+
 			// wrappers
 			this.wrappers = {
 				area: null
 			};
-
-			// 
+			
 			this.seance = {
 				mode: 'preview',
 	            dirname: false,
 	            location: false
 			}
 
+	        /*
+	        Initial widget
+	        */
 			this.init();
 		}
 
+	    /*
+	    Tune up it with prototype
+	    */
 	    FN.prototype = FNPROTO;
 	    FN.prototype.constructor = FN;
 
+	    /*
+	    Perform it as jQuery plugin for a change
+	    */
 		$.fn.ntFileManager = $.fn.ntFileManager = function(data, component) {
 			
-
-			
 			return $(this).each(function() {
-	            
+	            // Make it scopable
 	            component.$newScope(FN, [this, data]);
 			});
 		};

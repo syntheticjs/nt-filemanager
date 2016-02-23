@@ -1,44 +1,18 @@
 {
 	"type": "contents",
-	"content": {
-		"folders": [
-			{
-				"name": "this is name",
-				"origin": "origin path",
-				"title": "this is title"
-			}
+	"content": [
+		[
+			128,
+			"IMG_1038.jpg",
+			"images/thumbs/IMG_1038.jpg",
+			"image/jpeg"
 		],
-		"files": [
-			{
-				"name": "IMG_1038.jpg",
-				"origin": "origin path",
-				"thumb": "images/thumbs/IMG_1038.jpg"
-			},
-			{
-				"name": "IMG_1040.jpg",
-				"origin": "origin path",
-				"thumb": "images/thumbs/IMG_1040.jpg"
-			},
-			{
-				"name": "IMG_1041.jpg",
-				"origin": "origin path",
-				"thumb": "images/thumbs/IMG_1041.jpg"
-			},
-			{
-				"name": "IMG_1042.jpg",
-				"origin": "origin path",
-				"thumb": "images/thumbs/IMG_1042.jpg"
-			},
-			{
-				"name": "IMG_1043.jpg",
-				"origin": "origin path",
-				"thumb": "images/thumbs/IMG_1043.jpg"
-			},
-			{
-				"name": "IMG_1044.jpg",
-				"origin": "origin path",
-				"thumb": "images/thumbs/IMG_1044.jpg"
-			}
+		[
+			128,
+			"IMG_1040.jpg",
+			"images/thumbs/IMG_1040.jpg",
+			"image/jpeg"
 		]
-	}
+
+	]
 }

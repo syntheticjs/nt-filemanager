@@ -121,6 +121,8 @@ nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section > figur
 	font-weight: bold;
 	background-color: rgb(255, 255, 255);
 	border: 1px rgb(191, 197, 195) solid;
+	height: 23px;
+	line-height: 17px;
 
     
 }
@@ -128,6 +130,65 @@ nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section > figur
 
 nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section > figure >figcaption >span >button:focus {
 	border-color:1px rgb(24, 255, 185) solid;
+
+    
+}
+
+
+nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section > figure >figcaption >span >button:hover {
+	background-color:#FDFAF4;
+
+    
+}
+
+
+nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.nt-filemanager__textbutton {
+	-webkit-box-flex:0;
+	-webkit-flex:0 0 auto;
+	-ms-flex:0 0 auto;
+	flex:0 0 auto;
+
+    
+}
+
+
+nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.nt-filemanager__textbutton >figure {
+	position: relative;
+
+    
+}
+
+
+nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.nt-filemanager__textbutton >figure >div {
+	width:35px;
+	height:35px;
+
+    
+}
+
+
+nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.nt-filemanager__textbutton >figure >figcaption {
+	line-height: normal;
+	position: static;
+	text-align: center;
+	width: 100%;
+	font-size: 11px;
+
+    
+}
+
+
+nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.nt-filemanager__textbutton >figure >figcaption >span {
+	padding:0 10px;
+
+    
+}
+
+
+nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.nt-filemanager__textbutton >figure >figcaption >span i {
+	white-space: nowrap;
+	padding:0;
+	line-height: 50px;
 
     
 }
@@ -185,6 +246,13 @@ nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.add-are
 }
 
 
+nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.nt-filemanager__topbar__itemright {
+	margin-left: auto;
+
+    
+}
+
+
 nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.add-area-section-wide {
 	-webkit-box-flex:0;
 	-webkit-flex:0 1 100%;
@@ -195,29 +263,29 @@ nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.add-are
 }
 
 
-nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section:hover {
+nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.pointable {
+	cursor:pointer;
+
+    
+}
+
+
+nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.pointable:hover {
 	background-color:#FDFAF4;
 
     
 }
 
 
-nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section:hover > figure >div >svg {
+nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.pointable:hover > figure >div >svg {
 	fill:#00001E;
 
     
 }
 
 
-nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section:hover > figure >figcaption {
+nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.pointable:hover > figure >figcaption {
 	color:#58534B;
-
-    
-}
-
-
-nt-filemanager >div.nt-filemanager-header div.add-area .add-area-section.pointable {
-	cursor:pointer;
 
     
 }
@@ -316,7 +384,7 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li {
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.file {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.nt-filemanager__itemtype__folder {
 	-webkit-transition: background 0.25s ease;
 	transition:background 0.25s ease;
 
@@ -324,7 +392,7 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li.file {
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.thumb {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.nt-filemanager__thumb {
 	width:110px;
 	height:110px;
 	text-align:center;
@@ -336,7 +404,7 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.thumb {
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.thumb >.nt-filemanager-overlay {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.nt-filemanager__thumb >.nt-filemanager-overlay {
 	position: absolute;
 	top:0;
 	left:0;
@@ -348,7 +416,7 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.thumb >.nt-fileman
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.thumb >.nt-filemanager-overlay >div {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.nt-filemanager__thumb >.nt-filemanager-overlay >div {
 	background-color:transparent;
 	-webkit-transform-origin:50% 50%;
 	transform-origin:50% 50%;
@@ -375,14 +443,14 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.thumb >.nt-fileman
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.thumb >.nt-filemanager-overlay >div >symbol {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.nt-filemanager__thumb >.nt-filemanager-overlay >div >symbol {
 	cursor:pointer;
 
     
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.thumb >.nt-filemanager-overlay >div >symbol >div {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.nt-filemanager__thumb >.nt-filemanager-overlay >div >symbol >div {
 	width: 120%;
 	height: 120%;
 	cursor: pointer;
@@ -393,7 +461,7 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.thumb >.nt-fileman
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.thumb >.nt-filemanager-overlay >div >symbol >div >svg {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.nt-filemanager__thumb >.nt-filemanager-overlay >div >symbol >div >svg {
 	width: 100%;
 	height: 100%;
 	fill: transparent;
@@ -403,7 +471,7 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li > div.thumb >.nt-fileman
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.nt-filemanager__itemtype__folder >div.nt-filemanager__thumb >div {
 	width: 72%;
 	height: 72%;
 	position: absolute;
@@ -434,7 +502,7 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div {
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div >i {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.nt-filemanager__itemtype__folder >div.nt-filemanager__thumb >div >i {
 	display: inline-block;
 	vertical-align: top;
 	width: 10px;
@@ -447,7 +515,7 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div >
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div >i:nth-child(1n) {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.nt-filemanager__itemtype__folder >div.nt-filemanager__thumb >div >i:nth-child(1n) {
 	width: 12px;
 	height: 8px;
 	background-color: aqua;
@@ -456,7 +524,7 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div >
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div >i:nth-child(2n) {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.nt-filemanager__itemtype__folder >div.nt-filemanager__thumb >div >i:nth-child(2n) {
 	width: 8px;
 	height: 12px;
 	background-color: violet;
@@ -465,7 +533,7 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div >
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div >i:nth-child(3n) {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.nt-filemanager__itemtype__folder >div.nt-filemanager__thumb >div >i:nth-child(3n) {
 	width: 12px;
 	height: 12px;
 	background-color: yellowgreen;
@@ -474,14 +542,14 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li.folder >div.thumb >div >
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.image div.thumb {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.filemanager__itempreview__image div.nt-filemanager__thumb {
 	background-color: transparent;
 
     
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.image div.thumb > img {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.filemanager__itempreview__image div.nt-filemanager__thumb > img {
 	display:none;
 	box-shadow: -1px 4px 24px 0px rgba(0,0,0,0.66);
 
@@ -489,7 +557,7 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li.image div.thumb > img {
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.image div.thumb > img:after {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.filemanager__itempreview__image div.nt-filemanager__thumb > img:after {
 	content: "";
 	background-color:blue;
 	display:block;
@@ -537,7 +605,7 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li.selected div.subscribe {
 /*box-shadow:         1px 4px 17px 4px rgba(0, 0, 0, 0.39);*/
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.selected.image > div.thumb >img {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.selected.filemanager__itempreview__image > div.nt-filemanager__thumb >img {
 	background-color:transparent;
 	box-shadow: 0px 0px 0px 1px rgba(255, 217, 127, 0.49);
 
@@ -545,28 +613,28 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li.selected.image > div.thu
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.selected >div.thumb >.nt-filemanager-overlay {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.selected >div.nt-filemanager__thumb >.nt-filemanager-overlay {
 	display:block;
 
     
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.selected >div.thumb >.nt-filemanager-overlay >div {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.selected >div.nt-filemanager__thumb >.nt-filemanager-overlay >div {
 	opacity:1;
 
     
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.selected.folder >div.thumb >div {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.selected.filemanager__itemtype__folder >div.nt-filemanager__thumb >div {
 	border:1px rgba(255, 217, 127, 0.49) solid;
 
     
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea li.selected.folder >div.thumb >div >i {
+nt-filemanager >div.nt-filemanager-body ul.filesArea li.selected.filemanager__itemtype__folder >div.nt-filemanager__thumb >div >i {
 	background-color:rgba(255, 210, 102, 0.91);
 
     
@@ -600,21 +668,21 @@ nt-filemanager >div.nt-filemanager-body ul.filesArea li:hover div.subscribe {
 /*box-shadow:         1px 4px 17px 4px rgba(0, 0, 0, 0.39);*/
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea.danger >li.selected.image > div.thumb >img {
+nt-filemanager >div.nt-filemanager-body ul.filesArea.danger >li.selected.filemanager__itempreview__image > div.nt-filemanager__thumb >img {
 	box-shadow: 0px 0px 0px 1px rgb(255, 127, 127);
 
     
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea.danger >li.selected.folder >div.thumb >div {
+nt-filemanager >div.nt-filemanager-body ul.filesArea.danger >li.selected.filemanager__itemtype__folder >div.nt-filemanager__thumb >div {
 	border:1px rgb(255, 127, 127) solid;
 
     
 }
 
 
-nt-filemanager >div.nt-filemanager-body ul.filesArea.danger >li.selected.folder >div.thumb >div >i {
+nt-filemanager >div.nt-filemanager-body ul.filesArea.danger >li.selected.filemanager__itemtype__folder >div.nt-filemanager__thumb >div >i {
 	background-color:rgb(255, 127, 127);
 
     

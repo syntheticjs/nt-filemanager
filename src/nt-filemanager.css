@@ -77,13 +77,44 @@ nt-filemanager {
 							    font-weight: bold;
 							    background-color: rgb(255, 255, 255);
 							    border: 1px rgb(191, 197, 195) solid;
+							    height: 23px;
+    							line-height: 17px;
 						    	&:focus {
 						    		
 						    		border-color:1px rgb(24, 255, 185) solid;
 						    	}
+						    	&:hover {
+									background-color:#FDFAF4;
+						    	}
 						    }
 						}
-					    
+					}
+				}
+
+				&.nt-filemanager__textbutton {
+					flex:0 0 auto;
+					>figure {
+						position: relative;
+		    			
+						>div {
+							width:35px;
+							height:35px;
+						}
+						>figcaption {
+							line-height: normal;
+							position: static;
+						    text-align: center;
+						    width: 100%;
+						    font-size: 11px;
+						    >span {
+						    	padding:0 10px;
+						    	i {
+						    		white-space: nowrap;
+						    		padding:0;
+						    		line-height: 50px;
+						    	}
+						    }
+						}
 					}
 				}
 
@@ -114,28 +145,34 @@ nt-filemanager {
 						}
 					}
 				}
+				
+				&.nt-filemanager__topbar__itemright {
+					margin-left: auto;
+				}
 
 				&.add-area-section-wide {
 					flex:0 1 100%;
 				}
 
-				&:hover {
-					background-color:#FDFAF4;
-
-					> figure {
-						>div {
-							>svg {
-								fill:#00001E;
-							}
-						}
-						>figcaption {
-							color:#58534B;
-						}
-					}
-				}
+				
 
 				&.pointable {
 					cursor:pointer;
+
+					&:hover {
+						background-color:#FDFAF4;
+
+						> figure {
+							>div {
+								>svg {
+									fill:#00001E;
+								}
+							}
+							>figcaption {
+								color:#58534B;
+							}
+						}
+					}
 				}
 
 				&.active {
@@ -200,13 +237,13 @@ nt-filemanager {
 				box-sizing: content-box;
 				
 
-				&.file {
+				&.nt-filemanager__itemtype__folder {
 					
 					transition:background 0.25s ease;
 					
 				}
 
-				> div.thumb {
+				> div.nt-filemanager__thumb {
 					width:110px;
 					height:110px;
 					text-align:center;
@@ -259,8 +296,8 @@ nt-filemanager {
 					}
 				}
 
-				&.folder {
-					>div.thumb {
+				&.nt-filemanager__itemtype__folder {
+					>div.nt-filemanager__thumb {
 						>div {
 							width: 72%;
 						    height: 72%;
@@ -313,8 +350,8 @@ nt-filemanager {
 					}
 				}
 
-				&.image {
-					div.thumb {
+				&.filemanager__itempreview__image {
+					div.nt-filemanager__thumb {
 					background-color: transparent;
 						> img {
 							display:none;
@@ -357,8 +394,8 @@ nt-filemanager {
 						font-weight: 100;
 					}
 
-					&.image {
-						> div.thumb {
+					&.filemanager__itempreview__image {
+						> div.nt-filemanager__thumb {
 							/*box-shadow:         1px 4px 17px 4px rgba(0, 0, 0, 0.39);*/
 							>img {
 								background-color:transparent;
@@ -367,7 +404,7 @@ nt-filemanager {
 						}
 					}
 
-					>div.thumb {
+					>div.nt-filemanager__thumb {
 						>.nt-filemanager-overlay {
 							display:block;
 							>div {
@@ -376,8 +413,8 @@ nt-filemanager {
 						}
 					}
 
-					&.folder {
-						>div.thumb {
+					&.filemanager__itemtype__folder {
+						>div.nt-filemanager__thumb {
 							>div {
 								border:1px rgba(255, 217, 127, 0.49) solid;
 								>i {
@@ -410,8 +447,8 @@ nt-filemanager {
 			&.danger {
 				>li {
 					&.selected {
-						&.image {
-							> div.thumb {
+						&.filemanager__itempreview__image {
+							> div.nt-filemanager__thumb {
 								/*box-shadow:         1px 4px 17px 4px rgba(0, 0, 0, 0.39);*/
 								>img {
 									box-shadow: 0px 0px 0px 1px rgb(255, 127, 127);
@@ -419,8 +456,8 @@ nt-filemanager {
 							}
 						}
 
-						&.folder {
-							>div.thumb {
+						&.filemanager__itemtype__folder {
+							>div.nt-filemanager__thumb {
 								>div {
 									border:1px rgb(255, 127, 127) solid;
 									>i {

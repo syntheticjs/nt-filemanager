@@ -58,7 +58,8 @@ Synthetic.createComponent({
 				data: {
 					type: "'contents'",
 					content: {
-                        location: 'seance.location'
+                        location: 'seance.location',
+                        fields: 'component.$scope.$config.responseFields'
                     }
 				}
 			},
@@ -67,8 +68,7 @@ Synthetic.createComponent({
 					type: "'delete'",
 					content: {
 						location: 'seance.location',
-	                    files: 'seance.selectedItems.files',
-	                    folders: 'seance.selectedItems.folders'
+	                    items: 'selected.simplify("name")'
 					}
 				}
 			},
@@ -94,9 +94,13 @@ Synthetic.createComponent({
 			alert('ok');
 		}, // The function that take employed elements
 		maxEmployCount: 1, // Max count of elements that can be employ
-		allowFilesUpload: true,
-		allowDelete: true,
-		allowCreateNewFolder: true
+		allowFilesUpload: true, // Allow to upload files
+		allowDelete: true, // Allow to delete files and folders
+		allowCreateNewFolder: true, // Allow to create folders
+		responseFields: ["attributes","name","mimetype","url","thumbUrl"], // File info properties
+		notifyHandler: function(message, content) { // custom server notify handler
+			alert(message);
+		}
 	});
 
 	$init(function($element, $self, $config) {
