@@ -297,6 +297,53 @@ require('./jquery-ajaxform.js');
         }
     }
 
+    var requestHandler = function(res, callback) {
+        var widget = this;
+        expectedResponseType = false;
+        if ("object"===typeof callback) {
+            expectedResponseType = callback[0];
+            var tocallback = callback[1];
+        }
+        switch(res.type) {
+            case 'multiple':
+                res.content.forEach(function(subres) {
+                    requestHandler(subres, callback);
+                });
+                
+            break;
+            case 'contents': // Content
+                widget.contents = res.content; 
+                widget.updateView();
+            break; 
+            case 'location': // Force change location
+                widget.changeLocation(res.content);
+            break;
+            case 'notify':
+                widget.component.$fetch(['$config.notifyHandler'], function(notifyHandler) {
+                    if ("function"===typeof notifyHandler) {
+                        notifyHandler(res.content.message, res.content);
+                    } else {
+                        console.log('Notify: ', res.content.message);
+                    }
+                });
+                
+            break;
+            case 'action':
+                widget.action(res.content.name, res.content.data);
+            break;
+            default:
+                widget.throwError('INVALID_SERVER_RESPONSE');
+                return;
+            break;
+        }
+
+        if (expectedResponseType) {
+            if (res.type===expectedResponseType) tocallback(res);
+        } else {
+            callback(res);
+        }
+    };
+
     var FNPROTO = {
         init : function() {
             this.seance.location = this.options.location;
@@ -354,31 +401,10 @@ require('./jquery-ajaxform.js');
                 // Add functions
                 // Success callback
                 request.success = function(res) {
-                    
-                    switch(res.type) {
-                        case 'contents': // Content
-                            widget.contents = res.content; 
-                            widget.updateView();
-                        break; 
-                        case 'location': // Force change location
-                            widget.changeLocation(res.content);
-                        break;
-                        case 'notify':
-                            widget.component.$fetch(['$config.notifyHandler'], function(notifyHandler) {
-                                if ("function"===typeof notifyHandler) {
-                                    notifyHandler(res.content.message, res.content);
-                                } else {
-                                    console.log('Notify: ', res.content.message);
-                                }
-                            });
-                            
-                        break;
-                        default:
-                            widget.throwError('INVALID_SERVER_RESPONSE');
-                            return;
-                        break;
-                    }
-                    ;("function"==typeof success) && (success.call(widget, res.content, res.type)); 
+                    requestHandler.call(widget, res, [data.type, function(res) {
+                        ;("function"==typeof success) && (success.call(widget, res.content, res.type)); 
+                    }]);
+
                 };
                 // Error callback
                 request.error = function(r) {
@@ -388,6 +414,22 @@ require('./jquery-ajaxform.js');
                 $.ajax(request);
             });
             
+        },
+        action: function(macros, data) {
+            debugger;
+            switch(macros) {
+                case 'select': // select items by filename
+                    var select = [];
+                    this.contents.forEach(function(item, index) {
+                        if (!!~data.indexOf(this.getFileInfoProperty(item, "name"))) select.push(index);
+                    });
+
+                    for (var i = 0;i<select.length;++i) {
+                        $(this.wrappers.area).find('li[rel='+i+']').addClass('selected');
+                    }
+                    this.recheckSituation();
+                break;
+            }
         },
         alert : function(msg) {
             alert(msg);
