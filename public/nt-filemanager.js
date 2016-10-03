@@ -2185,7 +2185,11 @@ return /******/ (function(modules) { // webpackBootstrap
 			this.seance = {
 				mode: 'preview',
 	            dirname: false,
-	            location: false
+	            location: false,
+	            selectedItems : {
+	                'folders': [],
+	                'files': []
+	            }
 			}
 
 			this.init();
